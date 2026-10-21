@@ -1,13 +1,10 @@
-
 "use strict";
 
 // ==================================================
 // 1. CONFIGURATION SUPABASE
-// Remplace les deux valeurs par celles de TON projet.
-// Utilise uniquement la clé publique (publishable/anon).
 // ==================================================
 
-const SUPABASE_URL = "https://byzsqblgsssymvsztaqb.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://byzsqblgsssymvsztaqb.supabase.co";
 const SUPABASE_PUBLIC_KEY = "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwRE";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -36,19 +33,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // Connexion à Supabase
   let supabaseClient = null;
 
-  if (
-    window.supabase &&
-    SUPABASE_URL.startsWith("https://") &&
-    !SUPABASE_URL.includes("REMPLACE_PAR") &&
-    SUPABASE_PUBLIC_KEY &&
-    !SUPABASE_PUBLIC_KEY.includes("REMPLACE_PAR")
-  ) {
-    supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
+  try {
+    if (
+      window.supabase &&
+      typeof window.supabase.createClient === "function" &&
+      SUPABASE_URL.startsWith("https://") &&
       SUPABASE_PUBLIC_KEY
-    );
+    ) {
+      supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLIC_KEY
+      );
+    }
+  } catch (erreur) {
+    console.error("Erreur d'initialisation Supabase :", erreur);
   }
 
+  // Séries disponibles selon la classe
   const seriesParClasse = {
     "2nde": ["A", "C"],
     "1ère": ["A1", "A2", "C", "D"],
@@ -85,22 +86,21 @@ document.addEventListener("DOMContentLoaded", () => {
     resultat.hidden = false;
 
     resultat.scrollIntoView({
-      behavior: window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches ? "auto" : "smooth",
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
       block: "nearest"
     });
   }
 
+  // Actualiser les séries lorsque la classe change
   function mettreAJourSeries() {
     if (!classe || !serie || !blocSerie) return;
 
     const ancienneValeur = serie.value;
     const series = seriesParClasse[classe.value] || [];
 
-    serie.replaceChildren(
-      new Option("Sélectionne ta série", "")
-    );
+    serie.replaceChildren(new Option("Sélectionne ta série", ""));
 
     series.forEach((nom) => {
       serie.add(new Option("Série " + nom, nom));
@@ -119,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!afficher) serie.value = "";
   }
 
+  // Afficher les champs du domaine choisi
   function mettreAJourDomaine() {
     const choix = domaine.value;
 
@@ -173,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Préparer les données du parcours choisi.
+  // Préparer les données du parcours
   function obtenirParcours() {
     const choix = domaine.value;
 
@@ -210,6 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return { donnees, details, choix };
   }
 
+  // Enregistrer le parcours dans Supabase
   formulaire.addEventListener("submit", async (evenement) => {
     evenement.preventDefault();
 
@@ -226,12 +228,11 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Ne jamais prétendre enregistrer si Supabase n'est pas configuré.
     if (!supabaseClient) {
       afficherMessage(
-        "Configuration à terminer",
-        "La connexion Supabase n'est pas encore configurée. " +
-        "Remplace l'URL et la clé publique en haut du fichier app.js."
+        "Connexion indisponible",
+        "Le client Supabase ne se charge pas. Vérifie que la bibliothèque Supabase est présente dans index.html et que les paramètres sont corrects.",
+        true
       );
       return;
     }
@@ -248,7 +249,10 @@ document.addEventListener("DOMContentLoaded", () => {
         .from("parcours_apprenants")
         .insert([donnees]);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Erreur Supabase :", error);
+        throw error;
+      }
 
       resultat.replaceChildren();
 
@@ -281,18 +285,22 @@ document.addEventListener("DOMContentLoaded", () => {
       resultat.hidden = false;
 
       resultat.scrollIntoView({
-        behavior: window.matchMedia(
-          "(prefers-reduced-motion: reduce)"
-        ).matches ? "auto" : "smooth",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
         block: "nearest"
       });
     } catch (erreur) {
       console.error("Erreur d'enregistrement Supabase :", erreur);
 
+      const detailErreur =
+        erreur && erreur.message
+          ? erreur.message
+          : "Erreur inconnue. Consulte la console du navigateur.";
+
       afficherMessage(
         "Enregistrement impossible",
-        "Le parcours n'a pas été enregistré. Vérifie la table Supabase, " +
-        "les autorisations et les paramètres de connexion, puis réessaie.",
+        "Détail : " + detailErreur,
         true
       );
     } finally {
@@ -303,7 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Navigation fluide vers les sections.
+  // Navigation fluide vers les sections
   document.querySelectorAll('a[href^="#"]').forEach((lien) => {
     lien.addEventListener("click", (evenement) => {
       const id = lien.getAttribute("href");
@@ -316,9 +324,9 @@ document.addEventListener("DOMContentLoaded", () => {
       evenement.preventDefault();
 
       cible.scrollIntoView({
-        behavior: window.matchMedia(
-          "(prefers-reduced-motion: reduce)"
-        ).matches ? "auto" : "smooth",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
         block: "start"
       });
 
@@ -330,7 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.info(
     supabaseClient
-      ? "EduCap Afrique : Supabase est configuré."
-      : "EduCap Afrique : paramètres Supabase à compléter."
+      ? "EduCap Afrique : client Supabase initialisé."
+      : "EduCap Afrique : client Supabase indisponible."
   );
 });
