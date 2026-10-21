@@ -7,8 +7,8 @@
 // Utilise uniquement la clé publique (publishable/anon).
 // ==================================================
 
-const SUPABASE_URL = "REMPLACE_PAR_URL_DE_TON_PROJET";
-const SUPABASE_PUBLIC_KEY = "REMPLACE_PAR_TA_CLE_PUBLIQUE";
+const SUPABASE_URL = "https://byzsqblgsssymvsztaqb.supabase.co/rest/v1/";
+const SUPABASE_PUBLIC_KEY = "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwRE";
 
 document.addEventListener("DOMContentLoaded", () => {
   const domaine = document.querySelector("#domaine");
