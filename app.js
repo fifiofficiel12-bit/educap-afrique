@@ -7,7 +7,7 @@
 
 const SUPABASE_URL = "https://byzsqblgsssymvsztaqb.supabase.co";
 const SUPABASE_PUBLIC_KEY =
-  "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR";
+  "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwRE";
 
 document.addEventListener("DOMContentLoaded", () => {
   const domaine = document.querySelector("#domaine");
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const bouton = formulaire.querySelector('button[type="submit"]');
 
-  // Initialisation du client Supabase
+  // Initialisation de Supabase
   let supabaseClient = null;
 
   try {
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
   } catch (erreur) {
-    console.error("Erreur de connexion Supabase :", erreur);
+    console.error("Erreur d'initialisation Supabase :", erreur);
   }
 
   // Séries disponibles selon la classe
@@ -64,7 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   function rendreObligatoire(champ, obligatoire) {
-    if (champ) champ.required = obligatoire;
+    if (champ) {
+      champ.required = obligatoire;
+    }
   }
 
   function masquerResultat() {
@@ -82,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     message.textContent = messageTexte;
 
     resultat.append(titre, message);
+
     resultat.style.background = erreur ? "#fff0f0" : "#eaf6ef";
     resultat.style.color = erreur ? "#9b1c1c" : "#075b46";
     resultat.hidden = false;
@@ -94,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Mise à jour des séries selon la classe choisie
+  // Actualiser les séries selon la classe
   function mettreAJourSeries() {
     if (!classe || !serie || !blocSerie) return;
 
@@ -124,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Affichage des champs adaptés au domaine
+  // Afficher les champs correspondant au parcours
   function mettreAJourDomaine() {
     const choix = domaine.value;
 
@@ -158,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     mettreAJourDomaine();
 
     const section = document.querySelector("#inscription");
+
     if (section) {
       section.scrollIntoView({
         behavior: "smooth",
@@ -187,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Préparation des données destinées à Supabase
+  // Préparer les données à envoyer
   function obtenirParcours() {
     const choix = domaine.value;
 
@@ -212,17 +216,13 @@ document.addEventListener("DOMContentLoaded", () => {
         donnees.serie = serie.value;
         details.push("Série : " + serie.value);
       }
-    }
-
-    if (choix === "campus") {
+    } else if (choix === "campus") {
       donnees.niveau_campus = niveauCampus.value;
       donnees.domaine_campus = domaineCampus.value;
 
       details.push("Niveau : " + niveauCampus.value);
       details.push("Domaine : " + domaineCampus.value);
-    }
-
-    if (choix === "competences") {
+    } else if (choix === "competences") {
       donnees.formation = formation.value;
       details.push("Formation : " + formation.value);
     }
@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return { donnees, details, choix };
   }
 
-  // Enregistrement réel dans Supabase
+  // Enregistrer réellement dans Supabase
   formulaire.addEventListener("submit", async (evenement) => {
     evenement.preventDefault();
 
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const { donnees, details, choix } = obtenirParcours();
 
-    if (!nomsDomaines[choix]) {
+    if (!Object.prototype.hasOwnProperty.call(nomsDomaines, choix)) {
       afficherMessage(
         "Choix invalide",
         "Sélectionne un domaine pour continuer.",
@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!supabaseClient) {
       afficherMessage(
         "Connexion indisponible",
-        "La connexion à Supabase n'a pas pu être initialisée. Vérifie que la bibliothèque Supabase est chargée dans index.html.",
+        "La bibliothèque Supabase n'est pas chargée. Vérifie sa présence dans index.html.",
         true
       );
       return;
@@ -264,22 +264,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const { data, error } = await supabaseClient
+      // Ne pas demander le retour de l'identifiant :
+      // seule la confirmation de l'insertion est nécessaire.
+      const { error } = await supabaseClient
         .from("parcours_apprenants")
-        .insert([donnees])
-        .select("id");
+        .insert([donnees]);
 
       if (error) {
         throw error;
       }
 
-      // Ne pas annoncer de succès sans confirmation de Supabase.
-      if (!data || data.length !== 1 || data[0].id == null) {
-        throw new Error(
-          "L'enregistrement n'a pas pu être confirmé. Réessaie."
-        );
-      }
-
+      // Succès uniquement si Supabase ne renvoie aucune erreur.
       resultat.replaceChildren();
 
       const titre = document.createElement("h3");
@@ -302,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const information = document.createElement("p");
       information.textContent =
-        "Supabase a confirmé l'enregistrement de ton parcours. " +
+        "Supabase a accepté l'enregistrement de ton parcours. " +
         "Cette étape ne crée pas encore de compte utilisateur.";
 
       resultat.appendChild(information);
@@ -318,15 +313,14 @@ document.addEventListener("DOMContentLoaded", () => {
         block: "nearest"
       });
 
-      // Réinitialiser le formulaire après un enregistrement confirmé.
       formulaire.reset();
       mettreAJourDomaine();
 
     } catch (erreur) {
-      console.error("Erreur d'enregistrement Supabase :", erreur);
+      console.error("Erreur Supabase :", erreur);
 
       let message =
-        "Une erreur est survenue pendant l'enregistrement.";
+        "Supabase a refusé l'enregistrement de ton parcours.";
 
       if (erreur && erreur.message) {
         message += " Détail : " + erreur.message;
@@ -346,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Navigation fluide
+  // Navigation fluide entre les sections
   document.querySelectorAll('a[href^="#"]').forEach((lien) => {
     lien.addEventListener("click", (evenement) => {
       const id = lien.getAttribute("href");
