@@ -5,18 +5,57 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#075b46">
-  <meta name="description" content="EduCap Afrique : apprendre, progresser et réussir dans les domaines scolaire, universitaire et professionnel.">
+  <meta name="description" content="EduCap Afrique : parcours scolaire, universitaire et professionnel.">
   <title>EduCap Afrique — Apprendre. Progresser. Réussir.</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
+  <style>
+    .parcours-form {
+      max-width: 680px;
+      margin: 28px auto;
+      padding: 24px;
+      background: #fff;
+      border: 1px solid #dce8e2;
+      border-radius: 16px;
+      box-shadow: 0 8px 28px rgba(7, 91, 70, .07);
+    }
+    .parcours-form label {
+      display: block;
+      margin: 16px 0 7px;
+      font-weight: 600;
+    }
+    .parcours-form select,
+    .parcours-form input {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px;
+      border: 1px solid #bdcec5;
+      border-radius: 8px;
+      background: #fff;
+      font: inherit;
+    }
+    .parcours-form button {
+      margin-top: 22px;
+      width: 100%;
+      cursor: pointer;
+    }
+    .parcours-result {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 10px;
+      background: #eaf6ef;
+      color: #075b46;
+    }
+    .parcours-result a {
+      font-weight: 700;
+    }
+    [hidden] { display: none !important; }
+  </style>
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="logo" href="#accueil" aria-label="EduCap Afrique, accueil">
-        EduCap <span>Afrique</span>
-      </a>
-
+      <a class="logo" href="#accueil">EduCap <span>Afrique</span></a>
       <nav class="main-nav" aria-label="Navigation principale">
         <a href="#domaines">Nos domaines</a>
         <a href="#fonctionnement">Fonctionnement</a>
@@ -30,25 +69,11 @@
     <section class="hero" id="accueil">
       <div class="container hero-content">
         <span class="eyebrow">L'éducation et les compétences pour tous</span>
-
-        <h1>
-          Ton avenir commence par
-          <span>un apprentissage.</span>
-        </h1>
-
-        <p>
-          Des ressources pour réussir à l'école, progresser dans ses études
-          et développer des compétences utiles pour sa vie professionnelle.
-          Apprends à ton rythme, étape par étape.
-        </p>
-
+        <h1>Ton avenir commence par <span>un apprentissage.</span></h1>
+        <p>Des ressources pour réussir à l'école, progresser dans ses études et développer des compétences utiles pour sa vie professionnelle.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#domaines">
-            Découvrir nos domaines →
-          </a>
-          <a class="btn btn-secondary" href="#fonctionnement">
-            Comment ça marche ?
-          </a>
+          <a class="btn btn-primary" href="#domaines">Découvrir nos domaines →</a>
+          <a class="btn btn-secondary" href="#fonctionnement">Comment ça marche ?</a>
         </div>
       </div>
     </section>
@@ -57,47 +82,26 @@
       <div class="container">
         <div class="section-heading">
           <h2>Choisis ton parcours</h2>
-          <p>
-            Trois domaines, un même objectif :
-            te donner les moyens de progresser.
-          </p>
+          <p>Trois domaines, un même objectif : te donner les moyens de progresser.</p>
         </div>
-
         <div class="card-grid">
           <article class="card">
             <div class="card-icon" aria-hidden="true">📚</div>
             <h3>EduCap Scolaire</h3>
-            <p>
-              Du primaire au lycée : cours, exercices corrigés,
-              préparation au BEPC et au BAC, toutes séries.
-            </p>
-            <a class="card-link" href="#inscription">
-              Découvrir le parcours →
-            </a>
+            <p>Du primaire au lycée : cours, exercices, préparation au BEPC et au BAC.</p>
+            <a class="card-link" href="#inscription" data-parcours="scolaire">Choisir ce parcours →</a>
           </article>
-
           <article class="card">
             <div class="card-icon" aria-hidden="true">🎓</div>
             <h3>EduCap Campus</h3>
-            <p>
-              Des ressources pour accompagner les étudiants
-              dans leurs études supérieures, de la Licence au Master.
-            </p>
-            <a class="card-link" href="#inscription">
-              Découvrir le parcours →
-            </a>
+            <p>Des parcours pour les étudiants, de la Licence au Master.</p>
+            <a class="card-link" href="#inscription" data-parcours="campus">Choisir ce parcours →</a>
           </article>
-
           <article class="card">
             <div class="card-icon" aria-hidden="true">💼</div>
             <h3>EduCap Compétences</h3>
-            <p>
-              Bureautique, informatique, gestion, comptabilité,
-              marketing, communication et entrepreneuriat.
-            </p>
-            <a class="card-link" href="#inscription">
-              Découvrir le parcours →
-            </a>
+            <p>Informatique, bureautique, gestion, comptabilité, marketing et entrepreneuriat.</p>
+            <a class="card-link" href="#inscription" data-parcours="competences">Choisir ce parcours →</a>
           </article>
         </div>
       </div>
@@ -107,35 +111,23 @@
       <div class="container">
         <div class="section-heading">
           <h2>Apprendre, progresser, réussir.</h2>
-          <p>Un parcours simple pour avancer progressivement.</p>
+          <p>Choisis un objectif, prépare ton parcours et avance étape par étape.</p>
         </div>
-
         <div class="card-grid">
           <article class="card">
-            <div class="card-icon" aria-hidden="true">🎯</div>
+            <div class="card-icon">🎯</div>
             <h3>1. Choisis ton objectif</h3>
-            <p>
-              Sélectionne ton domaine et indique ton niveau
-              pour préparer un parcours adapté.
-            </p>
+            <p>Indique ton domaine et ton niveau.</p>
           </article>
-
           <article class="card">
-            <div class="card-icon" aria-hidden="true">📖</div>
+            <div class="card-icon">📖</div>
             <h3>2. Apprends à ton rythme</h3>
-            <p>
-              Consulte les cours, découvre les exercices
-              et entraîne-toi régulièrement.
-            </p>
+            <p>Prépare-toi à étudier avec des ressources adaptées.</p>
           </article>
-
           <article class="card">
-            <div class="card-icon" aria-hidden="true">📈</div>
-            <h3>3. Mesure tes progrès</h3>
-            <p>
-              Organise ton apprentissage et identifie
-              les notions que tu dois encore travailler.
-            </p>
+            <div class="card-icon">📈</div>
+            <h3>3. Progresse</h3>
+            <p>Construis progressivement tes connaissances et tes compétences.</p>
           </article>
         </div>
       </div>
@@ -145,30 +137,14 @@
       <div class="container">
         <div class="section-heading">
           <h2>Une plateforme pensée pour l'Afrique</h2>
-          <p>
-            EduCap Afrique ambitionne de rendre l'apprentissage
-            et le développement des compétences plus accessibles,
-            avec une attention particulière aux besoins des apprenants
-            en Côte d'Ivoire.
-          </p>
+          <p>EduCap Afrique veut rendre l'apprentissage plus accessible, avec une attention particulière aux besoins des apprenants en Côte d'Ivoire.</p>
         </div>
-
         <div class="welcome-panel">
-          <h3>Un projet construit pour progresser ensemble</h3>
-          <p>
-            Nous préparons des espaces dédiés aux apprenants,
-            aux enseignants et aux formateurs, avec des contenus
-            adaptés aux différents parcours.
-          </p>
-
+          <h3>Apprenants, enseignants et formateurs</h3>
+          <p>Notre objectif est de construire des espaces adaptés aux différents parcours et de permettre aux enseignants et formateurs de contribuer à la plateforme.</p>
           <div class="notice">
             <strong>Plateforme en préparation.</strong>
-            <p>
-              Les inscriptions, les espaces personnels,
-              les contenus et le programme d'affiliation seront
-              activés après leur mise en place et leurs tests.
-              Les paiements restent désactivés.
-            </p>
+            <p>La sélection de parcours ci-dessous prépare ton orientation. Elle ne crée pas encore de compte et ne donne pas accès à des cours privés.</p>
           </div>
         </div>
       </div>
@@ -176,22 +152,81 @@
 
     <section class="section" id="inscription">
       <div class="container">
-        <div class="welcome-panel">
-          <h2>Prêt à construire ton avenir ?</h2>
-          <p>
-            Choisis le parcours qui correspond à tes objectifs
-            et découvre les possibilités d'EduCap Afrique.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#domaines">
-              Explorer les parcours
-            </a>
-          </div>
-          <p class="muted">
-            L'ouverture des comptes sera annoncée après validation
-            des fonctionnalités et des tests de sécurité.
-          </p>
+        <div class="section-heading">
+          <h2>Prépare ton parcours</h2>
+          <p>Choisis ton domaine et indique ton niveau pour préparer la suite.</p>
         </div>
+
+        <form class="parcours-form" id="parcours-form">
+          <label for="domaine">1. Quel parcours veux-tu suivre ?</label>
+          <select id="domaine" name="domaine" required>
+            <option value="">Sélectionne un domaine</option>
+            <option value="scolaire">EduCap Scolaire</option>
+            <option value="campus">EduCap Campus</option>
+            <option value="competences">EduCap Compétences</option>
+          </select>
+
+          <div id="bloc-scolaire" hidden>
+            <label for="classe">2. Ta classe</label>
+            <select id="classe" name="classe">
+              <option value="">Sélectionne ta classe</option>
+              <option>CP1</option><option>CP2</option>
+              <option>CE1</option><option>CE2</option>
+              <option>CM1</option><option>CM2</option>
+              <option>6e</option><option>5e</option>
+              <option>4e</option><option>3e</option>
+              <option>2nde</option><option>1ère</option>
+              <option>Terminale</option>
+            </select>
+
+            <div id="bloc-serie" hidden>
+              <label for="serie">3. Ta série</label>
+              <select id="serie" name="serie">
+                <option value="">Sélectionne ta série</option>
+              </select>
+              <p class="muted">Les séries proposées dépendent de ta classe.</p>
+            </div>
+          </div>
+
+          <div id="bloc-campus" hidden>
+            <label for="niveau-campus">2. Ton niveau universitaire</label>
+            <select id="niveau-campus" name="niveau-campus">
+              <option value="">Sélectionne ton niveau</option>
+              <option>Licence 1</option><option>Licence 2</option>
+              <option>Licence 3</option><option>Master 1</option>
+              <option>Master 2</option><option>Doctorat</option>
+              <option>Autre formation supérieure</option>
+            </select>
+            <label for="domaine-campus">3. Ton domaine d'études</label>
+            <select id="domaine-campus" name="domaine-campus">
+              <option value="">Sélectionne ton domaine</option>
+              <option>Droit</option><option>Économie et gestion</option>
+              <option>Informatique</option><option>Santé</option>
+              <option>Sciences et technologies</option>
+              <option>Lettres et sciences humaines</option>
+              <option>Autre</option>
+            </select>
+          </div>
+
+          <div id="bloc-competences" hidden>
+            <label for="formation">2. Ta formation souhaitée</label>
+            <select id="formation" name="formation">
+              <option value="">Sélectionne une formation</option>
+              <option>Bureautique</option><option>Informatique et numérique</option>
+              <option>Comptabilité et finance</option><option>Gestion d'entreprise</option>
+              <option>Marketing et communication</option><option>Vente et commerce</option>
+              <option>Logistique</option><option>Ressources humaines</option>
+              <option>Entrepreneuriat</option><option>Langues</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Préparer mon parcours →</button>
+          <div id="resultat-parcours" class="parcours-result" role="status" aria-live="polite" hidden></div>
+        </form>
+
+        <p class="muted" style="text-align:center">
+          Cette étape est gratuite et indicative. Aucun paiement ni création de compte n'est effectué.
+        </p>
       </div>
     </section>
   </main>
