@@ -1,0 +1,212 @@
+
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#075b46">
+  <meta name="description" content="EduCap Afrique : apprendre, progresser et réussir dans les domaines scolaire, universitaire et professionnel.">
+  <title>EduCap Afrique — Apprendre. Progresser. Réussir.</title>
+  <style>
+    :root {
+      --vert: #075b46;
+      --vert-clair: #e9f6ef;
+      --orange: #f5a623;
+      --texte: #18352c;
+      --fond: #f7faf8;
+      --blanc: #fff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--fond);
+      color: var(--texte);
+      line-height: 1.6;
+    }
+    header {
+      background: white;
+      border-bottom: 1px solid #e4ece7;
+      padding: 14px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .logo { color: var(--vert); font-size: 22px; font-weight: 800; }
+    .logo span { color: var(--orange); }
+    nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    nav a { color: var(--texte); text-decoration: none; font-size: 14px; }
+    .hero {
+      padding: 72px 6% 64px;
+      background: linear-gradient(135deg, #e9f6ef, #fff9eb);
+    }
+    .hero-content { max-width: 850px; margin: auto; }
+    .tag {
+      display: inline-block;
+      padding: 6px 12px;
+      background: white;
+      color: var(--vert);
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    h1 { font-size: clamp(34px, 6vw, 60px); line-height: 1.12; margin: 20px 0; }
+    h1 span { color: var(--vert); }
+    .hero p { font-size: 18px; max-width: 680px; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+    .btn {
+      display: inline-block;
+      padding: 13px 20px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .primary { background: var(--vert); color: white; }
+    .secondary { background: white; color: var(--vert); border: 1px solid #cbded3; }
+    section { padding: 55px 6%; }
+    .section-inner { max-width: 1100px; margin: auto; }
+    .section-heading { text-align: center; margin-bottom: 30px; }
+    .section-heading h2 { font-size: clamp(25px, 4vw, 36px); margin-bottom: 8px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
+    .card {
+      background: white;
+      padding: 25px;
+      border: 1px solid #e3ece6;
+      border-radius: 16px;
+      box-shadow: 0 5px 18px #173b2810;
+    }
+    .card .emoji { font-size: 32px; }
+    .card h3 { margin-bottom: 8px; }
+    .card a { color: var(--vert); font-weight: bold; text-decoration: none; }
+    .notice {
+      margin-top: 24px;
+      padding: 16px;
+      background: #fff6df;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    .steps { background: var(--vert); color: white; }
+    .steps .card { color: var(--texte); }
+    footer { padding: 25px 6%; text-align: center; background: #073f32; color: white; font-size: 14px; }
+    @media (max-width: 600px) {
+      header { padding: 14px 5%; }
+      nav { gap: 12px; }
+      .hero { padding: 48px 5%; }
+      section { padding: 40px 5%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">EduCap <span>Afrique</span></div>
+    <nav aria-label="Navigation principale">
+      <a href="#domaines">Nos domaines</a>
+      <a href="#fonctionnement">Comment ça marche</a>
+      <a href="#apropos">À propos</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <span class="tag">L'éducation et les compétences pour tous</span>
+        <h1>Ton avenir commence par <span>un apprentissage.</span></h1>
+        <p>
+          Des ressources pour réussir à l'école, progresser dans ses études
+          et développer des compétences utiles pour sa vie professionnelle.
+          Apprends à ton rythme, étape par étape.
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="#domaines">Découvrir nos domaines →</a>
+          <a class="btn secondary" href="#fonctionnement">Comment ça marche ?</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="domaines">
+      <div class="section-inner">
+        <div class="section-heading">
+          <h2>Choisis ton parcours</h2>
+          <p>Trois domaines, un même objectif : te donner les moyens de progresser.</p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <div class="emoji">📚</div>
+            <h3>EduCap Scolaire</h3>
+            <p>Collège, lycée, cours, exercices corrigés et préparation au BEPC et au BAC.</p>
+            <a href="#inscription">Découvrir le parcours →</a>
+          </article>
+          <article class="card">
+            <div class="emoji">🎓</div>
+            <h3>EduCap Campus</h3>
+            <p>Des ressources pour accompagner les étudiants dans leurs études supérieures.</p>
+            <a href="#inscription">Découvrir le parcours →</a>
+          </article>
+          <article class="card">
+            <div class="emoji">💼</div>
+            <h3>EduCap Compétences</h3>
+            <p>Bureautique, numérique, gestion, communication et compétences professionnelles.</p>
+            <a href="#inscription">Découvrir le parcours →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="steps" id="fonctionnement">
+      <div class="section-inner">
+        <div class="section-heading">
+          <h2>Apprendre, progresser, réussir.</h2>
+          <p>Un parcours simple, pensé pour avancer progressivement.</p>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <h3>1. Choisis ton objectif</h3>
+            <p>Sélectionne le domaine qui correspond à tes besoins.</p>
+          </article>
+          <article class="card">
+            <h3>2. Apprends à ton rythme</h3>
+            <p>Découvre des contenus et entraîne-toi régulièrement.</p>
+          </article>
+          <article class="card">
+            <h3>3. Mesure tes progrès</h3>
+            <p>Identifie les notions à revoir et continue à avancer.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="apropos">
+      <div class="section-inner">
+        <div class="section-heading">
+          <h2>Une plateforme pensée pour l'Afrique</h2>
+          <p>
+            EduCap Afrique ambitionne de rendre l'apprentissage et le développement
+            des compétences plus accessibles, avec une attention particulière aux
+            besoins des apprenants en Côte d'Ivoire.
+          </p>
+        </div>
+        <div class="notice">
+          <strong>Version de lancement en préparation.</strong>
+          Les comptes, les contenus pédagogiques validés, le suivi personnalisé
+          et les paiements seront activés après leur configuration et leurs tests.
+          Aucun paiement n'est collecté sur cette version.
+        </div>
+      </div>
+    </section>
+
+    <section id="inscription">
+      <div class="section-inner section-heading">
+        <h2>Prêt à commencer ?</h2>
+        <p>Les parcours seront ouverts progressivement après la préparation de la plateforme.</p>
+        <a class="btn primary" href="#domaines">Explorer les parcours</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 EduCap Afrique — Apprendre. Progresser. Réussir.
+  </footer>
+</body>
+</html>
