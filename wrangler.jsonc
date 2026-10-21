@@ -1,0 +1,10 @@
+
+{
+  "$schema": "https://json.schemastore.org/wrangler",
+  "name": "educap-afrique",
+  "compatibility_date": "2026-10-21",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS"
+  }
+}
