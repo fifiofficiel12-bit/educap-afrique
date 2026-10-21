@@ -4,7 +4,7 @@
 // 1. CONFIGURATION SUPABASE
 // ==================================================
 
-const SUPABASE_URL = "https://byzsqblgsssymvsztaqb.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://byzsqblgsssymvsztaqb.supabase.co";
 const SUPABASE_PUBLIC_KEY = "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR";
 
 document.addEventListener("DOMContentLoaded", () => {
