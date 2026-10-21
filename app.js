@@ -1,6 +1,15 @@
 
 "use strict";
 
+// ==================================================
+// 1. CONFIGURATION SUPABASE
+// Remplace les deux valeurs par celles de TON projet.
+// Utilise uniquement la clé publique (publishable/anon).
+// ==================================================
+
+const SUPABASE_URL = "REMPLACE_PAR_URL_DE_TON_PROJET";
+const SUPABASE_PUBLIC_KEY = "REMPLACE_PAR_TA_CLE_PUBLIQUE";
+
 document.addEventListener("DOMContentLoaded", () => {
   const domaine = document.querySelector("#domaine");
   const classe = document.querySelector("#classe");
@@ -14,11 +23,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const formulaire = document.querySelector("#parcours-form");
   const resultat = document.querySelector("#resultat-parcours");
 
-  if (!domaine || !formulaire || !resultat) return;
+  if (!domaine || !formulaire || !resultat) {
+    console.error("EduCap Afrique : formulaire introuvable.");
+    return;
+  }
 
   const niveauCampus = document.querySelector("#niveau-campus");
   const domaineCampus = document.querySelector("#domaine-campus");
   const formation = document.querySelector("#formation");
+  const bouton = formulaire.querySelector('button[type="submit"]');
+
+  // Connexion à Supabase
+  let supabaseClient = null;
+
+  if (
+    window.supabase &&
+    SUPABASE_URL.startsWith("https://") &&
+    !SUPABASE_URL.includes("REMPLACE_PAR") &&
+    SUPABASE_PUBLIC_KEY &&
+    !SUPABASE_PUBLIC_KEY.includes("REMPLACE_PAR")
+  ) {
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLIC_KEY
+    );
+  }
 
   const seriesParClasse = {
     "2nde": ["A", "C"],
@@ -39,6 +68,28 @@ document.addEventListener("DOMContentLoaded", () => {
   function masquerResultat() {
     resultat.hidden = true;
     resultat.replaceChildren();
+  }
+
+  function afficherMessage(titreTexte, messageTexte, erreur = false) {
+    resultat.replaceChildren();
+
+    const titre = document.createElement("h3");
+    titre.textContent = titreTexte;
+
+    const message = document.createElement("p");
+    message.textContent = messageTexte;
+
+    resultat.append(titre, message);
+    resultat.style.background = erreur ? "#fff0f0" : "#eaf6ef";
+    resultat.style.color = erreur ? "#9b1c1c" : "#075b46";
+    resultat.hidden = false;
+
+    resultat.scrollIntoView({
+      behavior: window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches ? "auto" : "smooth",
+      block: "nearest"
+    });
   }
 
   function mettreAJourSeries() {
@@ -122,61 +173,134 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  formulaire.addEventListener("submit", (evenement) => {
+  // Préparer les données du parcours choisi.
+  function obtenirParcours() {
+    const choix = domaine.value;
+
+    const donnees = {
+      domaine: choix,
+      classe: null,
+      serie: null,
+      niveau_campus: null,
+      domaine_campus: null,
+      formation: null
+    };
+
+    const details = [];
+
+    if (choix === "scolaire") {
+      donnees.classe = classe.value;
+      details.push("Classe : " + classe.value);
+
+      if (blocSerie && !blocSerie.hidden) {
+        donnees.serie = serie.value;
+        details.push("Série : " + serie.value);
+      }
+    } else if (choix === "campus") {
+      donnees.niveau_campus = niveauCampus.value;
+      donnees.domaine_campus = domaineCampus.value;
+
+      details.push("Niveau : " + niveauCampus.value);
+      details.push("Domaine : " + domaineCampus.value);
+    } else if (choix === "competences") {
+      donnees.formation = formation.value;
+      details.push("Formation : " + formation.value);
+    }
+
+    return { donnees, details, choix };
+  }
+
+  formulaire.addEventListener("submit", async (evenement) => {
     evenement.preventDefault();
 
     if (!formulaire.reportValidity()) return;
 
-    const choix = domaine.value;
-    const details = [];
+    const { donnees, details, choix } = obtenirParcours();
 
-    if (choix === "scolaire") {
-      details.push("Classe : " + classe.value);
-
-      if (blocSerie && !blocSerie.hidden) {
-        details.push("Série : " + serie.value);
-      }
-    } else if (choix === "campus") {
-      details.push("Niveau : " + niveauCampus.value);
-      details.push("Domaine : " + domaineCampus.value);
-    } else if (choix === "competences") {
-      details.push("Formation : " + formation.value);
+    if (!nomsDomaines[choix]) {
+      afficherMessage(
+        "Choix invalide",
+        "Sélectionne un domaine pour continuer.",
+        true
+      );
+      return;
     }
 
-    resultat.replaceChildren();
+    // Ne jamais prétendre enregistrer si Supabase n'est pas configuré.
+    if (!supabaseClient) {
+      afficherMessage(
+        "Configuration à terminer",
+        "La connexion Supabase n'est pas encore configurée. " +
+        "Remplace l'URL et la clé publique en haut du fichier app.js."
+      );
+      return;
+    }
 
-    const titre = document.createElement("h3");
-    titre.textContent = "Ton parcours est préparé !";
-    resultat.appendChild(titre);
+    const texteBouton = bouton ? bouton.textContent : "";
 
-    const nom = document.createElement("p");
-    nom.textContent = nomsDomaines[choix];
-    resultat.appendChild(nom);
+    if (bouton) {
+      bouton.disabled = true;
+      bouton.textContent = "Enregistrement en cours...";
+    }
 
-    const liste = document.createElement("ul");
+    try {
+      const { error } = await supabaseClient
+        .from("parcours_apprenants")
+        .insert([donnees]);
 
-    details.forEach((detail) => {
-      const element = document.createElement("li");
-      element.textContent = detail;
-      liste.appendChild(element);
-    });
+      if (error) throw error;
 
-    resultat.appendChild(liste);
+      resultat.replaceChildren();
 
-    const information = document.createElement("p");
-    information.textContent =
-      "Ta sélection est affichée sur cette page. " +
-      "Elle n'est pas encore enregistrée dans un compte.";
+      const titre = document.createElement("h3");
+      titre.textContent = "Ton parcours est enregistré !";
+      resultat.appendChild(titre);
 
-    resultat.appendChild(information);
-    resultat.hidden = false;
+      const nom = document.createElement("p");
+      nom.textContent = nomsDomaines[choix];
+      resultat.appendChild(nom);
 
-    resultat.scrollIntoView({
-      behavior: window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches ? "auto" : "smooth",
-      block: "nearest"
-    });
+      const liste = document.createElement("ul");
+
+      details.forEach((detail) => {
+        const element = document.createElement("li");
+        element.textContent = detail;
+        liste.appendChild(element);
+      });
+
+      resultat.appendChild(liste);
+
+      const information = document.createElement("p");
+      information.textContent =
+        "Ton choix a été enregistré dans EduCap Afrique. " +
+        "Cette étape ne crée pas encore de compte utilisateur.";
+
+      resultat.appendChild(information);
+      resultat.style.background = "#eaf6ef";
+      resultat.style.color = "#075b46";
+      resultat.hidden = false;
+
+      resultat.scrollIntoView({
+        behavior: window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches ? "auto" : "smooth",
+        block: "nearest"
+      });
+    } catch (erreur) {
+      console.error("Erreur d'enregistrement Supabase :", erreur);
+
+      afficherMessage(
+        "Enregistrement impossible",
+        "Le parcours n'a pas été enregistré. Vérifie la table Supabase, " +
+        "les autorisations et les paramètres de connexion, puis réessaie.",
+        true
+      );
+    } finally {
+      if (bouton) {
+        bouton.disabled = false;
+        bouton.textContent = texteBouton;
+      }
+    }
   });
 
   // Navigation fluide vers les sections.
@@ -204,5 +328,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   mettreAJourDomaine();
 
-  console.info("EduCap Afrique : parcours initialisé.");
+  console.info(
+    supabaseClient
+      ? "EduCap Afrique : Supabase est configuré."
+      : "EduCap Afrique : paramètres Supabase à compléter."
+  );
 });
