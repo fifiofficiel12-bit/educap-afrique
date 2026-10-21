@@ -1,11 +1,13 @@
+
 "use strict";
 
 // ==================================================
-// 1. CONFIGURATION SUPABASE
+// EDUCAP AFRIQUE — CONFIGURATION SUPABASE
 // ==================================================
 
 const SUPABASE_URL = "https://byzsqblgsssymvsztaqb.supabase.co";
-const SUPABASE_PUBLIC_KEY = "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR";
+const SUPABASE_PUBLIC_KEY =
+  "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR";
 
 document.addEventListener("DOMContentLoaded", () => {
   const domaine = document.querySelector("#domaine");
@@ -20,25 +22,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const formulaire = document.querySelector("#parcours-form");
   const resultat = document.querySelector("#resultat-parcours");
 
+  const niveauCampus = document.querySelector("#niveau-campus");
+  const domaineCampus = document.querySelector("#domaine-campus");
+  const formation = document.querySelector("#formation");
+
   if (!domaine || !formulaire || !resultat) {
     console.error("EduCap Afrique : formulaire introuvable.");
     return;
   }
 
-  const niveauCampus = document.querySelector("#niveau-campus");
-  const domaineCampus = document.querySelector("#domaine-campus");
-  const formation = document.querySelector("#formation");
   const bouton = formulaire.querySelector('button[type="submit"]');
 
-  // Connexion à Supabase
+  // Initialisation du client Supabase
   let supabaseClient = null;
 
   try {
     if (
       window.supabase &&
-      typeof window.supabase.createClient === "function" &&
-      SUPABASE_URL.startsWith("https://") &&
-      SUPABASE_PUBLIC_KEY
+      typeof window.supabase.createClient === "function"
     ) {
       supabaseClient = window.supabase.createClient(
         SUPABASE_URL,
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
   } catch (erreur) {
-    console.error("Erreur d'initialisation Supabase :", erreur);
+    console.error("Erreur de connexion Supabase :", erreur);
   }
 
   // Séries disponibles selon la classe
@@ -86,21 +87,23 @@ document.addEventListener("DOMContentLoaded", () => {
     resultat.hidden = false;
 
     resultat.scrollIntoView({
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "auto"
-        : "smooth",
+      behavior: window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches ? "auto" : "smooth",
       block: "nearest"
     });
   }
 
-  // Actualiser les séries lorsque la classe change
+  // Mise à jour des séries selon la classe choisie
   function mettreAJourSeries() {
     if (!classe || !serie || !blocSerie) return;
 
     const ancienneValeur = serie.value;
     const series = seriesParClasse[classe.value] || [];
 
-    serie.replaceChildren(new Option("Sélectionne ta série", ""));
+    serie.replaceChildren(
+      new Option("Sélectionne ta série", "")
+    );
 
     series.forEach((nom) => {
       serie.add(new Option("Série " + nom, nom));
@@ -116,10 +119,12 @@ document.addEventListener("DOMContentLoaded", () => {
     blocSerie.hidden = !afficher;
     rendreObligatoire(serie, afficher);
 
-    if (!afficher) serie.value = "";
+    if (!afficher) {
+      serie.value = "";
+    }
   }
 
-  // Afficher les champs du domaine choisi
+  // Affichage des champs adaptés au domaine
   function mettreAJourDomaine() {
     const choix = domaine.value;
 
@@ -145,8 +150,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function choisirDomaine(valeur) {
+    if (!Object.prototype.hasOwnProperty.call(nomsDomaines, valeur)) {
+      return;
+    }
+
     domaine.value = valeur;
     mettreAJourDomaine();
+
+    const section = document.querySelector("#inscription");
+    if (section) {
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
   }
 
   domaine.addEventListener("change", mettreAJourDomaine);
@@ -158,11 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (serie) {
-    serie.addEventListener("change", masquerResultat);
-  }
-
-  [niveauCampus, domaineCampus, formation].forEach((champ) => {
+  [serie, niveauCampus, domaineCampus, formation].forEach((champ) => {
     if (champ) {
       champ.addEventListener("change", masquerResultat);
     }
@@ -174,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Préparer les données du parcours
+  // Préparation des données destinées à Supabase
   function obtenirParcours() {
     const choix = domaine.value;
 
@@ -193,17 +206,23 @@ document.addEventListener("DOMContentLoaded", () => {
       donnees.classe = classe.value;
       details.push("Classe : " + classe.value);
 
-      if (blocSerie && !blocSerie.hidden) {
+      const series = seriesParClasse[classe.value] || [];
+
+      if (series.length > 0) {
         donnees.serie = serie.value;
         details.push("Série : " + serie.value);
       }
-    } else if (choix === "campus") {
+    }
+
+    if (choix === "campus") {
       donnees.niveau_campus = niveauCampus.value;
       donnees.domaine_campus = domaineCampus.value;
 
       details.push("Niveau : " + niveauCampus.value);
       details.push("Domaine : " + domaineCampus.value);
-    } else if (choix === "competences") {
+    }
+
+    if (choix === "competences") {
       donnees.formation = formation.value;
       details.push("Formation : " + formation.value);
     }
@@ -211,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return { donnees, details, choix };
   }
 
-  // Enregistrer le parcours dans Supabase
+  // Enregistrement réel dans Supabase
   formulaire.addEventListener("submit", async (evenement) => {
     evenement.preventDefault();
 
@@ -231,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!supabaseClient) {
       afficherMessage(
         "Connexion indisponible",
-        "Le client Supabase ne se charge pas. Vérifie que la bibliothèque Supabase est présente dans index.html et que les paramètres sont corrects.",
+        "La connexion à Supabase n'a pas pu être initialisée. Vérifie que la bibliothèque Supabase est chargée dans index.html.",
         true
       );
       return;
@@ -245,13 +264,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const { error } = await supabaseClient
+      const { data, error } = await supabaseClient
         .from("parcours_apprenants")
-        .insert([donnees]);
+        .insert([donnees])
+        .select("id");
 
       if (error) {
-        console.error("Erreur Supabase :", error);
         throw error;
+      }
+
+      // Ne pas annoncer de succès sans confirmation de Supabase.
+      if (!data || data.length !== 1 || data[0].id == null) {
+        throw new Error(
+          "L'enregistrement n'a pas pu être confirmé. Réessaie."
+        );
       }
 
       resultat.replaceChildren();
@@ -276,33 +302,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const information = document.createElement("p");
       information.textContent =
-        "Ton choix a été enregistré dans EduCap Afrique. " +
+        "Supabase a confirmé l'enregistrement de ton parcours. " +
         "Cette étape ne crée pas encore de compte utilisateur.";
 
       resultat.appendChild(information);
+
       resultat.style.background = "#eaf6ef";
       resultat.style.color = "#075b46";
       resultat.hidden = false;
 
       resultat.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
+        behavior: window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches ? "auto" : "smooth",
         block: "nearest"
       });
+
+      // Réinitialiser le formulaire après un enregistrement confirmé.
+      formulaire.reset();
+      mettreAJourDomaine();
+
     } catch (erreur) {
       console.error("Erreur d'enregistrement Supabase :", erreur);
 
-      const detailErreur =
-        erreur && erreur.message
-          ? erreur.message
-          : "Erreur inconnue. Consulte la console du navigateur.";
+      let message =
+        "Une erreur est survenue pendant l'enregistrement.";
+
+      if (erreur && erreur.message) {
+        message += " Détail : " + erreur.message;
+      }
 
       afficherMessage(
         "Enregistrement impossible",
-        "Détail : " + detailErreur,
+        message,
         true
       );
+
     } finally {
       if (bouton) {
         bouton.disabled = false;
@@ -311,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Navigation fluide vers les sections
+  // Navigation fluide
   document.querySelectorAll('a[href^="#"]').forEach((lien) => {
     lien.addEventListener("click", (evenement) => {
       const id = lien.getAttribute("href");
@@ -324,9 +359,9 @@ document.addEventListener("DOMContentLoaded", () => {
       evenement.preventDefault();
 
       cible.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
+        behavior: window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches ? "auto" : "smooth",
         block: "start"
       });
 
