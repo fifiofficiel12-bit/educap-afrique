@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function mettreAJourSeries() {
     if (!classe || !serie || !blocSerie) return;
 
-    const anciennesValeurs = serie.value;
+    const ancienneValeur = serie.value;
     const series = seriesParClasse[classe.value] || [];
 
     serie.replaceChildren(
@@ -55,8 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
       serie.add(new Option("Série " + nom, nom));
     });
 
-    if (series.includes(anciennesValeurs)) {
-      serie.value = anciennesValeurs;
+    if (series.includes(ancienneValeur)) {
+      serie.value = ancienneValeur;
     }
 
     const afficher =
@@ -71,9 +71,17 @@ document.addEventListener("DOMContentLoaded", () => {
   function mettreAJourDomaine() {
     const choix = domaine.value;
 
-    blocScolaire.hidden = choix !== "scolaire";
-    blocCampus.hidden = choix !== "campus";
-    blocCompetences.hidden = choix !== "competences";
+    if (blocScolaire) {
+      blocScolaire.hidden = choix !== "scolaire";
+    }
+
+    if (blocCampus) {
+      blocCampus.hidden = choix !== "campus";
+    }
+
+    if (blocCompetences) {
+      blocCompetences.hidden = choix !== "competences";
+    }
 
     rendreObligatoire(classe, choix === "scolaire");
     rendreObligatoire(niveauCampus, choix === "campus");
@@ -125,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (choix === "scolaire") {
       details.push("Classe : " + classe.value);
 
-      if (!blocSerie.hidden) {
+      if (blocSerie && !blocSerie.hidden) {
         details.push("Série : " + serie.value);
       }
     } else if (choix === "campus") {
@@ -175,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('a[href^="#"]').forEach((lien) => {
     lien.addEventListener("click", (evenement) => {
       const id = lien.getAttribute("href");
+
       if (!id || id === "#") return;
 
       const cible = document.querySelector(id);
