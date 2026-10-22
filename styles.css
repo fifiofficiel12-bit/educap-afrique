@@ -565,3 +565,55 @@ body {
   .main-nav { gap: 10px 14px; }
   .main-nav a { font-size: 12px; }
 }
+
+
+/* Bibliothèque vidéo : cours et tutoriels */
+.video-section {
+  background: linear-gradient(180deg, #f5f8ff 0%, #edf4ff 100%);
+}
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  align-items: stretch;
+}
+.video-card {
+  padding: clamp(22px, 4vw, 32px);
+  border: 1px solid var(--bordure);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(25, 64, 130, .07);
+}
+.video-card-icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border-radius: 17px;
+  background: #eaf1ff;
+  font-size: 29px;
+}
+.video-label {
+  display: inline-block;
+  margin-top: 18px;
+  color: #1457d9;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.video-card h3 { margin: 8px 0 10px; font-size: 23px; }
+.video-card p, .video-card li { color: var(--secondaire); }
+.video-card ol { padding-left: 22px; margin-bottom: 24px; }
+.video-card li { margin: 7px 0; }
+.video-card .btn { margin-top: 10px; }
+.video-note {
+  max-width: 760px;
+  margin: 22px auto 0;
+  color: var(--secondaire);
+  font-size: 14px;
+  text-align: center;
+}
+@media (max-width: 650px) {
+  .video-grid { grid-template-columns: 1fr; }
+}
