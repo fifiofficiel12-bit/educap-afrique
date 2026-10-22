@@ -252,4 +252,194 @@ document.addEventListener("DOMContentLoaded", () => {
       if (bouton) bouton.disabled = false;
     }
   });
+
+  // Espace apprenant : authentification Supabase et accès aux cours publiés.
+  const connexionForm = document.querySelector("#connexion-form");
+  const inscriptionForm = document.querySelector("#inscription-form");
+  const authForms = document.querySelector("#auth-forms");
+  const authMessage = document.querySelector("#auth-message");
+  const compteConnecte = document.querySelector("#compte-connecte");
+  const compteBienvenue = document.querySelector("#compte-bienvenue");
+  const listeCours = document.querySelector("#liste-cours");
+  const deconnexionBouton = document.querySelector("#deconnexion-bouton");
+
+  const messageAuth = (message, succes = false) => {
+    if (!authMessage) return;
+    authMessage.textContent = message;
+    authMessage.style.color = succes ? "#16803c" : "#b42318";
+    authMessage.hidden = false;
+  };
+
+  const echapperHTML = (valeur) => String(valeur ?? "").replace(/[&<>"']/g, (caractere) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[caractere]);
+
+  const afficherCompte = async (session) => {
+    if (!authForms || !compteConnecte) return;
+    const utilisateur = session?.user;
+    authForms.hidden = Boolean(utilisateur);
+    compteConnecte.hidden = !utilisateur;
+    if (!utilisateur) {
+      if (listeCours) listeCours.replaceChildren();
+      return;
+    }
+
+    const { data: profil, error: erreurProfil } = await clientSupabase
+      .from("profiles")
+      .select("full_name, role, parcours, classe, serie")
+      .eq("id", utilisateur.id)
+      .maybeSingle();
+
+    if (erreurProfil) {
+      messageAuth("Connecté, mais impossible de charger ton profil : " + erreurProfil.message);
+      return;
+    }
+
+    const nom = profil?.full_name || utilisateur.email || "apprenant";
+    const role = profil?.role || "apprenant";
+    if (compteBienvenue) {
+      compteBienvenue.textContent = "Bienvenue " + nom + " — espace " + role + ".";
+    }
+
+    if (!listeCours) return;
+    listeCours.textContent = "Chargement des cours…";
+
+    const { data: cours, error: erreurCours } = await clientSupabase
+      .from("courses")
+      .select("id, title, description, category, subject, classe, serie, content")
+      .eq("published", true)
+      .order("created_at", { ascending: false });
+
+    if (erreurCours) {
+      listeCours.textContent = "Impossible de charger les cours : " + erreurCours.message;
+      return;
+    }
+
+    const { data: inscriptions, error: erreurInscriptions } = await clientSupabase
+      .from("enrollments")
+      .select("course_id")
+      .eq("student_id", utilisateur.id);
+
+    const dejaInscrit = new Set((erreurInscriptions ? [] : inscriptions || []).map((ligne) => ligne.course_id));
+
+    if (!cours?.length) {
+      listeCours.textContent = "Aucun cours n’est publié pour le moment. Reviens bientôt !";
+      return;
+    }
+
+    listeCours.innerHTML = cours.map((element) => {
+      const meta = [element.category, element.subject, element.classe, element.serie]
+        .filter(Boolean).join(" · ");
+      const inscrit = dejaInscrit.has(element.id);
+      return `<article class="course-item">
+        <p class="course-meta">${echapperHTML(meta || "Cours EduCap Afrique")}</p>
+        <h4>${echapperHTML(element.title)}</h4>
+        <p>${echapperHTML(element.description || "")}</p>
+        ${element.content ? `<details><summary>Consulter le contenu</summary><p>${echapperHTML(element.content)}</p></details>` : ""}
+        <button class="btn ${inscrit ? "btn-secondary" : "btn-primary"}" type="button" data-inscrire-cours="${echapperHTML(element.id)}" ${inscrit ? "disabled" : ""}>
+          ${inscrit ? "Déjà dans mes cours" : "M’inscrire gratuitement"}
+        </button>
+      </article>`;
+    }).join("");
+
+    listeCours.querySelectorAll("[data-inscrire-cours]").forEach((boutonCours) => {
+      boutonCours.addEventListener("click", async () => {
+        boutonCours.disabled = true;
+        boutonCours.textContent = "Inscription en cours…";
+        const { error } = await clientSupabase.from("enrollments").insert([{
+          student_id: utilisateur.id,
+          course_id: boutonCours.getAttribute("data-inscrire-cours")
+        }]);
+        if (error && error.code !== "23505") {
+          messageAuth("Inscription au cours impossible : " + error.message);
+          boutonCours.disabled = false;
+          boutonCours.textContent = "Réessayer";
+          return;
+        }
+        messageAuth("Le cours a été ajouté à tes inscriptions.", true);
+        await afficherCompte({ user: utilisateur });
+      });
+    });
+  };
+
+  connexionForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const bouton = connexionForm.querySelector('button[type="submit"]');
+    if (bouton) bouton.disabled = true;
+    try {
+      const donneesForm = new FormData(connexionForm);
+      const { data, error } = await clientSupabase.auth.signInWithPassword({
+        email: String(donneesForm.get("email") || "").trim(),
+        password: String(donneesForm.get("password") || "")
+      });
+      if (error) {
+        messageAuth("Connexion impossible : vérifie ton adresse e-mail et ton mot de passe.");
+        console.error("Erreur de connexion Supabase :", error.message);
+        return;
+      }
+      messageAuth("Connexion réussie.", true);
+      await afficherCompte(data.session);
+    } finally {
+      if (bouton) bouton.disabled = false;
+    }
+  });
+
+  inscriptionForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const bouton = inscriptionForm.querySelector('button[type="submit"]');
+    if (bouton) bouton.disabled = true;
+    try {
+      const donneesForm = new FormData(inscriptionForm);
+      const nom = String(donneesForm.get("full_name") || "").trim();
+      const email = String(donneesForm.get("email") || "").trim();
+      const password = String(donneesForm.get("password") || "");
+      if (nom.length < 2) {
+        messageAuth("Saisis ton nom complet.");
+        return;
+      }
+      const { data, error } = await clientSupabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: nom } }
+      });
+      if (error) {
+        messageAuth("Création du compte impossible : " + error.message);
+        return;
+      }
+      inscriptionForm.reset();
+      if (data.session) {
+        messageAuth("Ton compte est créé. Bienvenue sur EduCap Afrique !", true);
+        await afficherCompte(data.session);
+      } else {
+        messageAuth("Compte créé. Consulte ta boîte e-mail pour confirmer ton adresse avant de te connecter.", true);
+      }
+    } finally {
+      if (bouton) bouton.disabled = false;
+    }
+  });
+
+  deconnexionBouton?.addEventListener("click", async () => {
+    deconnexionBouton.disabled = true;
+    const { error } = await clientSupabase.auth.signOut();
+    deconnexionBouton.disabled = false;
+    if (error) {
+      messageAuth("Déconnexion impossible : " + error.message);
+      return;
+    }
+    messageAuth("Tu es déconnecté.", true);
+    await afficherCompte(null);
+  });
+
+  if (connexionForm || inscriptionForm) {
+    clientSupabase.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        messageAuth("Impossible de vérifier la session. Recharge la page.");
+        return;
+      }
+      afficherCompte(data.session);
+    });
+    clientSupabase.auth.onAuthStateChange((_evenement, session) => {
+      afficherCompte(session);
+    });
+  }
 });
