@@ -262,6 +262,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const compteBienvenue = document.querySelector("#compte-bienvenue");
   const listeCours = document.querySelector("#liste-cours");
   const deconnexionBouton = document.querySelector("#deconnexion-bouton");
+  const espaceFormateur = document.querySelector("#espace-formateur");
+  const coursForm = document.querySelector("#cours-form");
+  const mesCoursFormateur = document.querySelector("#mes-cours-formateur");
+  const espaceAdmin = document.querySelector("#espace-admin");
+  const coursAValider = document.querySelector("#cours-a-valider");
 
   const messageAuth = (message, succes = false) => {
     if (!authMessage) return;
@@ -300,7 +305,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (compteBienvenue) {
       compteBienvenue.textContent = "Bienvenue " + nom + " — espace " + role + ".";
     }
-
+    if (espaceFormateur) espaceFormateur.hidden = !["formateur", "admin"].includes(role);
+    if (espaceAdmin) espaceAdmin.hidden = role !== "admin";
     if (!listeCours) return;
     listeCours.textContent = "Chargement des cours…";
 
@@ -341,6 +347,39 @@ document.addEventListener("DOMContentLoaded", () => {
         </button>
       </article>`;
     }).join("");
+
+    if (["formateur", "admin"].includes(role)) {
+      const requeteBrouillons = clientSupabase.from("courses")
+        .select("id, title, description, category, subject, classe, serie, content, published, created_at")
+        .order("created_at", { ascending: false });
+      const { data: coursGeres, error: erreurGeres } = role === "admin"
+        ? await requeteBrouillons
+        : await requeteBrouillons.eq("teacher_id", utilisateur.id);
+      if (erreurGeres) {
+        if (mesCoursFormateur) mesCoursFormateur.textContent = "Impossible de charger tes cours.";
+        if (coursAValider) coursAValider.textContent = "Impossible de charger les cours à valider.";
+      } else {
+        if (mesCoursFormateur) {
+          const propres = (coursGeres || []).filter(c => role === "admin" || c.teacher_id === utilisateur.id || !c.published);
+          mesCoursFormateur.innerHTML = propres.length ? propres.map(c => `<article class="course-item"><p class="course-meta">${echapperHTML(c.category)} · ${c.published ? "Publié" : "En attente / brouillon"}</p><h4>${echapperHTML(c.title)}</h4><p>${echapperHTML(c.description || "")}</p></article>`).join("") : "<p>Aucun cours créé pour le moment.</p>";
+        }
+        if (role === "admin" && coursAValider) {
+          const aValider = (coursGeres || []).filter(c => !c.published);
+          coursAValider.innerHTML = aValider.length ? aValider.map(c => `<article class="course-item"><p class="course-meta">${echapperHTML(c.category)} · À valider</p><h4>${echapperHTML(c.title)}</h4><p>${echapperHTML(c.description || "")}</p><details><summary>Lire le contenu</summary><p>${echapperHTML(c.content || "")}</p></details><button class="btn btn-primary" type="button" data-publier-cours="${echapperHTML(c.id)}">Valider et publier</button></article>`).join("") : "<p>Aucun cours en attente de validation.</p>";
+          coursAValider.querySelectorAll("[data-publier-cours]").forEach(btn => btn.addEventListener("click", async () => {
+            btn.disabled = true;
+            const { error } = await clientSupabase.from("courses").update({ published: true }).eq("id", btn.dataset.publierCours);
+            if (error) {
+              messageAuth("Publication refusée : " + error.message);
+              btn.disabled = false;
+              return;
+            }
+            messageAuth("Cours publié et visible pour les apprenants.", true);
+            await afficherCompte({ user: utilisateur });
+          }));
+        }
+      }
+    }
 
     listeCours.querySelectorAll("[data-inscrire-cours]").forEach((boutonCours) => {
       boutonCours.addEventListener("click", async () => {
@@ -413,6 +452,50 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         messageAuth("Compte créé. Consulte ta boîte e-mail pour confirmer ton adresse avant de te connecter.", true);
       }
+    } finally {
+      if (bouton) bouton.disabled = false;
+    }
+  });
+
+  coursForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const bouton = coursForm.querySelector('button[type="submit"]');
+    if (bouton) bouton.disabled = true;
+    try {
+      const f = new FormData(coursForm);
+      const titre = String(f.get("title") || "").trim();
+      const contenu = String(f.get("content") || "").trim();
+      if (titre.length < 3 || contenu.length < 10) {
+        messageAuth("Ajoute un titre et un contenu de cours suffisamment détaillé.");
+        return;
+      }
+      const { data: sessionData } = await clientSupabase.auth.getSession();
+      const utilisateur = sessionData.session?.user;
+      if (!utilisateur) {
+        messageAuth("Reconnecte-toi pour envoyer ton cours.");
+        return;
+      }
+      const { error } = await clientSupabase.from("courses").insert([{
+        title: titre,
+        description: String(f.get("description") || "").trim() || null,
+        category: String(f.get("category") || ""),
+        subject: String(f.get("subject") || "").trim() || null,
+        classe: String(f.get("classe") || "").trim() || null,
+        serie: String(f.get("serie") || "").trim() || null,
+        content: contenu,
+        teacher_id: utilisateur.id,
+        published: false
+      }]);
+      if (error) {
+        messageAuth("Envoi impossible. Vérifie que ton compte a été autorisé comme formateur. " + error.message);
+        return;
+      }
+      coursForm.reset();
+      messageAuth("Cours envoyé. Il restera invisible aux apprenants jusqu'à sa validation.", true);
+      await afficherCompte({ user: utilisateur });
+    } catch (erreur) {
+      console.error(erreur);
+      messageAuth("Une erreur est survenue pendant l'envoi du cours.");
     } finally {
       if (bouton) bouton.disabled = false;
     }
