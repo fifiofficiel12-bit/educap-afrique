@@ -214,6 +214,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      // Si l'apprenant est connecté, actualiser aussi le parcours de son compte.
+      const { data: sessionInfo } = await clientSupabase.auth.getSession();
+      const utilisateurConnecte = sessionInfo.session?.user;
+
+      if (utilisateurConnecte) {
+        const { error: erreurProfilParcours } = await clientSupabase
+          .from("profiles")
+          .update({
+            parcours: domaineChoisi,
+            classe: donnees.classe,
+            serie: donnees.serie
+          })
+          .eq("id", utilisateurConnecte.id);
+
+        if (erreurProfilParcours) {
+          afficherMessage(
+            "Le parcours a été choisi, mais ton profil n'a pas pu être actualisé : " +
+              erreurProfilParcours.message
+          );
+          return;
+        }
+      }
+
       const { error } = await clientSupabase
         .from("parcours_apprenants")
         .insert([donnees]);
@@ -310,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!listeCours) return;
     listeCours.textContent = "Chargement des cours…";
 
-    const { data: cours, error: erreurCours } = await clientSupabase
+    const { data: tousLesCours, error: erreurCours } = await clientSupabase
       .from("courses")
       .select("id, title, description, category, subject, classe, serie, content")
       .eq("published", true)
@@ -336,8 +359,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const dejaInscrit = new Set((inscriptions || []).map((ligne) => ligne.course_id));
 
-    if (!cours?.length) {
-      listeCours.textContent = "Aucun cours n’est publié pour le moment. Reviens bientôt !";
+    const parcours = profil?.parcours || "scolaire";
+    const classeProfil = profil?.classe || "";
+    const serieProfil = profil?.serie || "";
+    const cours = (tousLesCours || []).filter((element) => {
+      if (element.category !== parcours) return false;
+      if (parcours === "scolaire") {
+        if (element.classe && classeProfil && element.classe !== classeProfil) return false;
+        if (element.serie && serieProfil && element.serie !== serieProfil) return false;
+        if (element.classe && !classeProfil) return false;
+        if (element.serie && !serieProfil) return false;
+      }
+      return true;
+    });
+
+    if (!cours.length) {
+      listeCours.textContent = "Aucun cours publié ne correspond à ton parcours actuel (" +
+        parcours + (classeProfil ? " · " + classeProfil : "") +
+        (serieProfil ? " · " + serieProfil : "") +
+        "). Tu peux rechoisir ton parcours avec le bouton « Rechoisir mon parcours ».";
       return;
     }
 
