@@ -317,6 +317,56 @@
     </section>
   </main>
 
+    <section class="section" id="espace-personnel">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Mon espace apprenant</h2>
+          <p>Crée ton compte ou connecte-toi pour retrouver les cours publiés.</p>
+        </div>
+        <div class="welcome-panel account-panel">
+          <div id="auth-message" class="parcours-result" role="status" aria-live="polite" hidden></div>
+          <div id="auth-forms" class="account-grid">
+            <form id="connexion-form" class="form-card">
+              <h3>J'ai déjà un compte</h3>
+              <div class="form-group">
+                <label for="connexion-email">Adresse e-mail</label>
+                <input id="connexion-email" name="email" type="email" autocomplete="email" required>
+              </div>
+              <div class="form-group">
+                <label for="connexion-password">Mot de passe</label>
+                <input id="connexion-password" name="password" type="password" autocomplete="current-password" minlength="8" required>
+              </div>
+              <button class="btn btn-primary" type="submit">Me connecter</button>
+            </form>
+            <form id="inscription-form" class="form-card">
+              <h3>Je crée mon compte</h3>
+              <div class="form-group">
+                <label for="inscription-nom">Nom complet</label>
+                <input id="inscription-nom" name="full_name" autocomplete="name" maxlength="100" required>
+              </div>
+              <div class="form-group">
+                <label for="inscription-email">Adresse e-mail</label>
+                <input id="inscription-email" name="email" type="email" autocomplete="email" required>
+              </div>
+              <div class="form-group">
+                <label for="inscription-password">Créer un mot de passe (8 caractères minimum)</label>
+                <input id="inscription-password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+              </div>
+              <button class="btn btn-primary" type="submit">Créer mon compte apprenant</button>
+              <p class="muted">Les comptes créés ici ont le rôle apprenant. Les rôles formateur et administrateur sont attribués séparément.</p>
+            </form>
+          </div>
+          <div id="compte-connecte" hidden>
+            <p id="compte-bienvenue"></p>
+            <button id="deconnexion-bouton" class="btn btn-secondary" type="button">Me déconnecter</button>
+            <h3 style="margin-top:28px">Cours disponibles</h3>
+            <p class="muted">Seuls les cours publiés par EduCap Afrique s'affichent ici.</p>
+            <div id="liste-cours" class="course-list" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   <footer class="site-footer">
     <div class="container">
       <p><strong>EduCap Afrique</strong></p>
