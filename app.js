@@ -99,8 +99,9 @@ document.addEventListener("DOMContentLoaded", () => {
       serie.value = ancienneSerie;
     }
 
-    serie.required = series.length > 0;
-    serie.disabled = series.length === 0;
+    const parcoursScolaireActif = domaine?.value === "scolaire";
+    serie.required = parcoursScolaireActif && series.length > 0;
+    serie.disabled = !parcoursScolaireActif || series.length === 0;
   };
 
   const actualiserChamps = () => {
@@ -115,6 +116,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (blocSerie) blocSerie.hidden = choix !== "scolaire";
     if (blocCampus) blocCampus.hidden = choix !== "campus";
     if (blocCompetences) blocCompetences.hidden = choix !== "competences";
+
+    if (classe) classe.required = choix === "scolaire";
+    if (niveauCampus) niveauCampus.required = choix === "campus";
+    if (domaineCampus) domaineCampus.required = choix === "campus";
+    if (formation) formation.required = choix === "competences";
 
     actualiserSeries();
   };
