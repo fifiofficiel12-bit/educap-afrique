@@ -1,15 +1,15 @@
 
 :root {
-  --vert: #075b46;
-  --vert-fonce: #064333;
-  --vert-clair: #eaf5ee;
-  --or: #d9a441;
-  --ivoire: #fbfaf6;
+  --vert: #1457d9;
+  --vert-fonce: #103b91;
+  --vert-clair: #eaf1ff;
+  --or: #57a5ff;
+  --ivoire: #f5f8ff;
   --blanc: #ffffff;
-  --texte: #20352d;
-  --secondaire: #718078;
-  --bordure: #e5ebe6;
-  --ombre: 0 12px 35px rgba(17, 58, 41, 0.08);
+  --texte: #172642;
+  --secondaire: #64748b;
+  --bordure: #dce6f5;
+  --ombre: 0 12px 35px rgba(20, 87, 217, 0.12);
   --rayon: 18px;
 }
 
@@ -145,8 +145,8 @@ img {
   overflow: hidden;
   padding: 88px 0 80px;
   background:
-    radial-gradient(ellipse at 90% 15%, #f5e9c9 0, transparent 32%),
-    linear-gradient(135deg, #eaf5ee 0%, #fbfaf6 70%);
+    radial-gradient(ellipse at 90% 15%, #dceaff 0, transparent 32%),
+    linear-gradient(135deg, #eaf1ff 0%, #f5f8ff 70%);
 }
 
 .hero-content {
@@ -158,7 +158,7 @@ img {
   align-items: center;
   gap: 8px;
   padding: 7px 13px;
-  border: 1px solid #d6e8dc;
+  border: 1px solid #cfe0ff;
   border-radius: 100px;
   background: rgba(255, 255, 255, 0.8);
   color: var(--vert);
@@ -180,7 +180,7 @@ img {
 
 .hero p {
   max-width: 680px;
-  color: #596b61;
+  color: #526581;
   font-size: clamp(16px, 2vw, 19px);
 }
 
@@ -223,7 +223,7 @@ img {
   border: 1px solid var(--bordure);
   border-radius: var(--rayon);
   background: var(--blanc);
-  box-shadow: 0 5px 18px rgba(17, 58, 41, 0.035);
+  box-shadow: 0 5px 18px rgba(20, 87, 217, 0.045);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
@@ -318,7 +318,7 @@ img {
   width: 100%;
   min-height: 48px;
   padding: 12px 14px;
-  border: 1px solid #d9e3dc;
+  border: 1px solid #d3def0;
   border-radius: 10px;
   background: white;
   color: var(--texte);
@@ -327,15 +327,15 @@ img {
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  outline: 3px solid #d6eee0;
+  outline: 3px solid #dbeafe;
   border-color: var(--vert);
 }
 
 .notice {
   padding: 17px 20px;
   border-radius: 12px;
-  background: #fff5dc;
-  color: #66501c;
+  background: #eaf2ff;
+  color: #234a91;
   font-size: 14px;
 }
 
@@ -473,7 +473,7 @@ img {
   padding: 24px;
   border: 1px solid var(--bordure);
   border-radius: 16px;
-  background: #f8fbf8;
+  background: #f3f7ff;
 }
 .teacher-form {
   display: grid;
@@ -499,4 +499,69 @@ img {
   .teacher-panel { padding: 17px; }
   .teacher-form { grid-template-columns: 1fr; }
   .teacher-form .form-group, .teacher-form button { grid-column: 1; }
+}
+
+
+/* Identité visuelle bleue — EduCap Afrique */
+:root {
+  --rayon: 20px;
+}
+body {
+  background: #f5f8ff;
+  letter-spacing: .05px;
+}
+.site-header {
+  box-shadow: 0 4px 22px rgba(18, 56, 120, .06);
+}
+.logo { letter-spacing: -1px; }
+.logo span { color: #57a5ff; }
+.main-nav a { transition: color .18s ease; }
+.btn { border-radius: 13px; box-shadow: 0 4px 12px rgba(20, 87, 217, .07); }
+.btn-primary {
+  background: linear-gradient(135deg, #1457d9, #2677f5);
+  box-shadow: 0 8px 20px rgba(20, 87, 217, .18);
+}
+.btn-primary:hover { background: linear-gradient(135deg, #103b91, #1457d9); }
+.btn-secondary { border-color: #d5e3fb; }
+.hero {
+  background:
+    radial-gradient(ellipse at 88% 15%, rgba(87,165,255,.25) 0, transparent 34%),
+    radial-gradient(ellipse at 10% 90%, rgba(20,87,217,.09) 0, transparent 36%),
+    linear-gradient(135deg, #eaf1ff 0%, #f8faff 68%, #ffffff 100%);
+}
+.hero h1 span { color: #1457d9; }
+.eyebrow { border-color: #d5e3fb; }
+.card, .welcome-panel, .form-card, .course-item {
+  box-shadow: 0 8px 26px rgba(25, 64, 130, .055);
+}
+.card { border-radius: 20px; }
+.card-icon {
+  background: linear-gradient(145deg, #eaf1ff, #dceaff);
+  color: #1457d9;
+}
+.card:hover { border-color: #c5d9ff; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus,
+.parcours-form select:focus, .parcours-form input:focus, .teacher-form textarea:focus {
+  outline: 3px solid #dbeafe;
+  border-color: #1457d9;
+}
+.parcours-form {
+  border-color: #dce6f5;
+  border-radius: 22px;
+  box-shadow: 0 12px 36px rgba(20, 87, 217, .09);
+}
+.parcours-result { background: #eaf1ff; color: #17469c; }
+.teacher-panel {
+  background: #f7f9ff;
+  border-color: #dce6f5;
+  border-radius: 20px;
+}
+.course-item { border-radius: 18px; }
+.course-item .course-meta { color: #1457d9; }
+.site-footer { background: linear-gradient(135deg, #103b91, #1457d9); }
+:focus-visible { outline-color: #57a5ff; }
+::selection { background: #cfe0ff; color: #103b91; }
+@media (max-width: 560px) {
+  .main-nav { gap: 10px 14px; }
+  .main-nav a { font-size: 12px; }
 }
