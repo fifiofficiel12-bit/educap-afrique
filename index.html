@@ -522,6 +522,23 @@
           </div>
           <div id="compte-connecte" hidden>
             <p id="compte-bienvenue"></p>
+            <section class="form-card" id="abonnement-edc" style="margin:20px 0">
+              <h3>Abonnement annuel EduCap Afrique</h3>
+              <p>Accès annuel : <strong>750 FCFA</strong></p>
+              <form id="paiement-form">
+                <div class="form-group">
+                  <label for="paiement-nom">Nom complet</label>
+                  <input id="paiement-nom" name="nomclient" autocomplete="name" maxlength="100" required>
+                </div>
+                <div class="form-group">
+                  <label for="paiement-telephone">Numéro Mobile Money</label>
+                  <input id="paiement-telephone" name="numeroSend" type="tel" inputmode="tel" placeholder="Ex. 0700000000" maxlength="20" required>
+                </div>
+                <button class="btn btn-primary" id="paiement-bouton" type="submit">Payer 750 FCFA</button>
+                <p class="muted">Le paiement sera activé après vérification par le serveur.</p>
+              </form>
+              <div id="paiement-message" class="parcours-result" role="status" aria-live="polite" hidden></div>
+            </section>
             <div class="account-actions">
               <a class="btn btn-primary" id="rechoisir-parcours" href="#inscription">Rechoisir mon parcours</a>
             </div>
