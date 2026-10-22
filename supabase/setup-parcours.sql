@@ -1,0 +1,40 @@
+-- EduCap Afrique : configuration minimale et sécurisée du formulaire de parcours
+-- À exécuter dans Supabase > Éditeur SQL > Nouvelle requête.
+-- Cette configuration autorise uniquement l'envoi de parcours depuis le formulaire public.
+-- Elle n'autorise PAS la lecture publique des dossiers.
+
+create table if not exists public.parcours_apprenants (
+  id uuid primary key,
+  domaine text not null check (domaine in ('scolaire', 'campus', 'competences')),
+  classe text,
+  serie text,
+  niveau_campus text,
+  domaine_campus text,
+  formation text,
+  created_at timestamptz not null default now()
+);
+
+alter table public.parcours_apprenants enable row level security;
+
+grant usage on schema public to anon, authenticated;
+grant insert on table public.parcours_apprenants to anon, authenticated;
+
+drop policy if exists "eduCap_public_insert_parcours" on public.parcours_apprenants;
+
+create policy "eduCap_public_insert_parcours"
+on public.parcours_apprenants
+for insert
+to anon, authenticated
+with check (
+  domaine in ('scolaire', 'campus', 'competences')
+  and (
+    (domaine = 'scolaire' and classe is not null and length(trim(classe)) > 0)
+    or (domaine = 'campus'
+        and niveau_campus is not null and length(trim(niveau_campus)) > 0
+        and domaine_campus is not null and length(trim(domaine_campus)) > 0)
+    or (domaine = 'competences' and formation is not null and length(trim(formation)) > 0)
+  )
+);
+
+-- Ne donne volontairement aucun droit SELECT à anon : les parcours des apprenants
+-- ne doivent pas être consultables publiquement.
