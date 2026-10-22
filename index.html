@@ -363,6 +363,61 @@
             <h3 style="margin-top:28px">Cours disponibles</h3>
             <p class="muted">Seuls les cours publiés par EduCap Afrique s'affichent ici.</p>
             <div id="liste-cours" class="course-list" aria-live="polite"></div>
+
+            <section id="espace-formateur" class="teacher-panel" hidden>
+              <h3>Mon espace formateur</h3>
+              <p class="muted">Crée un cours ou une fiche. Tout nouveau contenu reste en brouillon jusqu'à validation par l'administration.</p>
+              <form id="cours-form" class="teacher-form">
+                <div class="form-group">
+                  <label for="cours-titre">Titre du cours</label>
+                  <input id="cours-titre" name="title" maxlength="160" required>
+                </div>
+                <div class="form-group">
+                  <label for="cours-categorie">Domaine</label>
+                  <select id="cours-categorie" name="category" required>
+                    <option value="">Choisir un domaine</option>
+                    <option value="scolaire">Scolaire</option>
+                    <option value="campus">Universitaire</option>
+                    <option value="competences">Compétences professionnelles</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="cours-matiere">Matière ou spécialité</label>
+                  <input id="cours-matiere" name="subject" maxlength="120" placeholder="Ex. Mathématiques, comptabilité">
+                </div>
+                <div class="form-group">
+                  <label for="cours-classe">Classe (facultatif)</label>
+                  <select id="cours-classe" name="classe">
+                    <option value="">Sans classe précise</option>
+                    <option>4e</option><option>3e</option><option>2nde</option><option>1ère</option><option>Terminale</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="cours-serie">Série (facultatif)</label>
+                  <select id="cours-serie" name="serie">
+                    <option value="">Toutes séries / sans série</option>
+                    <option>A1</option><option>A2</option><option>C</option><option>D</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="cours-description">Description</label>
+                  <textarea id="cours-description" name="description" rows="3" maxlength="1200"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="cours-contenu">Contenu du cours</label>
+                  <textarea id="cours-contenu" name="content" rows="7" placeholder="Rédige ici la leçon, les explications ou les exercices." required></textarea>
+                </div>
+                <button class="btn btn-primary" type="submit">Envoyer pour validation</button>
+              </form>
+              <h3>Mes brouillons et contenus en attente</h3>
+              <div id="mes-cours-formateur" class="course-list"></div>
+            </section>
+
+            <section id="espace-admin" class="teacher-panel" hidden>
+              <h3>Espace administration — validation des cours</h3>
+              <p class="muted">Vérifie les contenus avant de les rendre visibles aux apprenants.</p>
+              <div id="cours-a-valider" class="course-list"></div>
+            </section>
           </div>
         </div>
       </div>
