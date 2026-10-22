@@ -447,3 +447,21 @@ img {
     animation-duration: 0.01ms !important;
   }
 }
+
+
+/* Espace apprenant */
+.account-panel { max-width: 980px; margin-inline: auto; }
+.account-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+.account-grid .form-card { width: 100%; margin: 0; }
+.account-grid .form-card h3 { margin-top: 0; }
+.account-panel [hidden] { display: none !important; }
+.account-panel button:disabled { opacity: .65; cursor: wait; }
+.course-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+.course-item { padding: 20px; border: 1px solid var(--bordure); border-radius: 14px; background: var(--blanc); }
+.course-item h4 { margin: 0 0 8px; font-size: 18px; }
+.course-item p { color: var(--secondaire); white-space: pre-wrap; overflow-wrap: anywhere; }
+.course-item .course-meta { font-size: 13px; font-weight: 700; color: var(--vert); }
+@media (max-width: 700px) {
+  .account-grid, .course-list { grid-template-columns: 1fr; }
+  .account-grid .form-card { padding: 22px; }
+}
