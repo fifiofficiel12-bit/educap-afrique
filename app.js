@@ -161,7 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const donnees = {
-        id: crypto.randomUUID(),
         domaine: domaineChoisi,
         classe: null,
         serie: null,
