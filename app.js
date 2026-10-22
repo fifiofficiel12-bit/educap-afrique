@@ -224,7 +224,10 @@ document.addEventListener("DOMContentLoaded", () => {
           .update({
             parcours: domaineChoisi,
             classe: donnees.classe,
-            serie: donnees.serie
+            serie: donnees.serie,
+            niveau_campus: donnees.niveau_campus,
+            domaine_campus: donnees.domaine_campus,
+            formation: donnees.formation
           })
           .eq("id", utilisateurConnecte.id);
 
@@ -314,7 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const { data: profil, error: erreurProfil } = await clientSupabase
       .from("profiles")
-      .select("full_name, role, parcours, classe, serie")
+      .select("full_name, role, parcours, classe, serie, niveau_campus, domaine_campus, formation")
       .eq("id", utilisateur.id)
       .maybeSingle();
 
@@ -326,7 +329,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const nom = profil?.full_name || utilisateur.email || "apprenant";
     const role = profil?.role || "apprenant";
     if (compteBienvenue) {
-      compteBienvenue.textContent = "Bienvenue " + nom + " — espace " + role + ".";
+      const detailsParcours = profil?.parcours === "campus"
+        ? [profil?.niveau_campus, profil?.domaine_campus].filter(Boolean).join(" · ")
+        : profil?.parcours === "competences"
+          ? (profil?.formation || "")
+          : profil?.parcours === "scolaire"
+            ? [profil?.classe, profil?.serie].filter(Boolean).join(" · ")
+            : "";
+      compteBienvenue.textContent = "Bienvenue " + nom + " — espace " + role + "." +
+        (detailsParcours ? " Ton parcours : " + detailsParcours + "." : " Choisis ton parcours pour personnaliser tes cours.");
     }
     if (espaceFormateur) espaceFormateur.hidden = !["formateur", "admin"].includes(role);
     if (espaceAdmin) espaceAdmin.hidden = role !== "admin";
@@ -377,6 +388,8 @@ document.addEventListener("DOMContentLoaded", () => {
       listeCours.textContent = "Aucun cours publié ne correspond à ton parcours actuel (" +
         parcours + (classeProfil ? " · " + classeProfil : "") +
         (serieProfil ? " · " + serieProfil : "") +
+        (profil?.domaine_campus ? " · " + profil.domaine_campus : "") +
+        (profil?.formation ? " · " + profil.formation : "") +
         "). Tu peux rechoisir ton parcours avec le bouton « Rechoisir mon parcours ».";
       return;
     }
