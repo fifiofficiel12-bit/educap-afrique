@@ -1,15 +1,7 @@
 
 "use strict";
 
-// =====================================================
-// EDUCAP AFRIQUE — CONFIGURATION SUPABASE
-// =====================================================
-
 const SUPABASE_URL = "https://byzsqblgsssymvsztaqb.supabase.co";
-
-// Clé publique fournie dans la conversation.
-// Si elle est refusée, remplace-la par la clé Publishable
-// complète copiée depuis le projet Supabase EduCap Afrique.
 const SUPABASE_PUBLIC_KEY =
   "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR";
 
@@ -28,31 +20,17 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log(message);
       return;
     }
-
     resultat.textContent = message;
     resultat.style.color = succes ? "#16803c" : "#b42318";
   };
 
   if (!formulaire) {
-    console.error("Formulaire #parcours-form introuvable.");
+    console.error("Formulaire introuvable : #parcours-form");
     return;
   }
 
-  if (
-    !window.supabase ||
-    typeof window.supabase.createClient !== "function"
-  ) {
-    afficherMessage(
-      "La bibliothèque Supabase ne se charge pas. Vérifie index.html."
-    );
-    return;
-  }
-
-  if (
-    !SUPABASE_URL.startsWith("https://") ||
-    !SUPABASE_PUBLIC_KEY.startsWith("sb_publishable_")
-  ) {
-    afficherMessage("La configuration Supabase est incorrecte.");
+  if (!window.supabase?.createClient) {
+    afficherMessage("La bibliothèque Supabase ne se charge pas.");
     return;
   }
 
@@ -61,21 +39,88 @@ document.addEventListener("DOMContentLoaded", () => {
     SUPABASE_PUBLIC_KEY
   );
 
+  // Séries proposées selon la classe choisie
+  const seriesParClasse = {
+    "2nde": ["A", "C"],
+    "2nde A": ["A"],
+    "2nde C": ["C"],
+    "1ère": ["A1", "A2", "C", "D"],
+    "Première": ["A1", "A2", "C", "D"],
+    "Premiere": ["A1", "A2", "C", "D"],
+    "Première A1": ["A1"],
+    "Première A2": ["A2"],
+    "Première C": ["C"],
+    "Première D": ["D"],
+    "Terminale": ["A1", "A2", "C", "D"],
+    "Terminale A1": ["A1"],
+    "Terminale A2": ["A2"],
+    "Terminale C": ["C"],
+    "Terminale D": ["D"]
+  };
+
+  const normaliser = (valeur) =>
+    (valeur || "")
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+  const actualiserSeries = () => {
+    if (!classe || !serie) return;
+
+    const ancienneSerie = serie.value;
+    const classeChoisie = classe.value.trim();
+    const classeNormalisee = normaliser(classeChoisie);
+
+    const entree = Object.entries(seriesParClasse).find(
+      ([nom]) => normaliser(nom) === classeNormalisee
+    );
+
+    const series = entree ? entree[1] : [];
+
+    serie.replaceChildren();
+
+    const optionDepart = document.createElement("option");
+    optionDepart.value = "";
+    optionDepart.textContent = series.length
+      ? "Choisis ta série"
+      : "Pas de série à choisir";
+    serie.appendChild(optionDepart);
+
+    series.forEach((nomSerie) => {
+      const option = document.createElement("option");
+      option.value = nomSerie;
+      option.textContent = nomSerie;
+      serie.appendChild(option);
+    });
+
+    if (series.includes(ancienneSerie)) {
+      serie.value = ancienneSerie;
+    }
+
+    serie.required = series.length > 0;
+    serie.disabled = series.length === 0;
+  };
+
   const actualiserChamps = () => {
-    const valeur = domaine?.value || "";
+    const choix = domaine?.value || "";
 
     const blocScolaire = document.querySelector("#bloc-scolaire");
     const blocSerie = document.querySelector("#bloc-serie");
     const blocCampus = document.querySelector("#bloc-campus");
     const blocCompetences = document.querySelector("#bloc-competences");
 
-    if (blocScolaire) blocScolaire.hidden = valeur !== "scolaire";
-    if (blocSerie) blocSerie.hidden = valeur !== "scolaire";
-    if (blocCampus) blocCampus.hidden = valeur !== "campus";
-    if (blocCompetences) blocCompetences.hidden = valeur !== "competences";
+    if (blocScolaire) blocScolaire.hidden = choix !== "scolaire";
+    if (blocSerie) blocSerie.hidden = choix !== "scolaire";
+    if (blocCampus) blocCampus.hidden = choix !== "campus";
+    if (blocCompetences) blocCompetences.hidden = choix !== "competences";
+
+    actualiserSeries();
   };
 
   domaine?.addEventListener("change", actualiserChamps);
+  classe?.addEventListener("change", actualiserSeries);
+
   actualiserChamps();
 
   formulaire.addEventListener("submit", async (event) => {
@@ -98,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const donnees = {
+        id: crypto.randomUUID(),
         domaine: domaineChoisi,
         classe: null,
         serie: null,
@@ -115,22 +161,16 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        // Si une série est proposée dans le formulaire,
-        // elle doit être choisie pour les classes concernées.
-        const classesAvecSerie = [
-          "2nde A",
-          "2nde C",
-          "Première A1",
-          "Première A2",
-          "Première C",
-          "Première D",
-          "Terminale A1",
-          "Terminale A2",
-          "Terminale C",
-          "Terminale D"
-        ];
+        const classeNormalisee = normaliser(donnees.classe);
+        const entree = Object.entries(seriesParClasse).find(
+          ([nom]) => normaliser(nom) === classeNormalisee
+        );
+        const seriesRequises = entree ? entree[1] : [];
 
-        if (classesAvecSerie.includes(donnees.classe) && !donnees.serie) {
+        if (
+          seriesRequises.length > 0 &&
+          !seriesRequises.includes(donnees.serie)
+        ) {
           afficherMessage("Choisis ta série pour continuer.");
           return;
         }
@@ -164,47 +204,33 @@ document.addEventListener("DOMContentLoaded", () => {
       if (error) {
         console.error("Erreur Supabase :", error);
 
-        const messageErreur = (error.message || "").toLowerCase();
-
         if (
-          messageErreur.includes("invalid api key") ||
-          messageErreur.includes("invalid jwt") ||
-          error.status === 401
-        ) {
-          afficherMessage(
-            "Clé API refusée. Copie la clé Publishable complète du projet EduCap Afrique dans app.js, puis republie le site."
-          );
-        } else if (
           error.code === "42501" ||
-          messageErreur.includes("row-level security")
+          (error.message || "").toLowerCase().includes("row-level security")
         ) {
           afficherMessage(
-            "Supabase refuse l’enregistrement à cause des autorisations de la table. La clé est reconnue, mais les règles d’accès doivent être vérifiées."
+            "Accès refusé par Supabase. Les autorisations de la table doivent être corrigées."
           );
         } else {
           afficherMessage(
             "Enregistrement impossible : " +
-            (error.message || "erreur inconnue") +
-            (error.code ? " (code " + error.code + ")" : "")
+              (error.message || "erreur inconnue") +
+              (error.code ? " (code " + error.code + ")" : "")
           );
         }
-
         return;
       }
 
       afficherMessage(
-        "Ton parcours a bien été enregistré ! Tu peux continuer sur EduCap Afrique.",
+        "Ton parcours a bien été enregistré ! Bienvenue sur EduCap Afrique.",
         true
       );
 
       formulaire.reset();
       actualiserChamps();
-
     } catch (erreur) {
       console.error("Erreur inattendue :", erreur);
-      afficherMessage(
-        "Erreur de connexion. Vérifie Internet et réessaie."
-      );
+      afficherMessage("Erreur de connexion. Vérifie Internet et réessaie.");
     } finally {
       if (bouton) bouton.disabled = false;
     }
