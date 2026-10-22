@@ -617,3 +617,20 @@ body {
 @media (max-width: 650px) {
   .video-grid { grid-template-columns: 1fr; }
 }
+
+
+.video-steps {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border: 1px solid #dce6f5;
+  border-radius: 13px;
+  background: #f8faff;
+}
+.video-steps summary {
+  color: #103b91;
+  font-weight: 800;
+  cursor: pointer;
+}
+.video-steps ol { padding-left: 22px; }
+.video-steps li { margin: 9px 0; }
+.video-steps p { color: #526581; }
