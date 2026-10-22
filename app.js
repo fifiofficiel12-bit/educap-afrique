@@ -326,7 +326,15 @@ document.addEventListener("DOMContentLoaded", () => {
       .select("course_id")
       .eq("student_id", utilisateur.id);
 
-    const dejaInscrit = new Set((erreurInscriptions ? [] : inscriptions || []).map((ligne) => ligne.course_id));
+    if (erreurInscriptions) {
+      console.error("Erreur de chargement des inscriptions :", erreurInscriptions);
+      listeCours.textContent =
+        "Les cours sont chargés, mais tes inscriptions ne peuvent pas être vérifiées. Réessaie dans quelques instants.";
+      messageAuth("Impossible de vérifier les cours déjà suivis. Aucune nouvelle inscription n’a été effectuée.");
+      return;
+    }
+
+    const dejaInscrit = new Set((inscriptions || []).map((ligne) => ligne.course_id));
 
     if (!cours?.length) {
       listeCours.textContent = "Aucun cours n’est publié pour le moment. Reviens bientôt !";
@@ -390,12 +398,17 @@ document.addEventListener("DOMContentLoaded", () => {
           course_id: boutonCours.getAttribute("data-inscrire-cours")
         }]);
         if (error && error.code !== "23505") {
-          messageAuth("Inscription au cours impossible : " + error.message);
+          console.error("Erreur d'inscription au cours :", error);
+          messageAuth("Inscription au cours impossible. Vérifie ta connexion puis réessaie.");
           boutonCours.disabled = false;
           boutonCours.textContent = "Réessayer";
           return;
         }
-        messageAuth("Le cours a été ajouté à tes inscriptions.", true);
+        if (error?.code === "23505") {
+          messageAuth("Tu es déjà inscrit à ce cours.", true);
+        } else {
+          messageAuth("Inscription enregistrée avec succès.", true);
+        }
         await afficherCompte({ user: utilisateur });
       });
     });
