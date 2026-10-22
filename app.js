@@ -350,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (["formateur", "admin"].includes(role)) {
       const requeteBrouillons = clientSupabase.from("courses")
-        .select("id, title, description, category, subject, classe, serie, content, published, created_at")
+        .select("id, title, description, category, subject, classe, serie, content, published, created_at, teacher_id")
         .order("created_at", { ascending: false });
       const { data: coursGeres, error: erreurGeres } = role === "admin"
         ? await requeteBrouillons
