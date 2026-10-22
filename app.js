@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     resultat.textContent = message;
     resultat.style.color = succes ? "#16803c" : "#b42318";
+    resultat.hidden = false;
   };
 
   if (!formulaire) {
@@ -120,6 +121,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   domaine?.addEventListener("change", actualiserChamps);
   classe?.addEventListener("change", actualiserSeries);
+
+  // Les cartes de la page sélectionnent directement le parcours correspondant.
+  document.querySelectorAll("[data-parcours]").forEach((lien) => {
+    lien.addEventListener("click", () => {
+      const parcours = lien.getAttribute("data-parcours");
+      if (domaine && ["scolaire", "campus", "competences"].includes(parcours)) {
+        domaine.value = parcours;
+        actualiserChamps();
+      }
+    });
+  });
 
   actualiserChamps();
 
