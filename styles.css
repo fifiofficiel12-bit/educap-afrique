@@ -465,3 +465,38 @@ img {
   .account-grid, .course-list { grid-template-columns: 1fr; }
   .account-grid .form-card { padding: 22px; }
 }
+
+
+/* Espaces formateur et administration */
+.teacher-panel {
+  margin-top: 32px;
+  padding: 24px;
+  border: 1px solid var(--bordure);
+  border-radius: 16px;
+  background: #f8fbf8;
+}
+.teacher-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+  margin: 20px 0 30px;
+}
+.teacher-form .form-group { margin: 0; }
+.teacher-form .form-group:nth-last-of-type(1),
+.teacher-form .form-group:nth-last-of-type(2),
+.teacher-form button { grid-column: 1 / -1; }
+.teacher-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d9e3dc;
+  border-radius: 10px;
+  background: white;
+  color: var(--texte);
+  resize: vertical;
+}
+.teacher-form button { justify-self: start; }
+@media (max-width: 650px) {
+  .teacher-panel { padding: 17px; }
+  .teacher-form { grid-template-columns: 1fr; }
+  .teacher-form .form-group, .teacher-form button { grid-column: 1; }
+}
