@@ -737,6 +737,13 @@
               <a class="btn btn-primary" id="rechoisir-parcours" href="#inscription">Rechoisir mon parcours</a>
             </div>
             <button id="deconnexion-bouton" class="btn btn-secondary" type="button">Me déconnecter</button>
+            <section class="form-card" id="rejoindre-classe" style="margin:20px 0">
+              <h3>Rejoindre la classe de mon enseignant</h3>
+              <p>Demande le code d’invitation à ton enseignant, puis saisis-le ici pour voir les cours réservés à ta classe.</p>
+              <form id="rejoindre-classe-form"><label for="code-classe">Code d’invitation</label><input id="code-classe" name="code" maxlength="8" minlength="8" required placeholder="Ex. A1B2C3D4"><button class="btn btn-primary" type="submit">Rejoindre la classe</button></form>
+              <p id="rejoindre-classe-message" role="status" aria-live="polite" hidden></p>
+              <h4>Mes classes virtuelles</h4><div id="mes-classes-apprenant" class="course-list"></div>
+            </section>
             <h3 style="margin-top:28px">Cours disponibles</h3>
             <p class="muted">Seuls les cours publiés par EduCap Afrique s'affichent ici.</p>
             <div id="liste-cours" class="course-list" aria-live="polite"></div>
@@ -767,6 +774,19 @@
             </section>
             <section id="espace-formateur" class="teacher-panel" hidden>
               <h3>Mon espace formateur</h3>
+              <section class="form-card">
+                <h4>Créer une classe virtuelle</h4>
+                <p>Crée un groupe, puis partage son code d’invitation avec tes élèves ou apprenants.</p>
+                <form id="creer-classe-form">
+                  <div class="form-group"><label for="classe-virtuelle-nom">Nom de la classe</label><input id="classe-virtuelle-nom" name="nom" required maxlength="120" placeholder="Ex. Terminale D — Mathématiques"></div>
+                  <div class="form-group"><label for="classe-virtuelle-domaine">Domaine</label><select id="classe-virtuelle-domaine" name="domaine" required><option value="scolaire">Scolaire</option><option value="campus">Université</option><option value="competences">Compétences professionnelles</option></select></div>
+                  <div class="form-group"><label for="classe-virtuelle-niveau">Niveau / classe</label><input id="classe-virtuelle-niveau" name="niveau" maxlength="100" placeholder="Ex. 3e, Terminale D, Licence 1"></div>
+                  <div class="form-group"><label for="classe-virtuelle-description">Description (facultatif)</label><textarea id="classe-virtuelle-description" name="description" rows="2" maxlength="500" placeholder="Objectif du groupe, horaires, consignes…"></textarea></div>
+                  <button class="btn btn-primary" type="submit">Créer ma classe virtuelle</button>
+                </form>
+                <p id="creer-classe-message" role="status" aria-live="polite" hidden></p>
+                <h4>Mes classes et codes d’invitation</h4><div id="mes-classes-formateur" class="course-list"></div>
+              </section>
               <p class="muted">Crée un cours ou une fiche. Tout nouveau contenu reste en brouillon jusqu'à validation par l'administration.</p>
               <section class="lesson-builder">
                 <h4>Préparer un cours avec l’assistant pédagogique</h4>
