@@ -39,11 +39,12 @@ Deno.serve(async (req: Request) => {
   }
 
   if (action === "list_admin") {
-    const [affiliatesResult, commissionsResult] = await Promise.all([
+    const [affiliatesResult, commissionsResult, withdrawalsResult] = await Promise.all([
       admin.from("affiliate_profiles").select("user_id,code,category,status,created_at,approved_at").order("created_at", { ascending: false }).limit(200),
-      admin.from("affiliate_commissions").select("id,affiliate_id,referred_user_id,payment_id,amount,category_at_payment,status,created_at,approved_at,paid_at").order("created_at", { ascending: false }).limit(300),
+      admin.from("affiliate_commissions").select("id,affiliate_id,referred_user_id,payment_id,amount,category_at_payment,status,created_at,approved_at,paid_at,withdrawal_id").order("created_at", { ascending: false }).limit(300),
+      admin.from("affiliate_withdrawals").select("id,affiliate_id,amount,mobile_money_operator,mobile_money_number,status,created_at,approved_at,paid_at").order("created_at", { ascending: false }).limit(300),
     ]);
-    if (affiliatesResult.error || commissionsResult.error) return json({ error: "Impossible de charger les données d’affiliation." }, 500);
+    if (affiliatesResult.error || commissionsResult.error || withdrawalsResult.error) return json({ error: "Impossible de charger les données d’affiliation." }, 500);
     const affiliates = affiliatesResult.data || [];
     const commissions = commissionsResult.data || [];
     const [clicksResult, referralsResult] = await Promise.all([
@@ -95,5 +96,28 @@ Deno.serve(async (req: Request) => {
     return json({ success: true });
   }
 
-  return json({ error: "Action non reconnue." }, 400);
+
+  if (action === "approve_withdrawal") {
+    const { data, error } = await admin.from("affiliate_withdrawals")
+      .update({ status: "approved", approved_at: new Date().toISOString() })
+      .eq("id", id).eq("status", "pending").select("id").maybeSingle();
+    if (error || !data) return json({ error: "Demande de retrait introuvable ou déjà traitée." }, 409);
+    return json({ success: true });
+  }
+  if (action === "mark_withdrawal_paid") {
+    const { data: withdrawal, error: fetchError } = await admin.from("affiliate_withdrawals")
+      .select("id").eq("id", id).eq("status", "approved").maybeSingle();
+    if (fetchError || !withdrawal) return json({ error: "Le retrait doit d’abord être approuvé." }, 409);
+    const now = new Date().toISOString();
+    const { error: commissionError } = await admin.from("affiliate_commissions")
+      .update({ status: "paid", paid_at: now, paid_by: authData.user.id })
+      .eq("withdrawal_id", id).eq("status", "approved");
+    if (commissionError) return json({ error: "Impossible de mettre à jour les commissions associées." }, 500);
+    const { data, error } = await admin.from("affiliate_withdrawals")
+      .update({ status: "paid", paid_at: now, paid_by: authData.user.id })
+      .eq("id", id).eq("status", "approved").select("id").maybeSingle();
+    if (error || !data) return json({ error: "Impossible de confirmer le versement." }, 500);
+    return json({ success: true });
+  }
+\n  return json({ error: "Action non reconnue." }, 400);
 });
