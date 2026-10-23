@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const [clicks,refs,comm]=await Promise.all([
         db.from("affiliate_clicks").select("id",{count:"exact",head:true}).eq("affiliate_id",session.user.id),
         db.from("affiliate_referrals").select("id",{count:"exact",head:true}).eq("affiliate_id",session.user.id),
-        db.from("affiliate_commissions").select("id,amount,status,category_at_payment,created_at").eq("affiliate_id",session.user.id).order("created_at",{ascending:false}).limit(100)
+        db.from("affiliate_commissions").select("id,amount,status,category_at_payment,created_at").eq("affiliate_id",session.user.id).order("created_at",{ascending:false}).limit(1000)
       ]);
       if(clicks.error||refs.error||comm.error){say("Certaines statistiques ne sont pas disponibles.");return;}
       const rows=comm.data||[];
