@@ -682,4 +682,133 @@ document.addEventListener("DOMContentLoaded", () => {
       afficherCompte(session);
     });
   }
+
+  // Assistant guidé : accompagne l'utilisateur sans demander ni lire son mot de passe.
+  const assistantToggle = document.querySelector("#assistant-toggle");
+  const assistantPanneau = document.querySelector("#assistant-panneau");
+  const assistantFermer = document.querySelector("#assistant-fermer");
+  const assistantMessages = document.querySelector("#assistant-messages");
+  const assistantChoix = document.querySelector("#assistant-choix");
+  const assistantParcours = document.querySelector("#parcours-form");
+  const assistantInscription = document.querySelector("#inscription-form");
+
+  const assistantDire = (texte, auteur = "bot") => {
+    if (!assistantMessages) return;
+    const bulle = document.createElement("p");
+    bulle.className = "assistant-bulle " + (auteur === "user" ? "assistant-user" : "assistant-bot");
+    bulle.textContent = texte;
+    assistantMessages.appendChild(bulle);
+    assistantMessages.scrollTop = assistantMessages.scrollHeight;
+  };
+
+  const assistantBoutons = (choix) => {
+    if (!assistantChoix) return;
+    assistantChoix.replaceChildren();
+    choix.forEach(({ texte, action }) => {
+      const bouton = document.createElement("button");
+      bouton.type = "button";
+      bouton.textContent = texte;
+      bouton.dataset.assistantAction = action;
+      assistantChoix.appendChild(bouton);
+    });
+  };
+
+  const assistantOuvrir = () => {
+    if (!assistantPanneau) return;
+    assistantPanneau.hidden = false;
+    assistantToggle?.setAttribute("aria-expanded", "true");
+  };
+  const assistantFermerPanneau = () => {
+    if (!assistantPanneau) return;
+    assistantPanneau.hidden = true;
+    assistantToggle?.setAttribute("aria-expanded", "false");
+  };
+
+  const assistantChoisirParcours = (parcours) => {
+    if (domaine && ["scolaire", "campus", "competences", "formation"].includes(parcours)) {
+      // Formation est visible dans l'interface; le parcours complet sera finalisé dans le formulaire.
+      domaine.value = parcours;
+      actualiserChamps();
+      assistantParcours?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const assistantAction = (action) => {
+    if (action === "start") {
+      assistantDire("Oui, m'accompagner", "user");
+      assistantDire("Étape 1 sur 3 : choisis ton parcours. Quel est ton objectif ?");
+      assistantBoutons([
+        { texte: "Je suis élève (Scolaire)", action: "pick-scolaire" },
+        { texte: "Je suis étudiant (Campus)", action: "pick-campus" },
+        { texte: "Je veux des compétences pratiques", action: "pick-competences" },
+        { texte: "Je cherche une formation métier", action: "pick-formation" }
+      ]);
+    } else if (action.startsWith("pick-")) {
+      const parcours = action.slice(5);
+      assistantChoisirParcours(parcours);
+      assistantDire(({scolaire:"Scolaire",campus:"Campus",competences:"Compétences",formation:"Formation"})[parcours] || parcours, "user");
+      assistantDire("Étape 2 sur 3 : complète le formulaire qui vient d'être affiché. Choisis ton pays, puis les informations demandées. Je ne peux pas remplir à ta place les informations personnelles.");
+      assistantBoutons([
+        { texte: "M'aider à compléter le parcours", action: "help-parcours" },
+        { texte: "J'ai terminé le parcours", action: "done-parcours" },
+        { texte: "Aller à la création du compte", action: "go-register" }
+      ]);
+    } else if (action === "help-parcours") {
+      assistantDire("Pour Scolaire : pays, classe et série si elle est proposée. Pour Campus : pays, niveau, établissement et filière. Pour Compétences : choisis une compétence. Pour Formation : le formulaire distinct doit encore être finalisé. Ne partage ici aucun mot de passe ni donnée bancaire.");
+      assistantBoutons([
+        { texte: "Retour au formulaire", action: "back-parcours" },
+        { texte: "Aller à la création du compte", action: "go-register" }
+      ]);
+    } else if (action === "back-parcours") {
+      assistantParcours?.scrollIntoView({ behavior: "smooth", block: "start" });
+      assistantDire("Complète les champs visibles, puis clique sur « Enregistrer mon parcours ». Si un message d'erreur apparaît, suis son indication.");
+      assistantBoutons([
+        { texte: "J'ai terminé le parcours", action: "done-parcours" },
+        { texte: "Besoin d'aide", action: "help-parcours" }
+      ]);
+    } else if (action === "done-parcours") {
+      assistantDire("Vérifie que le site affiche « Ton parcours a bien été enregistré ». Si c'est le cas, passe à la création du compte.");
+      assistantBoutons([
+        { texte: "Créer mon compte", action: "go-register" },
+        { texte: "Revoir mon parcours", action: "back-parcours" }
+      ]);
+    } else if (action === "go-register") {
+      document.querySelector("#espace-personnel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      assistantInscription?.scrollIntoView({ behavior: "smooth", block: "center" });
+      assistantDire("Étape 3 sur 3 : dans « Je crée mon compte », saisis ton nom, ton e-mail et choisis un mot de passe d'au moins 8 caractères. Puis clique sur « Créer mon compte apprenant ». Le mot de passe reste dans le formulaire sécurisé du site : ne me l'envoie jamais.");
+      assistantBoutons([
+        { texte: "J'ai créé mon compte", action: "account-done" },
+        { texte: "J'ai déjà un compte", action: "login" },
+        { texte: "Aide pour l'e-mail de confirmation", action: "email-help" }
+      ]);
+    } else if (action === "account-done") {
+      assistantDire("Bravo ! Vérifie le message affiché par le site. Si une confirmation par e-mail est demandée, ouvre le message reçu et confirme ton adresse. Ensuite, connecte-toi pour accéder à ton espace.");
+      assistantBoutons([
+        { texte: "Aller à la connexion", action: "login" },
+        { texte: "Rester sur cette page", action: "start" }
+      ]);
+    } else if (action === "login") {
+      document.querySelector("#connexion-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      document.querySelector("#connexion-email")?.focus({ preventScroll: true });
+      assistantDire("Saisis ton e-mail et ton mot de passe directement dans le formulaire « J'ai déjà un compte », puis clique sur « Me connecter ».");
+      assistantBoutons([{ texte: "Compris", action: "account-done" }]);
+    } else if (action === "email-help") {
+      assistantDire("Vérifie la boîte de réception et les courriers indésirables. Ouvre le message de confirmation et utilise son lien. Si aucun message n'arrive, vérifie que l'adresse e-mail est correcte.");
+      assistantBoutons([
+        { texte: "Retour à la création du compte", action: "go-register" },
+        { texte: "Aller à la connexion", action: "login" }
+      ]);
+    }
+  };
+
+  assistantToggle?.addEventListener("click", () => {
+    if (assistantPanneau?.hidden) assistantOuvrir();
+    else assistantFermerPanneau();
+  });
+  assistantFermer?.addEventListener("click", assistantFermerPanneau);
+  assistantChoix?.addEventListener("click", (event) => {
+    const bouton = event.target.closest("[data-assistant-action]");
+    if (bouton) assistantAction(bouton.dataset.assistantAction);
+  });
+
 });
