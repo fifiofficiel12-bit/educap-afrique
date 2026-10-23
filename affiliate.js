@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const apply = $("affiliate-application");
   const dash = $("affiliate-dashboard");
   const adminPanel = $("affiliate-admin-panel");
-  let session = null, profile = null;
+  let session = null, profile = null, affiliateChannel = null;
   const say = (s, ok=false) => { if(msg){msg.textContent=s;msg.style.color=ok?"#16803c":"#b42318";msg.hidden=false;} };
   const number = (id,n) => {if($(id)) $(id).textContent=new Intl.NumberFormat("fr-FR").format(n||0);};
   const money = (n) => new Intl.NumberFormat("fr-FR").format(Number(n||0))+" FCFA";
@@ -99,6 +99,19 @@ document.addEventListener("DOMContentLoaded", () => {
       ]);
       if(clicks.error||refs.error||comm.error){say("Certaines statistiques ne sont pas disponibles.");return;}
       const rows=comm.data||[];
+      const notice=$("affiliate-notice");
+      const paidRows=rows.filter(x=>["pending","approved","paid"].includes(x.status));
+      if(notice){
+        if(paidRows.length){
+          const latest=paidRows[0];
+          const statusText=({pending:"ta commission est en cours de vérification",approved:"ta commission est validée et en attente de versement",paid:"ta commission a été versée"})[latest.status];
+          notice.textContent="Dernier abonnement confirmé : un apprenant venu grâce à ton lien a payé. Commission : "+money(latest.amount)+". "+statusText+".";
+          notice.hidden=false;
+        }else{
+          notice.textContent="Dès qu’un apprenant paiera son abonnement annuel grâce à ton lien, cette page affichera la confirmation et ta commission.";
+          notice.hidden=false;
+        }
+      }
       number("affiliate-clicks",clicks.count);number("affiliate-referrals",refs.count);
       number("affiliate-paid-subscriptions",rows.filter(x=>["pending","approved","paid"].includes(x.status)).length);
       number("affiliate-earned",rows.filter(x=>x.status!=="cancelled").reduce((s,x)=>s+x.amount,0));
@@ -106,10 +119,29 @@ document.addEventListener("DOMContentLoaded", () => {
       number("affiliate-paid",rows.filter(x=>x.status==="paid").reduce((s,x)=>s+x.amount,0));
       const ul=$("affiliate-commission-list");ul.replaceChildren();
       if(!rows.length)ul.textContent="Les commissions apparaîtront après les premiers abonnements payés.";
-      rows.forEach(x=>{const li=document.createElement("li");li.textContent=new Date(x.created_at).toLocaleDateString("fr-FR")+" — "+money(x.amount)+" — "+x.category_at_payment.toUpperCase()+" — "+({pending:"À contrôler",approved:"Approuvée, en attente de paiement",paid:"Payée",cancelled:"Annulée"})[x.status];ul.append(li);});
+      rows.forEach(x=>{const li=document.createElement("li");li.textContent=new Date(x.created_at).toLocaleDateString("fr-FR")+" — Abonnement confirmé — Commission : "+money(x.amount)+" — "+({pending:"en cours de vérification",approved:"validée, en attente de versement",paid:"versée",cancelled:"annulée"})[x.status];ul.append(li);});
     }
     if(profile?.role==="admin")await loadAdmin();else if(adminPanel)adminPanel.hidden=true;
   }
   apply?.addEventListener("click",()=>{if(!session){say("Crée un compte ou connecte-toi avant de demander à devenir affilié.");document.querySelector("#espace-personnel")?.scrollIntoView({behavior:"smooth"});}});
-  if(db){db.auth.getSession().then(({data})=>load(data.session));db.auth.onAuthStateChange((_e,s)=>{void load(s);});}
+  async function refreshAffiliateAfterPayment(){
+    if(session) await load(session);
+  }
+  if(db){
+    db.auth.getSession().then(({data})=>load(data.session));
+    db.auth.onAuthStateChange((_e,s)=>{
+      if(affiliateChannel){db.removeChannel(affiliateChannel);affiliateChannel=null;}
+      void load(s);
+      if(s){
+        affiliateChannel=db.channel("affiliate-commissions-"+s.user.id)
+          .on("postgres_changes",{event:"INSERT",schema:"public",table:"affiliate_commissions",filter:"affiliate_id=eq."+s.user.id},()=>{
+            void refreshAffiliateAfterPayment();
+            say("Bonne nouvelle ! Un abonnement vient d’être confirmé grâce à ton lien. Consulte le message dans ton espace affiliation.",true);
+          })
+          .subscribe();
+      }
+    });
+    document.addEventListener("visibilitychange",()=>{if(!document.hidden)void refreshAffiliateAfterPayment();});
+    window.addEventListener("focus",()=>void refreshAffiliateAfterPayment());
+  }
 });
