@@ -655,3 +655,79 @@ body {
 }
 .video-grid-resources { margin-top: 24px; }
 .video-card a:not(.btn) { color: #1457d9; font-weight: 700; }
+
+
+/* Finition visuelle : accueil, lisibilité, respect des publics et accessibilité */
+:root {
+  --vert: #1457d9;
+  --vert-fonce: #103b91;
+  --vert-clair: #eaf1ff;
+  --or: #57a5ff;
+  --ivoire: #f5f8ff;
+  --texte: #172642;
+  --secondaire: #526581;
+  --bordure: #dce6f5;
+  --ombre: 0 16px 40px rgba(16, 59, 145, .10);
+}
+body { font-size: 16px; }
+.site-header { box-shadow: 0 4px 18px rgba(16, 59, 145, .05); }
+.logo { letter-spacing: -.6px; }
+.logo span { color: #1457d9; }
+.main-nav a { padding: 8px 0; transition: color .18s ease; }
+.main-nav a[href="#inscription"] {
+  padding: 9px 15px;
+  border-radius: 999px;
+  background: #1457d9;
+  color: #fff;
+}
+.main-nav a[href="#inscription"]:hover { background: #103b91; color: #fff; }
+.hero {
+  background:
+    radial-gradient(ellipse at 88% 10%, rgba(87,165,255,.22) 0, transparent 33%),
+    radial-gradient(ellipse at 5% 95%, rgba(20,87,217,.08) 0, transparent 30%),
+    linear-gradient(135deg, #eaf1ff 0%, #f8faff 68%, #fff 100%);
+}
+.hero-content { max-width: 850px; }
+.hero h1 { max-width: 820px; }
+.hero p { color: #435675; }
+.section:nth-of-type(even) { background: rgba(234,241,255,.36); }
+.card, .video-card, .form-card, .parcours-form, .welcome-panel {
+  border-color: #dce6f5;
+  box-shadow: 0 8px 26px rgba(16,59,145,.055);
+}
+.card:hover, .video-card:hover { border-color: #b9d1ff; }
+.card-icon, .video-card-icon {
+  background: #eaf1ff;
+  color: #103b91;
+}
+.btn { border-radius: 12px; min-height: 48px; }
+.btn-primary { background: #1457d9; }
+.btn-primary:hover { background: #103b91; }
+.btn-secondary { background: #fff; border-color: #cbd8ed; }
+input, select, textarea { accent-color: #1457d9; }
+input:focus, select:focus, textarea:focus {
+  outline: 3px solid rgba(87,165,255,.28);
+  border-color: #1457d9 !important;
+}
+.notice { background: #eef4ff; color: #234a91; border: 1px solid #d7e5ff; }
+.video-frame { overflow: hidden; border-radius: 14px; }
+.site-footer { background: #103b91; }
+.parcours-form label, .form-group label { color: #172642; }
+button:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+a { text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid #57a5ff;
+  outline-offset: 3px;
+}
+@media (max-width: 800px) {
+  .header-inner { align-items: flex-start; }
+  .main-nav a[href="#inscription"] { padding: 6px 11px; }
+}
+@media (max-width: 560px) {
+  .main-nav { gap: 8px 13px; }
+  .main-nav a { font-size: 13px; }
+  .hero h1 { font-size: clamp(34px, 10vw, 48px); }
+  .section-heading { text-align: left; }
+  .section-heading h2 { font-size: 29px; }
+  .parcours-form { padding: 20px; }
+}
