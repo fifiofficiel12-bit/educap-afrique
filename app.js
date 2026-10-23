@@ -1281,169 +1281,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // ============================================================
-// PROFESSEUR IA EDUCAP — dialogue écrit et vocal
-// L'IA réelle passe par une fonction serveur, jamais directement par le navigateur.
-// ============================================================
-document.addEventListener("DOMContentLoaded", () => {
-  if (document.querySelector("#professeur-ia")) return;
-  const section = document.createElement("section");
-  section.id = "professeur-ia";
-  section.className = "section";
-  section.innerHTML = `
-    <div class="container">
-      <div class="welcome-panel prof-ia-panel">
-        <span class="eyebrow">🎓 Mentor EduCap · accompagnement pédagogique</span>
-        <h2 id="professeur-ia-titre">Ton professeur particulier</h2>
-        <p>Pose ta question directement ici, écris ou dicte ta réponse, puis progresse étape par étape. Le service de dialogue nécessite une connexion à ton compte et la disponibilité du service IA.</p>
-        <div class="prof-ia-grid">
-          <label>Ton niveau
-            <input id="prof-ia-niveau" maxlength="100" placeholder="Ex. Terminale D, Licence 1" />
-          </label>
-          <label>Matière ou compétence
-            <input id="prof-ia-matiere" maxlength="120" placeholder="Ex. mathématiques, philosophie, Excel" />
-          </label>
-          <label>Ton objectif
-            <select id="prof-ia-objectif">
-              <option value="comprendre">Comprendre une notion</option>
-              <option value="exercice">Faire un exercice avec des indices</option>
-              <option value="revision">Réviser pour un examen</option>
-              <option value="oral">M'entraîner à l'oral</option>
-            </select>
-          </label>
-        </div>
-        <div id="prof-ia-conversation" class="prof-ia-conversation" role="log" aria-live="polite">
-          <div class="prof-ia-bulle prof-ia-bot">Bonjour ! Je suis ton professeur EduCap. Dis-moi ce que tu veux apprendre. Nous avancerons ensemble : une explication, une question, puis un exercice adapté à tes réponses.</div>
-        </div>
-        <form id="prof-ia-form" class="prof-ia-form">
-          <label for="prof-ia-message">Ta question ou ta réponse</label>
-          <textarea id="prof-ia-message" rows="3" maxlength="2500" required placeholder="Écris ici, ou appuie sur le micro pour parler…"></textarea>
-          <div class="prof-ia-actions">
-            <button class="btn btn-primary" type="submit" id="prof-ia-envoyer">Envoyer au professeur</button>
-            <button class="btn btn-secondary" type="button" id="prof-ia-micro">🎙️ Parler</button>
-            <button class="btn btn-secondary" type="button" id="prof-ia-lire">🔊 Lire la réponse</button>
-            <button class="btn btn-secondary" type="button" id="prof-ia-effacer">Nouvelle séance</button>
-          </div>
-          <p id="prof-ia-statut" class="muted" aria-live="polite">La conversation sera adaptée à ton niveau. La voix dépend des fonctions disponibles sur ton appareil.</p>
-        </form>
-      </div>
-    </div>`;
-  const coach = document.querySelector("#coach-intelligent");
-  if (coach?.parentNode) coach.parentNode.insertBefore(section, coach);
-  else document.querySelector("main")?.appendChild(section);
+// Mentor EduCap IA retiré : le site conserve un guide d’accompagnement local, sans service IA payant.
 
-  const style = document.createElement("style");
-  style.textContent = `
-    .prof-ia-panel{max-width:960px;margin:auto}.prof-ia-panel h2{font-size:clamp(28px,4vw,38px);margin:12px 0}
-    .prof-ia-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}
-    .prof-ia-grid label,.prof-ia-form label{display:grid;gap:7px;font-weight:700;font-size:14px}
-    .prof-ia-grid input,.prof-ia-grid select,.prof-ia-form textarea{box-sizing:border-box;width:100%;min-height:46px;padding:11px;border:1px solid #ccd8e8;border-radius:10px;background:#fff;font:inherit}
-    .prof-ia-conversation{height:320px;overflow:auto;background:#f5f8fd;border:1px solid #dce5f2;border-radius:14px;padding:14px;margin:18px 0;display:flex;flex-direction:column;gap:10px}
-    .prof-ia-bulle{max-width:88%;padding:12px 14px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}
-    .prof-ia-bot{align-self:flex-start;background:#fff;border:1px solid #dce5f2}.prof-ia-user{align-self:flex-end;background:#dceaff;color:#16345f}
-    .prof-ia-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}.prof-ia-actions button{min-height:44px}
-    @media(max-width:700px){.prof-ia-grid{grid-template-columns:1fr}.prof-ia-bulle{max-width:96%}.prof-ia-actions{display:grid;grid-template-columns:1fr 1fr}.prof-ia-actions button{width:100%}}
-  `;
-  document.head.appendChild(style);
-
-  const conversation = document.querySelector("#prof-ia-conversation");
-  const input = document.querySelector("#prof-ia-message");
-  const status = document.querySelector("#prof-ia-statut");
-  const sendButton = document.querySelector("#prof-ia-envoyer");
-  const history = [];
-  let lastAnswer = "";
-  const sayStatus = (s) => { status.textContent = s; };
-  const addBubble = (text, who) => {
-    const bubble = document.createElement("div");
-    bubble.className = "prof-ia-bulle " + (who === "user" ? "prof-ia-user" : "prof-ia-bot");
-    bubble.textContent = text;
-    conversation.appendChild(bubble);
-    conversation.scrollTop = conversation.scrollHeight;
-  };
-  const readAloud = (text) => {
-    if (!("speechSynthesis" in window)) { sayStatus("La lecture vocale n'est pas disponible sur cet appareil."); return; }
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "fr-FR";
-    utterance.rate = 0.95;
-    window.speechSynthesis.speak(utterance);
-  };
-
-  document.querySelector("#prof-ia-form")?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const message = input.value.trim();
-    if (!message) return;
-    const niveau = document.querySelector("#prof-ia-niveau").value.trim();
-    const matiere = document.querySelector("#prof-ia-matiere").value.trim();
-    const objectif = document.querySelector("#prof-ia-objectif").value;
-    addBubble(message, "user");
-    history.push({ role: "user", content: message });
-    input.value = "";
-    sendButton.disabled = true;
-    sayStatus("Ton professeur prépare une explication adaptée…");
-    try {
-      const { data: sessionData, error: sessionError } = await window.supabase.createClient(
-        "https://byzsqblgsssymvsztaqb.supabase.co",
-        "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR"
-      ).auth.getSession();
-      if (sessionError || !sessionData?.session) {
-        history.pop();
-        addBubble("Pour démarrer une séance personnalisée, connecte-toi d'abord dans « Mon espace », puis reviens ici.", "assistant");
-        sayStatus("Connexion nécessaire pour utiliser le professeur IA.");
-        return;
-      }
-      const response = await fetch("https://byzsqblgsssymvsztaqb.supabase.co/functions/v1/professeur-ia", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR",
-          "Authorization": "Bearer " + sessionData.session.access_token
-        },
-        body: JSON.stringify({ niveau, matiere, objectif, messages: history.slice(-12) })
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok || !data.reply) throw new Error(data.error || "Le professeur IA n'est pas encore configuré.");
-      lastAnswer = String(data.reply);
-      history.push({ role: "assistant", content: lastAnswer });
-      addBubble(lastAnswer, "assistant");
-      sayStatus("Tu peux poser une question, répondre à l'exercice ou écouter l'explication.");
-      readAloud(lastAnswer);
-    } catch (error) {
-      history.pop();
-      addBubble("Je ne peux pas répondre pour le moment. " + (error.message || "Vérifie la connexion et réessaie."), "assistant");
-      sayStatus("Le service IA doit être configuré côté serveur pour répondre.");
-    } finally {
-      sendButton.disabled = false;
-      input.focus();
-    }
-  });
-
-  document.querySelector("#prof-ia-micro")?.addEventListener("click", () => {
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!Recognition) { sayStatus("La dictée vocale n'est pas prise en charge par ce navigateur. Tu peux écrire ta réponse."); return; }
-    const recognition = new Recognition();
-    recognition.lang = "fr-FR";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-    sayStatus("Je t'écoute… parle clairement.");
-    recognition.onresult = (event) => { input.value = event.results[0][0].transcript; input.focus(); sayStatus("Ta réponse est prête. Relis-la puis envoie-la."); };
-    recognition.onerror = () => sayStatus("Je n'ai pas pu capter ta voix. Autorise le micro ou écris ta réponse.");
-    recognition.onend = () => { if (!input.value.trim()) sayStatus("Tu peux réessayer ou écrire ta réponse."); };
-    recognition.start();
-  });
-  document.querySelector("#prof-ia-lire")?.addEventListener("click", () => {
-    if (lastAnswer) readAloud(lastAnswer);
-    else sayStatus("La réponse du professeur apparaîtra ici et pourra être lue à voix haute.");
-  });
-  document.querySelector("#prof-ia-effacer")?.addEventListener("click", () => {
-    history.length = 0; lastAnswer = "";
-    conversation.replaceChildren();
-    addBubble("Nouvelle séance ! Quel sujet veux-tu travailler aujourd'hui ?", "assistant");
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-    sayStatus("Nouvelle séance commencée.");
-  });
-});
-
-// ============================================================
 // COACH INTELLIGENT EDUCAP — outil d'étude immédiatement utilisable
 // Fonctionne côté navigateur, sans inventer de cours officiels.
 // ============================================================
@@ -1594,9 +1433,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const root = document.createElement("div");
   root.id = "educap-aide-flottante";
   root.innerHTML = `
-    <section id="educap-aide-panneau" role="dialog" aria-label="Mentor EduCap — assistant d’apprentissage">
-      <h3>Bonjour, je suis Mentor EduCap !</h3>
-      <p>Je reste avec toi dans EduCap Afrique. Choisis ton besoin et décris ta question : je te proposerai une méthode pour avancer, gratuitement.</p>
+    <section id="educap-aide-panneau" role="dialog" aria-label="Guide EduCap — aide au démarrage">
+      <h3>Bienvenue sur EduCap Afrique !</h3>
+      <p>Je suis ton guide de démarrage. Choisis ton besoin pour obtenir des étapes simples et découvrir comment utiliser EduCap Afrique.</p>
       <label for="educap-aide-parcours">Ton parcours</label>
       <select id="educap-aide-parcours">
         <option value="scolaire">Collège / lycée</option>
@@ -1614,13 +1453,12 @@ document.addEventListener("DOMContentLoaded", () => {
       <label for="educap-aide-sujet">Précise le sujet (facultatif)</label>
       <textarea id="educap-aide-sujet" maxlength="500" placeholder="Ex. : équations du second degré, dissertation, comptabilité…"></textarea>
       <button type="button" class="action principal" id="educap-aide-conseil">Obtenir une méthode gratuite</button>
-      <button type="button" class="action" id="educap-aide-dialogue">Discuter avec mon professeur EduCap</button>
       <button type="button" class="action" id="educap-aide-inscription">M’aider à choisir mon parcours / m’inscrire</button>
       <div id="educap-aide-reponse" hidden aria-live="polite"></div>
       
       <button type="button" class="action" id="educap-aide-fermer">Fermer</button>
     </section>
-    <button id="educap-aide-bouton" type="button" aria-expanded="false">💬 Mentor EduCap</button>
+    <button id="educap-aide-bouton" type="button" aria-expanded="false">🧭 Guide EduCap</button>
   `;
   document.body.appendChild(root);
 
@@ -1635,17 +1473,6 @@ document.addEventListener("DOMContentLoaded", () => {
   root.querySelector("#educap-aide-fermer").addEventListener("click", () => {
     panel.classList.remove("ouvert");
     toggle.setAttribute("aria-expanded", "false");
-  });
-
-  root.querySelector("#educap-aide-dialogue").addEventListener("click", () => {
-    const professeur = document.querySelector("#professeur-ia");
-    panel.classList.remove("ouvert");
-    toggle.setAttribute("aria-expanded", "false");
-    if (professeur) {
-      professeur.scrollIntoView({ behavior: "smooth", block: "start" });
-      const champ = document.querySelector("#prof-ia-message");
-      window.setTimeout(() => champ?.focus({ preventScroll: true }), 450);
-    }
   });
 
   root.querySelector("#educap-aide-inscription").addEventListener("click", () => {
