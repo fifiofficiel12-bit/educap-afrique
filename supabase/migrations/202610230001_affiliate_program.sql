@@ -147,3 +147,6 @@ create trigger trg_process_affiliate_paid_payment after update of status on publ
 for each row when (new.status = 'paid' and old.status is distinct from 'paid')
 execute function public.process_affiliate_paid_payment();
 revoke all on function public.process_affiliate_paid_payment() from public, anon, authenticated;
+
+create index if not exists affiliate_commissions_referred_user_idx on public.affiliate_commissions (referred_user_id);
+create index if not exists affiliate_commissions_paid_by_idx on public.affiliate_commissions (paid_by);
