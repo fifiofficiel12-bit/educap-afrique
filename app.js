@@ -1202,7 +1202,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ============================================================
 // ASSISTANT FLOTTANT GRATUIT EDUCAP AFRIQUE
-// Aide d'orientation locale + accès facultatif à ChatGPT.
+// Aide d'orientation locale + accès facultatif à un assistant externe.
 // Ne prétend pas être une IA générative intégrée au site.
 // =============================================================
 document.addEventListener("DOMContentLoaded", () => {
@@ -1231,7 +1231,7 @@ document.addEventListener("DOMContentLoaded", () => {
   root.innerHTML = `
     <section id="educap-aide-panneau" role="dialog" aria-label="Mentor EduCap — assistant d’apprentissage">
       <h3>Bonjour, je suis Mentor EduCap !</h3>
-      <p>Je peux t’aider à choisir quoi travailler et te proposer une méthode gratuite. Pour une vraie conversation avec une IA, tu peux ouvrir ChatGPT séparément.</p>
+      <p>Je peux t’aider à choisir quoi travailler et te proposer une méthode gratuite. Pour poursuivre avec une IA conversationnelle, tu peux ouvrir l’assistant externe séparément.</p>
       <label for="educap-aide-parcours">Ton parcours</label>
       <select id="educap-aide-parcours">
         <option value="scolaire">Collège / lycée</option>
@@ -1250,7 +1250,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <textarea id="educap-aide-sujet" maxlength="500" placeholder="Ex. : équations du second degré, dissertation, comptabilité…"></textarea>
       <button type="button" class="action principal" id="educap-aide-conseil">Obtenir une méthode gratuite</button>
       <div id="educap-aide-reponse" hidden aria-live="polite"></div>
-      <button type="button" class="action" id="educap-aide-chatgpt">Poser ma question à Mentor EduCap</button>
+      <button type="button" class="action" id="educap-aide-externe">Poser ma question à Mentor EduCap</button>
       <button type="button" class="action" id="educap-aide-fermer">Fermer</button>
     </section>
     <button id="educap-aide-bouton" type="button" aria-expanded="false">💬 Mentor EduCap</button>
@@ -1287,7 +1287,7 @@ document.addEventListener("DOMContentLoaded", () => {
     answer.hidden = false;
   });
 
-  root.querySelector("#educap-aide-chatgpt").addEventListener("click", () => {
+  root.querySelector("#educap-aide-externe").addEventListener("click", () => {
     window.open("https://chatgpt.com/", "_blank", "noopener,noreferrer");
   });
 });
