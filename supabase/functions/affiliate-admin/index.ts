@@ -119,5 +119,6 @@ Deno.serve(async (req: Request) => {
     if (error || !data) return json({ error: "Impossible de confirmer le versement." }, 500);
     return json({ success: true });
   }
-\n  return json({ error: "Action non reconnue." }, 400);
+
+  return json({ error: "Action non reconnue." }, 400);
 });
