@@ -928,8 +928,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <p class="course-meta">${echapperHTML(meta || "Cours EduCap Afrique")}</p>
         <h4>${echapperHTML(element.title)}</h4>
         <p>${echapperHTML(element.description || "")}</p>
-        ${(abonnementActif || ["admin", "formateur"].includes(role)) && element.content ? `<section class="lesson-preview"><h5>Leçon complète</h5><div class="lesson-content">${formaterContenuCours(element.content)}</div></section>` : abonnementActif ? `<p class="course-empty-note">Le contenu complet de cette leçon sera ajouté prochainement.</p>` : `<section class="course-empty-note"><strong>Aperçu gratuit.</strong><p>Le titre et la description sont accessibles gratuitement. L’accès à la leçon complète nécessite l’abonnement annuel à 750 FCFA.</p></section>`}
-        ${abonnementActif ? `<button class="btn ${inscrit ? "btn-secondary" : "btn-primary"}" type="button" data-inscrire-cours="${echapperHTML(element.id)}" ${inscrit ? "disabled" : ""}>${inscrit ? "Déjà dans mes cours" : "Ajouter à mes cours"}</button>` : `<a class="btn btn-primary" href="#paiement-form">S’abonner — 750 FCFA/an</a>`}
+        ${(abonnementActif || ["admin", "formateur"].includes(role)) && element.content ? `<section class="lesson-preview"><h5>Leçon complète</h5><div class="lesson-content">${formaterContenuCours(element.content)}</div></section>` : abonnementActif ? `<p class="course-empty-note">Le contenu complet de cette leçon sera ajouté prochainement.</p>` : `<section class="course-empty-note"><strong>Aperçu gratuit.</strong><p>Le titre et la description sont accessibles gratuitement. Un seul abonnement annuel de 750 FCFA donne accès à tous les cours publiés de ton parcours, sans payer chaque matière séparément.</p></section>`}
+        ${abonnementActif ? `<button class="btn ${inscrit ? "btn-secondary" : "btn-primary"}" type="button" data-inscrire-cours="${echapperHTML(element.id)}" ${inscrit ? "disabled" : ""}>${inscrit ? "Déjà dans mes cours" : "Ajouter à mes cours"}</button>` : `<a class="btn btn-primary" href="#paiement-form">Débloquer tous les cours — 750 FCFA/an</a>`}
       </article>`;
     }).join("");
 
