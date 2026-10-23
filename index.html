@@ -749,11 +749,16 @@
             <div id="liste-cours" class="course-list" aria-live="polite"></div>
 
             <section id="teacher-application-section" class="form-card" hidden>
-              <h3>Devenir formateur EduCap Afrique</h3>
-              <p>Présente ton expérience. L’équipe EduCap Afrique examinera ta demande avant d’activer ton espace formateur.</p>
+              <h3>Tu es enseignant, formateur ou développeur de compétences ?</h3>
+              <p>Après la création de ton compte, présente ton domaine et ton expérience ici. L’équipe EduCap Afrique examinera ta demande. Une fois ton accès formateur validé, tu pourras publier des cours et créer ta propre classe virtuelle pour accompagner tes apprenants.</p>
+              <ol>
+                <li>Décris la matière ou la compétence que tu enseignes.</li>
+                <li>Envoie ta demande et attends la validation de l’équipe.</li>
+                <li>Après validation, ouvre « Mon espace formateur » pour publier des cours ou créer une classe virtuelle.</li>
+              </ol>
               <form id="teacher-application-form">
                 <div class="form-group">
-                  <label for="teacher-subject-area">Matière ou domaine enseigné</label>
+                  <label for="teacher-subject-area">Matière enseignée ou compétence que tu souhaites développer</label>
                   <input id="teacher-subject-area" name="subject_area" maxlength="160" required placeholder="Ex. Mathématiques, comptabilité, bureautique">
                 </div>
                 <div class="form-group">
@@ -761,22 +766,27 @@
                   <input id="teacher-institution" name="institution" maxlength="180" placeholder="Nom de l’établissement ou organisme">
                 </div>
                 <div class="form-group">
-                  <label for="teacher-qualifications">Formation et expérience</label>
+                  <label for="teacher-qualifications">Présente ton expérience et ce que tu peux transmettre</label>
                   <textarea id="teacher-qualifications" name="qualifications" rows="4" maxlength="3000" required placeholder="Présente tes diplômes, ton expérience et les niveaux que tu peux accompagner."></textarea>
                 </div>
                 <div class="form-group">
                   <label for="teacher-evidence-url">Lien vers un portfolio ou un justificatif (facultatif)</label>
                   <input id="teacher-evidence-url" name="evidence_url" type="url" maxlength="500" placeholder="https://...">
                 </div>
-                <button class="btn btn-primary" type="submit">Envoyer ma candidature</button>
+                <button class="btn btn-primary" type="submit">Demander mon accès formateur</button>
               </form>
               <p id="teacher-application-status" class="parcours-result" role="status" aria-live="polite" hidden></p>
             </section>
             <section id="espace-formateur" class="teacher-panel" hidden>
               <h3>Mon espace formateur</h3>
+              <p><strong>Bienvenue dans ton espace de transmission !</strong> Tu peux publier des ressources pédagogiques et accompagner tes apprenants en ligne.</p>
+              <div class="welcome-panel">
+                <h4>👩🏽‍🏫 Gérer une classe virtuelle</h4>
+                <p>Crée un groupe pour tes élèves, étudiants ou personnes en formation. Donne-lui un nom clair, indique le niveau, puis partage le code d’invitation avec tes apprenants pour qu’ils rejoignent la classe.</p>
+              </div>
               <section class="form-card">
-                <h4>Créer une classe virtuelle</h4>
-                <p>Crée un groupe, puis partage son code d’invitation avec tes élèves ou apprenants.</p>
+                <h4>Créer ma classe virtuelle</h4>
+                <p>Étape 1 : donne un nom à ta classe. Étape 2 : choisis le domaine. Étape 3 : crée-la et partage le code d’invitation.</p>
                 <form id="creer-classe-form">
                   <div class="form-group"><label for="classe-virtuelle-nom">Nom de la classe</label><input id="classe-virtuelle-nom" name="nom" required maxlength="120" placeholder="Ex. Terminale D — Mathématiques"></div>
                   <div class="form-group"><label for="classe-virtuelle-domaine">Domaine</label><select id="classe-virtuelle-domaine" name="domaine" required><option value="scolaire">Scolaire</option><option value="campus">Université</option><option value="competences">Compétences professionnelles</option></select></div>
