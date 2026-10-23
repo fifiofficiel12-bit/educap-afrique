@@ -863,6 +863,21 @@ document.addEventListener("DOMContentLoaded", () => {
       .gt("subscription_ends_at", new Date().toISOString())
       .limit(1);
     const abonnementActif = !erreurAbonnement && Boolean(paiementsActifs?.length);
+    const panneauAbonnement = document.querySelector("#abonnement-edc");
+    if (panneauAbonnement) {
+      panneauAbonnement.hidden = abonnementActif;
+      let confirmationAbonnement = document.querySelector("#abonnement-actif-message");
+      if (abonnementActif && !confirmationAbonnement) {
+        confirmationAbonnement = document.createElement("section");
+        confirmationAbonnement.id = "abonnement-actif-message";
+        confirmationAbonnement.className = "form-card";
+        confirmationAbonnement.setAttribute("role", "status");
+        confirmationAbonnement.innerHTML = "<h3>✓ Abonnement actif</h3><p>Ton paiement de 750 FCFA est confirmé. Tu as accès aux cours publiés de tous les parcours EduCap Afrique. Aucun nouveau paiement n’est nécessaire pendant la période de validité.</p>";
+        panneauAbonnement.insertAdjacentElement("afterend", confirmationAbonnement);
+      } else if (!abonnementActif && confirmationAbonnement) {
+        confirmationAbonnement.remove();
+      }
+    }
     let contenusCours = [];
     if (abonnementActif || ["admin", "formateur"].includes(role)) {
       const { data: details, error: erreurDetails } = await clientSupabase
@@ -896,7 +911,7 @@ document.addEventListener("DOMContentLoaded", () => {
       content: contenuParId.get(element.id) || null
     })).filter((element) => {
       // Les anciens cours « formation » appartiennent au parcours Compétences.
-      const categorieCompatible = element.category === parcours ||
+      const categorieCompatible = abonnementActif || element.category === parcours ||
         (parcours === "competences" && element.category === "formation");
       if (!categorieCompatible) return false;
       if (element.pays && profil?.pays) {
@@ -906,7 +921,7 @@ document.addEventListener("DOMContentLoaded", () => {
           (paysProfil === "ci" && paysCours === "cote divoire");
         if (!memePays) return false;
       }
-      if (parcours === "scolaire") {
+      if (!abonnementActif && parcours === "scolaire") {
         if (element.classe && classeProfil && element.classe !== classeProfil) return false;
         if (element.serie && serieProfil && element.serie !== serieProfil) return false;
         if (element.classe && !classeProfil) return false;
