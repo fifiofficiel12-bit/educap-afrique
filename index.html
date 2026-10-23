@@ -26,6 +26,7 @@
 
   <!-- Script principal EduCap Afrique -->
   <script src="app.js" defer></script>
+  <script src="affiliate.js" defer></script>
 
   <style>
     .parcours-form {
@@ -82,6 +83,17 @@
     .parcours-form .muted { margin-top:4px; }
     @media (max-width: 640px) { .parcours-shortcuts { grid-template-columns:1fr; } }
 
+    .affiliate-tiers,.affiliate-stats { margin: 20px 0; }
+    .affiliate-stat { font-size: 1.35rem; font-weight: 800; color: #1457d9; overflow-wrap: anywhere; }
+    .affiliate-copy-row { display:flex; flex-wrap:wrap; gap:10px; }
+    .affiliate-copy-row input { flex:1 1 280px; min-width:0; }
+    .affiliate-commission-list { padding-left:20px; }
+    .affiliate-commission-list li { margin:10px 0; overflow-wrap:anywhere; }
+    .affiliate-admin-panel { margin-top:24px; padding:20px; border:1px solid #dce8e2; border-radius:14px; background:#f8fbff; }
+    .affiliate-admin-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin:12px 0 24px; }
+    .affiliate-admin-card { overflow-wrap:anywhere; }
+    .affiliate-admin-card .btn { margin:5px 8px 0 0; }
+    @media(max-width:640px){.affiliate-copy-row{display:grid}.affiliate-copy-row .btn{width:100%}}
     [hidden] {
       display: none !important;
     }
@@ -98,6 +110,7 @@
         <a href="#fonctionnement">Fonctionnement</a>
         <a href="#videos">Vidéos</a>
         <a href="#professeur-ia">Mentor EduCap</a>
+        <a href="#affiliation">Affiliation</a>
         <a href="#apropos">À propos</a>
         <a href="#inscription">Commencer</a>
         <a href="#espace-personnel">Mon espace</a>
@@ -781,6 +794,45 @@
         </article>
       </div>
       <p class="muted">Ces règles constituent une base d’information et ne remplacent pas la validation des mentions légales et conditions définitives par un professionnel compétent en Côte d’Ivoire.</p>
+    </div>
+  </section>
+
+  <section class="section" id="affiliation">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Programme d’affiliation EduCap Afrique</h2>
+        <p>Partage ton lien personnel. Les commissions sont comptabilisées uniquement après confirmation d’un abonnement annuel payé de 750 FCFA.</p>
+      </div>
+      <div class="card-grid affiliate-tiers">
+        <article class="card"><div class="card-icon">🌱</div><h3>Starter</h3><p><strong>75 FCFA</strong> par abonnement payé.</p><p class="muted">Catégorie de départ.</p></article>
+        <article class="card"><div class="card-icon">🚀</div><h3>Pro</h3><p><strong>110 FCFA</strong> par abonnement payé.</p><p class="muted">À partir de 20 abonnements payés attribués.</p></article>
+        <article class="card"><div class="card-icon">🏆</div><h3>Elite</h3><p><strong>150 FCFA</strong> par abonnement payé.</p><p class="muted">À partir de 100 abonnements payés attribués.</p></article>
+      </div>
+      <div id="affiliate-message" class="parcours-result" role="status" aria-live="polite" hidden></div>
+      <p><strong>Règles :</strong> un apprenant ne peut être attribué qu’une seule fois. Les clics et inscriptions seuls ne génèrent aucune commission. Les commissions restent en attente jusqu’au contrôle de l’administration. Le passage de catégorie est automatique selon les abonnements payés validés.</p>
+      <button id="affiliate-application" class="btn btn-primary" type="button">Demander à devenir affilié</button>
+      <div id="affiliate-dashboard" class="affiliate-dashboard" hidden>
+        <div class="card affiliate-link-card">
+          <h3>Mon lien personnel</h3>
+          <p>Code : <strong id="affiliate-code"></strong> · Catégorie : <strong id="affiliate-category"></strong> · Statut : <strong id="affiliate-status"></strong></p>
+          <div class="affiliate-copy-row"><input id="affiliate-link" type="url" readonly aria-label="Mon lien d’affiliation"><button id="affiliate-link-copy" type="button" class="btn btn-primary">Copier le lien</button></div>
+        </div>
+        <div class="card-grid affiliate-stats">
+          <article class="card"><h3>Clics suivis</h3><p class="affiliate-stat" id="affiliate-clicks">0</p></article>
+          <article class="card"><h3>Filleuls attribués</h3><p class="affiliate-stat" id="affiliate-referrals">0</p></article>
+          <article class="card"><h3>Abonnements payés</h3><p class="affiliate-stat" id="affiliate-paid-subscriptions">0</p></article>
+          <article class="card"><h3>Commissions générées</h3><p class="affiliate-stat"><span id="affiliate-earned">0</span> FCFA</p></article>
+          <article class="card"><h3>À verser</h3><p class="affiliate-stat"><span id="affiliate-pending">0</span> FCFA</p></article>
+          <article class="card"><h3>Déjà versées</h3><p class="affiliate-stat"><span id="affiliate-paid">0</span> FCFA</p></article>
+        </div>
+        <div class="card"><h3>Historique des commissions</h3><ul id="affiliate-commission-list" class="affiliate-commission-list"></ul></div>
+      </div>
+      <div id="affiliate-admin-panel" class="affiliate-admin-panel" hidden>
+        <h3>Administration des affiliations</h3>
+        <p>Valide ou suspends les affiliés, puis contrôle chaque commission avant de l’approuver et de la marquer comme payée.</p>
+        <h4>Demandes et résultats des affiliés</h4><div id="affiliate-admin-affiliates" class="affiliate-admin-list"></div>
+        <h4>Commissions à contrôler</h4><div id="affiliate-admin-commissions" class="affiliate-admin-list"></div>
+      </div>
     </div>
   </section>
 
