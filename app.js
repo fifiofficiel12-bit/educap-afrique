@@ -1198,3 +1198,96 @@ document.addEventListener("DOMContentLoaded", () => {
     output.scrollIntoView({behavior:"smooth",block:"start"});
   });
 });
+
+
+// ============================================================
+// ASSISTANT FLOTTANT GRATUIT EDUCAP AFRIQUE
+// Aide d'orientation locale + accès facultatif à ChatGPT.
+// Ne prétend pas être une IA générative intégrée au site.
+// =============================================================
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.querySelector("#educap-aide-flottante")) return;
+
+  const style = document.createElement("style");
+  style.textContent = `
+    #educap-aide-flottante{position:fixed;right:18px;bottom:18px;z-index:9999;font-family:inherit}
+    #educap-aide-bouton{border:0;border-radius:999px;padding:14px 18px;background:#123d75;color:#fff;font-weight:800;box-shadow:0 8px 28px #0b214744;cursor:pointer}
+    #educap-aide-panneau{display:none;position:absolute;right:0;bottom:64px;width:min(350px,calc(100vw - 32px));max-height:72vh;overflow:auto;background:#fff;color:#172642;border:1px solid #d9e3f2;border-radius:18px;box-shadow:0 14px 44px #10233b33;padding:18px}
+    #educap-aide-panneau.ouvert{display:block}
+    #educap-aide-panneau h3{margin:0 0 8px;font-size:19px}
+    #educap-aide-panneau p{font-size:14px;line-height:1.5}
+    #educap-aide-panneau label{display:block;font-weight:700;font-size:13px;margin:12px 0 6px}
+    #educap-aide-panneau select,#educap-aide-panneau textarea{box-sizing:border-box;width:100%;padding:10px;border:1px solid #ccd8e8;border-radius:9px;background:#fff;color:#172642}
+    #educap-aide-panneau textarea{min-height:72px;resize:vertical}
+    #educap-aide-panneau button.action{width:100%;border:0;border-radius:9px;padding:11px;margin-top:9px;font-weight:700;cursor:pointer;background:#eaf1fb;color:#123d75}
+    #educap-aide-panneau button.principal{background:#123d75;color:#fff}
+    #educap-aide-reponse{white-space:pre-line;background:#f3f7fd;padding:12px;border-radius:10px;margin-top:12px;font-size:14px;line-height:1.5}
+    @media(max-width:480px){#educap-aide-flottante{right:12px;bottom:12px}#educap-aide-panneau{max-height:70vh}}
+  `;
+  document.head.appendChild(style);
+
+  const root = document.createElement("div");
+  root.id = "educap-aide-flottante";
+  root.innerHTML = `
+    <section id="educap-aide-panneau" role="dialog" aria-label="Aide EduCap Afrique">
+      <h3>Besoin d’un coup de main ?</h3>
+      <p>Je peux t’aider à choisir quoi travailler et te proposer une méthode gratuite. Pour une vraie conversation avec une IA, tu peux ouvrir ChatGPT séparément.</p>
+      <label for="educap-aide-parcours">Ton parcours</label>
+      <select id="educap-aide-parcours">
+        <option value="scolaire">Collège / lycée</option>
+        <option value="campus">Université</option>
+        <option value="competences">Formation professionnelle</option>
+      </select>
+      <label for="educap-aide-besoin">De quoi as-tu besoin ?</label>
+      <select id="educap-aide-besoin">
+        <option value="comprendre">Comprendre une leçon</option>
+        <option value="exercice">Résoudre un exercice étape par étape</option>
+        <option value="revision">Préparer un examen</option>
+        <option value="organisation">Organiser mon travail</option>
+        <option value="orientation">Choisir un parcours ou une compétence</option>
+      </select>
+      <label for="educap-aide-sujet">Précise le sujet (facultatif)</label>
+      <textarea id="educap-aide-sujet" maxlength="500" placeholder="Ex. : équations du second degré, dissertation, comptabilité…"></textarea>
+      <button type="button" class="action principal" id="educap-aide-conseil">Obtenir une méthode gratuite</button>
+      <div id="educap-aide-reponse" hidden aria-live="polite"></div>
+      <button type="button" class="action" id="educap-aide-chatgpt">Continuer avec ChatGPT</button>
+      <button type="button" class="action" id="educap-aide-fermer">Fermer</button>
+    </section>
+    <button id="educap-aide-bouton" type="button" aria-expanded="false">💬 Besoin d’aide ?</button>
+  `;
+  document.body.appendChild(root);
+
+  const panel = root.querySelector("#educap-aide-panneau");
+  const toggle = root.querySelector("#educap-aide-bouton");
+  const answer = root.querySelector("#educap-aide-reponse");
+  toggle.addEventListener("click", () => {
+    const open = !panel.classList.contains("ouvert");
+    panel.classList.toggle("ouvert", open);
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+  root.querySelector("#educap-aide-fermer").addEventListener("click", () => {
+    panel.classList.remove("ouvert");
+    toggle.setAttribute("aria-expanded", "false");
+  });
+
+  root.querySelector("#educap-aide-conseil").addEventListener("click", () => {
+    const parcours = root.querySelector("#educap-aide-parcours").value;
+    const besoin = root.querySelector("#educap-aide-besoin").value;
+    const sujet = root.querySelector("#educap-aide-sujet").value.trim();
+    const sujetTexte = sujet ? " Sujet choisi : " + sujet + "." : "";
+    const conseils = {
+      comprendre: "1. Lis une petite partie de la leçon.\n2. Reformule l’idée avec tes propres mots.\n3. Trouve un exemple.\n4. Note précisément ce que tu ne comprends pas, puis demande une explication.",
+      exercice: "1. Recopie la consigne et repère ce qu’on cherche.\n2. Liste les données utiles.\n3. Essaie une première étape sans regarder le corrigé.\n4. Vérifie chaque calcul et explique pourquoi ta méthode fonctionne.",
+      revision: "1. Choisis un seul chapitre.\n2. Rappelle les notions sans regarder le cours.\n3. Fais un exercice ou une question type examen.\n4. Corrige tes erreurs et révise-les de nouveau demain.",
+      organisation: "1. Choisis un objectif réalisable aujourd’hui.\n2. Travaille 25 minutes sans distraction.\n3. Fais une pause de 5 minutes.\n4. Termine en écrivant ce que tu as compris et ce qu’il reste à revoir.",
+      orientation: "1. Décris ce que tu aimes faire.\n2. Note les matières ou compétences où tu progresses.\n3. Choisis une compétence à tester avec un petit projet.\n4. Compare les prérequis et les débouchés à l’aide de sources fiables."
+    };
+    const niveaux = {scolaire:"Pour ton parcours scolaire",campus:"Pour ton parcours universitaire",competences:"Pour ta formation professionnelle"};
+    answer.textContent = niveaux[parcours] + " :\n\n" + conseils[besoin] + sujetTexte + "\n\nCette aide donne une méthode générale, pas une correction automatique vérifiée. Tu peux continuer avec ChatGPT si tu souhaites poser ta question à une IA.";
+    answer.hidden = false;
+  });
+
+  root.querySelector("#educap-aide-chatgpt").addEventListener("click", () => {
+    window.open("https://chatgpt.com/", "_blank", "noopener,noreferrer");
+  });
+});
