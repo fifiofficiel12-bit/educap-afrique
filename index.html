@@ -801,7 +801,7 @@
     <div class="container">
       <div class="section-heading">
         <h2>Programme d’affiliation EduCap Afrique</h2>
-        <p>Partage ton lien personnel. Les commissions sont comptabilisées uniquement après confirmation d’un abonnement annuel payé de 750 FCFA.</p>
+        <p>Ton rôle est simple : copie ton lien, partage-le, puis suis les abonnements confirmés et tes commissions ici. Tu n’as pas besoin de gérer les paiements des apprenants.</p>
       </div>
       <div class="card-grid affiliate-tiers">
         <article class="card"><div class="card-icon">🌱</div><h3>Starter</h3><p><strong>75 FCFA</strong> par abonnement payé.</p><p class="muted">Catégorie de départ.</p></article>
@@ -809,10 +809,13 @@
         <article class="card"><div class="card-icon">🏆</div><h3>Elite</h3><p><strong>150 FCFA</strong> par abonnement payé.</p><p class="muted">À partir de 100 abonnements payés attribués.</p></article>
       </div>
       <div id="affiliate-message" class="parcours-result" role="status" aria-live="polite" hidden></div>
-      <p><strong>Règles :</strong> un apprenant ne peut être attribué qu’une seule fois. Les clics et inscriptions seuls ne génèrent aucune commission. Les commissions restent en attente jusqu’au contrôle de l’administration. Le passage de catégorie est automatique selon les abonnements payés validés.</p>
+      <div class="card" style="margin:18px 0"><h3>Comment ça marche ?</h3><ol><li>Demande ton accès affilié et attends la validation d’EduCap Afrique.</li><li>Copie ton lien personnel et partage-le sur WhatsApp ou les réseaux sociaux.</li><li>Quand un apprenant s’abonne et que son paiement est confirmé, ton tableau de bord affiche l’abonnement et ta commission.</li><li>La commission est vérifiée par l’administration avant le versement.</li></ol><p class="muted">Un clic ou une inscription sans paiement confirmé ne rapporte pas de commission. Le montant dépend de ta catégorie.</p></div>
       <button id="affiliate-application" class="btn btn-primary" type="button">Demander à devenir affilié</button>
       <div id="affiliate-dashboard" class="affiliate-dashboard" hidden>
+        <div id="affiliate-notice" class="parcours-result" role="status" aria-live="polite" hidden></div>
         <div class="card affiliate-link-card">
+          <h3>Ton espace en 3 étapes</h3>
+          <p>1. Copie ton lien. 2. Partage-le. 3. Reviens ici pour voir les abonnements confirmés et tes commissions.</p>
           <h3>Mon lien personnel</h3>
           <p>Code : <strong id="affiliate-code"></strong> · Catégorie : <strong id="affiliate-category"></strong> · Statut : <strong id="affiliate-status"></strong></p>
           <div class="affiliate-copy-row"><input id="affiliate-link" type="url" readonly aria-label="Mon lien d’affiliation"><button id="affiliate-link-copy" type="button" class="btn btn-primary">Copier le lien</button></div>
@@ -825,7 +828,7 @@
           <article class="card"><h3>À verser</h3><p class="affiliate-stat"><span id="affiliate-pending">0</span> FCFA</p></article>
           <article class="card"><h3>Déjà versées</h3><p class="affiliate-stat"><span id="affiliate-paid">0</span> FCFA</p></article>
         </div>
-        <div class="card"><h3>Historique des commissions</h3><ul id="affiliate-commission-list" class="affiliate-commission-list"></ul></div>
+        <div class="card"><h3>Suivi simple de tes abonnements</h3><p class="muted">Chaque ligne correspond à un abonnement payé grâce à ton lien et indique l’état de ta commission.</p><ul id="affiliate-commission-list" class="affiliate-commission-list"></ul></div>
       </div>
       <div id="affiliate-admin-panel" class="affiliate-admin-panel" hidden>
         <h3>Administration des affiliations</h3>
