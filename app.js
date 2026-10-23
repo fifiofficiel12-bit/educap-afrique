@@ -330,6 +330,49 @@ document.addEventListener("DOMContentLoaded", () => {
   const teacherApplicationStatus = document.querySelector("#teacher-application-status");
   const teacherApplicationsList = document.querySelector("#teacher-applications-list");
 
+  // Vérifie une transaction déjà lancée sans en créer une nouvelle.
+  const boutonVerifierPaiement = document.createElement("button");
+  boutonVerifierPaiement.type = "button";
+  boutonVerifierPaiement.id = "verifier-paiement-existant";
+  boutonVerifierPaiement.className = "button button-secondary";
+  boutonVerifierPaiement.textContent = "J’ai déjà payé — vérifier mon paiement";
+  boutonVerifierPaiement.style.marginBottom = "12px";
+  const formulairePaiementParent = document.querySelector("#paiement-form");
+  if (formulairePaiementParent) formulairePaiementParent.insertAdjacentElement("beforebegin", boutonVerifierPaiement);
+  boutonVerifierPaiement.addEventListener("click", async () => {
+    const message = document.querySelector("#paiement-message");
+    const afficher = (texte, ok = false) => {
+      if (!message) return;
+      message.textContent = texte;
+      message.style.color = ok ? "#16803c" : "#b42318";
+      message.hidden = false;
+    };
+    boutonVerifierPaiement.disabled = true;
+    boutonVerifierPaiement.textContent = "Vérification en cours…";
+    try {
+      const { data, error } = await clientSupabase.auth.getSession();
+      const session = data?.session;
+      if (error || !session) { afficher("Connecte-toi avec le compte utilisé lors du paiement."); return; }
+      const response = await fetch(SUPABASE_URL + "/functions/v1/verify-money-fusion-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "apikey": SUPABASE_PUBLIC_KEY, "Authorization": "Bearer " + session.access_token },
+        body: JSON.stringify({})
+      });
+      const result = await response.json().catch(() => ({}));
+      afficher(result.message || result.error || "Vérification impossible pour le moment.", Boolean(result.active));
+      if (response.ok && result.active) {
+        boutonVerifierPaiement.hidden = true;
+        if (formulairePaiementParent) formulairePaiementParent.hidden = true;
+        window.setTimeout(() => window.location.reload(), 1200);
+      }
+    } catch (e) {
+      afficher("Connexion impossible au service de vérification. Réessaie plus tard sans refaire le paiement.");
+    } finally {
+      boutonVerifierPaiement.disabled = false;
+      boutonVerifierPaiement.textContent = "J’ai déjà payé — vérifier mon paiement";
+    }
+  });
+
   // Paiement annuel : le serveur Supabase valide la session et initie la transaction.
   const paiementForm = document.querySelector("#paiement-form");
   paiementForm?.addEventListener("submit", async (event) => {
