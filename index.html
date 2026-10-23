@@ -96,6 +96,9 @@
   </header>
 
   <main>
+    <div class="container" role="alert" style="margin:14px auto;padding:14px 18px;border:1px solid #f0c36d;border-radius:12px;background:#fff8e6;color:#684b00">
+      <strong>Avant tout paiement :</strong> connectez-vous et vérifiez que des cours avec contenu sont disponibles pour votre parcours. Si aucun cours ne correspond à votre classe/série, niveau ou compétence, ne payez pas pour le moment.
+    </div>
     <section class="hero" id="accueil">
       <div class="container hero-content">
         <span class="eyebrow">🌍 Une plateforme d’apprentissage pour toute l’Afrique</span>
@@ -557,9 +560,21 @@
           <div id="compte-connecte" hidden>
             <p id="compte-bienvenue"></p>
             <section class="form-card" id="abonnement-edc" style="margin:20px 0">
-              <h3>Accès aux cours</h3>
-              <p><strong>Aucun paiement n’est demandé pour le moment.</strong></p>
-              <p class="muted">Consulte d’abord les cours réellement disponibles dans ton espace. L’abonnement ne sera proposé qu’après vérification des contenus, de leur accès et du fonctionnement du paiement.</p>
+              <h3>Abonnement annuel EduCap Afrique</h3>
+              <p>Accès annuel : <strong>750 FCFA</strong></p>
+              <p class="muted">Avant de payer, consulte les cours disponibles dans ton espace et vérifie qu’ils correspondent à ton parcours (classe/série, niveau ou compétence). Le paiement ne garantit pas qu’un cours absent de ton parcours soit disponible.</p>
+              <form id="paiement-form">
+                <div class="form-group">
+                  <label for="paiement-nomclient">Nom complet</label>
+                  <input id="paiement-nomclient" name="nomclient" type="text" autocomplete="name" minlength="2" required>
+                </div>
+                <div class="form-group">
+                  <label for="paiement-numero">Numéro Mobile Money</label>
+                  <input id="paiement-numero" name="numeroSend" type="tel" inputmode="tel" placeholder="Ex. 07XXXXXXXX" minlength="8" required>
+                </div>
+                <p id="paiement-message" class="muted" aria-live="polite" hidden></p>
+                <button class="btn btn-primary" type="submit">Payer 750 FCFA pour un an</button>
+              </form>
             </section>
             <div class="account-actions">
               <a class="btn btn-primary" id="rechoisir-parcours" href="#inscription">Rechoisir mon parcours</a>
