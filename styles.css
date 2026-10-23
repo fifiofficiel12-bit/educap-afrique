@@ -731,3 +731,158 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   .section-heading h2 { font-size: 29px; }
   .parcours-form { padding: 20px; }
 }
+
+
+/* Nouvelle direction artistique : campus ivoirien moderne */
+:root {
+  --vert: #087443;
+  --vert-fonce: #064b30;
+  --vert-clair: #e5f5ec;
+  --or: #f28c28;
+  --ivoire: #fbfaf6;
+  --blanc: #ffffff;
+  --texte: #172b24;
+  --secondaire: #61736a;
+  --bordure: #dce9df;
+  --ombre: 0 18px 50px rgba(6, 75, 48, .10);
+  --rayon: 22px;
+}
+html { scroll-padding-top: 100px; }
+body {
+  background: #fbfaf6;
+  color: #172b24;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+.site-header {
+  background: rgba(255,255,255,.94);
+  border-bottom-color: rgba(8,116,67,.12);
+  box-shadow: 0 8px 30px rgba(16,49,33,.06);
+}
+.header-inner { min-height: 82px; }
+.logo { color: #064b30; font-size: 25px; }
+.logo span { color: #f28c28; }
+.main-nav { gap: clamp(10px, 1.7vw, 23px); }
+.main-nav a { font-size: 13px; }
+.main-nav a[href="#inscription"] {
+  background: #087443;
+  color: #fff;
+  padding: 11px 17px;
+  border-radius: 999px;
+}
+.main-nav a[href="#inscription"]:hover { background: #064b30; }
+.hero {
+  isolation: isolate;
+  padding: clamp(72px, 9vw, 120px) 0 clamp(70px, 8vw, 104px);
+  color: #fff;
+  background:
+    radial-gradient(ellipse at 82% 20%, rgba(242,140,40,.24), transparent 28%),
+    radial-gradient(ellipse at 12% 100%, rgba(31,175,105,.24), transparent 34%),
+    linear-gradient(120deg, #063d28 0%, #075b39 54%, #087443 100%);
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 290px;
+  height: 290px;
+  right: 7%;
+  top: 18%;
+  border: 1px solid rgba(255,255,255,.17);
+  border-radius: 50%;
+  box-shadow: 0 0 0 35px rgba(255,255,255,.025), 0 0 0 70px rgba(255,255,255,.02);
+  pointer-events: none;
+}
+.hero-content { max-width: 920px; }
+.eyebrow {
+  background: rgba(255,255,255,.09);
+  border-color: rgba(255,255,255,.25);
+  color: #ffcc8d;
+}
+.hero h1 {
+  max-width: 850px;
+  color: #fff;
+  font-size: clamp(42px, 6.8vw, 76px);
+  letter-spacing: -2.4px;
+}
+.hero h1 span { color: #ffb45e; }
+.hero p { max-width: 700px; color: #e1eee6; }
+.hero .btn-primary {
+  background: #f28c28;
+  color: #18271e;
+  box-shadow: 0 12px 28px rgba(0,0,0,.16);
+}
+.hero .btn-primary:hover { background: #ffad52; }
+.hero .btn-secondary {
+  color: #fff;
+  border-color: rgba(255,255,255,.35);
+  background: rgba(255,255,255,.07);
+}
+.section { padding: clamp(52px, 7vw, 88px) 0; }
+.section:nth-of-type(even) { background: #f3f7f1; }
+.section-heading h2 { color: #123b29; letter-spacing: -1.1px; }
+.section-heading p { color: #61736a; }
+.card, .video-card, .welcome-panel, .form-card, .parcours-form, .course-item {
+  border-color: #dce9df;
+  border-radius: 22px;
+  box-shadow: 0 10px 32px rgba(17,58,37,.055);
+}
+.card { position: relative; overflow: hidden; }
+.card::before {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 4px;
+  margin-bottom: 18px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #087443 0 68%, #f28c28 68% 100%);
+}
+.card-icon, .video-card-icon {
+  border-radius: 17px;
+  background: #e5f5ec;
+  color: #087443;
+}
+.card-link, .video-card a:not(.btn) { color: #087443; }
+.btn { border-radius: 13px; min-height: 48px; }
+.btn-primary {
+  background: linear-gradient(135deg, #087443, #0b8d53);
+  box-shadow: 0 9px 22px rgba(8,116,67,.17);
+}
+.btn-primary:hover { background: #064b30; }
+.btn-secondary { border-color: #dce9df; color: #087443; }
+.video-section { background: linear-gradient(180deg, #f3f7f1, #fbfaf6); }
+.video-label { color: #087443; letter-spacing: .07em; }
+.video-steps { background: #f7faf6; border-color: #dce9df; }
+.video-steps summary { color: #064b30; }
+.parcours-form {
+  padding: clamp(22px, 4vw, 34px);
+  border-radius: 26px;
+}
+.parcours-form label { color: #244b37; }
+.parcours-form select, .parcours-form input,
+.form-group input, .form-group select, .form-group textarea {
+  border-color: #cbdccf;
+  border-radius: 12px;
+}
+.parcours-form select:focus, .parcours-form input:focus,
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: 3px solid #d8f1e2;
+  border-color: #087443;
+}
+.notice { background: #eaf6ee; color: #20543a; }
+.teacher-panel { background: #f3f8f3; border-color: #dce9df; }
+.course-item .course-meta { color: #087443; }
+.progress-track { background: #e5f5ec; }
+.progress-fill { background: linear-gradient(90deg, #087443, #f28c28); }
+.site-footer { background: linear-gradient(120deg, #063d28, #087443); }
+::selection { background: #c4ecd3; color: #064b30; }
+:focus-visible { outline-color: #f28c28; }
+@media (max-width: 800px) {
+  .header-inner { padding: 13px 0; }
+  .main-nav { gap: 8px 14px; }
+}
+@media (max-width: 560px) {
+  .hero { padding: 58px 0 62px; }
+  .hero h1 { letter-spacing: -1.3px; }
+  .hero::after { width: 170px; height: 170px; right: -35px; top: 12%; }
+  .main-nav a[href="#inscription"] { padding: 7px 11px; }
+}
