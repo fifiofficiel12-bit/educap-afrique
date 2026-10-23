@@ -894,7 +894,10 @@ document.addEventListener("DOMContentLoaded", () => {
       ...element,
       content: contenuParId.get(element.id) || null
     })).filter((element) => {
-      if (element.category !== parcours) return false;
+      // Les anciens cours « formation » appartiennent au parcours Compétences.
+      const categorieCompatible = element.category === parcours ||
+        (parcours === "competences" && element.category === "formation");
+      if (!categorieCompatible) return false;
       if (element.pays && profil?.pays) {
         const paysCours = normaliser(element.pays).replace(/[’']/g, "");
         const paysProfil = normaliser(profil.pays).replace(/[’']/g, "");
