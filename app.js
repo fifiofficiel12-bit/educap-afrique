@@ -129,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   domaine?.addEventListener("change", actualiserChamps);
+  pays?.addEventListener("change", actualiserSeries);
   classe?.addEventListener("change", actualiserSeries);
 
   // Les raccourcis de parcours sélectionnent le bon formulaire et y amènent l'utilisateur.
