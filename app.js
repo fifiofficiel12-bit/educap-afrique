@@ -736,18 +736,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const assistantAction = (action) => {
     if (action === "start") {
       assistantDire("Oui, m'accompagner", "user");
-      assistantDire("Étape 1 sur 3 : choisis ton parcours. Quel est ton objectif ?");
+      assistantDire("Bienvenue sur EduCap Afrique ! 😊 Que tu sois déjà en formation, que tu souhaites poursuivre ton parcours, découvrir un nouveau domaine ou commencer quelque chose de nouveau, je suis là pour t’accompagner. Choisis simplement le parcours qui te correspond le mieux.");
       assistantBoutons([
         { texte: "Je suis élève (Scolaire)", action: "pick-scolaire" },
         { texte: "Je suis étudiant (Campus)", action: "pick-campus" },
         { texte: "Je veux des compétences pratiques", action: "pick-competences" },
-        { texte: "Je cherche une formation métier", action: "pick-formation" }
+        { texte: "Je souhaite suivre un parcours Formation", action: "pick-formation" }
       ]);
     } else if (action.startsWith("pick-")) {
       const parcours = action.slice(5);
       assistantChoisirParcours(parcours);
       assistantDire(({scolaire:"Scolaire",campus:"Campus",competences:"Compétences",formation:"Formation"})[parcours] || parcours, "user");
-      assistantDire("Étape 2 sur 3 : complète le formulaire qui vient d'être affiché. Choisis ton pays, puis les informations demandées. Je ne peux pas remplir à ta place les informations personnelles.");
+      assistantDire("Très bien, avançons ensemble ! 😊 Étape 2 sur 3 : complète le formulaire affiché. Choisis ton pays puis les informations demandées. Que tu sois débutant ou déjà engagé dans un parcours, tu es le bienvenu. Je peux te guider, sans te demander de partager ici tes informations personnelles.");
       assistantBoutons([
         { texte: "M'aider à compléter le parcours", action: "help-parcours" },
         { texte: "J'ai terminé le parcours", action: "done-parcours" },
