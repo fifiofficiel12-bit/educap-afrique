@@ -131,6 +131,22 @@ document.addEventListener("DOMContentLoaded", () => {
   domaine?.addEventListener("change", actualiserChamps);
   classe?.addEventListener("change", actualiserSeries);
 
+  // Les raccourcis de parcours sélectionnent le bon formulaire et y amènent l'utilisateur.
+  document.querySelectorAll("[data-choix-parcours]").forEach((bouton) => {
+    bouton.addEventListener("click", () => {
+      const parcours = bouton.getAttribute("data-choix-parcours");
+      if (domaine && ["scolaire", "campus", "competences"].includes(parcours)) {
+        domaine.value = parcours;
+        actualiserChamps();
+        formulaire.scrollIntoView({ behavior: "smooth", block: "start" });
+        const prochainChamp = parcours === "scolaire" ? pays
+          : parcours === "campus" ? niveauCampus
+          : formation;
+        window.setTimeout(() => prochainChamp?.focus(), 250);
+      }
+    });
+  });
+
   // Les cartes de la page sélectionnent directement le parcours correspondant.
   document.querySelectorAll("[data-parcours]").forEach((lien) => {
     lien.addEventListener("click", () => {
