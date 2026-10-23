@@ -347,8 +347,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const f = new FormData(paiementForm);
       const nomclient = String(f.get("nomclient") || "").trim();
-      const numeroSend = String(f.get("numeroSend") || "").replace(/\\s+/g, "");
-      if (nomclient.length < 2 || !/^\\+?[0-9]{8,15}$/.test(numeroSend)) {
+      const numeroSend = String(f.get("numeroSend") || "").replace(/\s+/g, "");
+      if (nomclient.length < 2 || !/^\+?[0-9]{8,15}$/.test(numeroSend)) {
         afficherPaiement("Vérifie ton nom complet et ton numéro Mobile Money.");
         return;
       }
