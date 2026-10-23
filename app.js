@@ -1229,8 +1229,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const root = document.createElement("div");
   root.id = "educap-aide-flottante";
   root.innerHTML = `
-    <section id="educap-aide-panneau" role="dialog" aria-label="Aide EduCap Afrique">
-      <h3>Besoin d’un coup de main ?</h3>
+    <section id="educap-aide-panneau" role="dialog" aria-label="Mentor EduCap — assistant d’apprentissage">
+      <h3>Bonjour, je suis Mentor EduCap !</h3>
       <p>Je peux t’aider à choisir quoi travailler et te proposer une méthode gratuite. Pour une vraie conversation avec une IA, tu peux ouvrir ChatGPT séparément.</p>
       <label for="educap-aide-parcours">Ton parcours</label>
       <select id="educap-aide-parcours">
@@ -1250,10 +1250,10 @@ document.addEventListener("DOMContentLoaded", () => {
       <textarea id="educap-aide-sujet" maxlength="500" placeholder="Ex. : équations du second degré, dissertation, comptabilité…"></textarea>
       <button type="button" class="action principal" id="educap-aide-conseil">Obtenir une méthode gratuite</button>
       <div id="educap-aide-reponse" hidden aria-live="polite"></div>
-      <button type="button" class="action" id="educap-aide-chatgpt">Continuer avec ChatGPT</button>
+      <button type="button" class="action" id="educap-aide-chatgpt">Poser ma question à Mentor EduCap</button>
       <button type="button" class="action" id="educap-aide-fermer">Fermer</button>
     </section>
-    <button id="educap-aide-bouton" type="button" aria-expanded="false">💬 Besoin d’aide ?</button>
+    <button id="educap-aide-bouton" type="button" aria-expanded="false">💬 Mentor EduCap</button>
   `;
   document.body.appendChild(root);
 
@@ -1283,7 +1283,7 @@ document.addEventListener("DOMContentLoaded", () => {
       orientation: "1. Décris ce que tu aimes faire.\n2. Note les matières ou compétences où tu progresses.\n3. Choisis une compétence à tester avec un petit projet.\n4. Compare les prérequis et les débouchés à l’aide de sources fiables."
     };
     const niveaux = {scolaire:"Pour ton parcours scolaire",campus:"Pour ton parcours universitaire",competences:"Pour ta formation professionnelle"};
-    answer.textContent = niveaux[parcours] + " :\n\n" + conseils[besoin] + sujetTexte + "\n\nCette aide donne une méthode générale, pas une correction automatique vérifiée. Tu peux continuer avec ChatGPT si tu souhaites poser ta question à une IA.";
+    answer.textContent = niveaux[parcours] + " :\n\n" + conseils[besoin] + sujetTexte + "\n\nCette aide donne une méthode générale, pas une correction automatique vérifiée. Tu peux poser ta question à Mentor EduCap en ouvrant l’assistant externe.";
     answer.hidden = false;
   });
 
