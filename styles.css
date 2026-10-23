@@ -982,3 +982,20 @@ body.is-admin #abonnement-edc, body.is-admin #rechoisir-parcours { display:none 
 .lesson-plan-result{margin-top:16px;padding:16px;border:1px solid #b9d8c4;border-radius:12px;background:#f0fbf3;color:#205335;line-height:1.65}
 .lesson-plan-result h5{margin:0 0 8px;font-size:17px}
 @media(max-width:600px){.lesson-builder-grid{grid-template-columns:1fr}.lesson-builder{border-radius:15px}}
+
+
+/* Navigation simplifiée et lecture confortable sur téléphone */
+.main-nav{gap:clamp(10px,2vw,22px)}
+.main-nav a{white-space:nowrap}
+.lesson-reader{width:100%;border:1px solid #d8e4f4;border-radius:13px;background:#f8fbff;overflow:hidden}
+.lesson-reader>summary,.course-item details>summary{cursor:pointer;list-style:none;padding:14px 16px;color:#174ca5;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.lesson-reader>summary::-webkit-details-marker,.course-item details>summary::-webkit-details-marker{display:none}
+.lesson-reader>summary::after,.course-item details>summary::after{content:"＋";font-size:20px;line-height:1;color:#174ca5}
+.lesson-reader[open]>summary::after,.course-item details[open]>summary::after{content:"−"}
+.lesson-reader[open]>summary{border-bottom:1px solid #d8e4f4;background:#edf4ff}
+.lesson-reader .lesson-preview{margin:0;border:0;border-radius:0;padding:clamp(16px,3vw,28px);box-shadow:none}
+.course-content-readable{padding:16px;line-height:1.8;overflow-wrap:anywhere;background:#fff}
+.course-content-readable h5{margin:22px 0 8px;color:#174ca5;font-size:17px}
+.course-content-readable p{margin:0 0 14px}
+.course-content-readable ul{padding-left:22px}
+@media(max-width:700px){.header-inner{flex-direction:row;align-items:center;min-height:64px;gap:10px}.main-nav{flex:1;min-width:0;overflow-x:auto;flex-wrap:nowrap;gap:8px;padding:8px 0;scrollbar-width:thin}.main-nav a{font-size:12px;padding:7px 9px;background:#f1f6ff;border-radius:8px;min-height:36px}.logo{font-size:19px;white-space:nowrap}.lesson-reader>summary,.course-item details>summary{padding:13px 14px}.course-content-readable{padding:14px;font-size:15px;line-height:1.75}.course-item .btn{width:100%;align-self:stretch}}
