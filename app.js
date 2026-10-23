@@ -1202,8 +1202,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ============================================================
 // ASSISTANT FLOTTANT GRATUIT EDUCAP AFRIQUE
-// Aide d'orientation locale + accès facultatif à un assistant externe.
-// Ne prétend pas être une IA générative intégrée au site.
+// Assistant local d'accompagnement : conseils guidés sans service externe.
 // =============================================================
 document.addEventListener("DOMContentLoaded", () => {
   if (document.querySelector("#educap-aide-flottante")) return;
@@ -1231,7 +1230,7 @@ document.addEventListener("DOMContentLoaded", () => {
   root.innerHTML = `
     <section id="educap-aide-panneau" role="dialog" aria-label="Mentor EduCap — assistant d’apprentissage">
       <h3>Bonjour, je suis Mentor EduCap !</h3>
-      <p>Je peux t’aider à choisir quoi travailler et te proposer une méthode gratuite. Pour poursuivre avec une IA conversationnelle, tu peux ouvrir l’assistant externe séparément.</p>
+      <p>Je reste avec toi dans EduCap Afrique. Choisis ton besoin et décris ta question : je te proposerai une méthode pour avancer, gratuitement.</p>
       <label for="educap-aide-parcours">Ton parcours</label>
       <select id="educap-aide-parcours">
         <option value="scolaire">Collège / lycée</option>
@@ -1250,7 +1249,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <textarea id="educap-aide-sujet" maxlength="500" placeholder="Ex. : équations du second degré, dissertation, comptabilité…"></textarea>
       <button type="button" class="action principal" id="educap-aide-conseil">Obtenir une méthode gratuite</button>
       <div id="educap-aide-reponse" hidden aria-live="polite"></div>
-      <button type="button" class="action" id="educap-aide-externe">Poser ma question à Mentor EduCap</button>
+      
       <button type="button" class="action" id="educap-aide-fermer">Fermer</button>
     </section>
     <button id="educap-aide-bouton" type="button" aria-expanded="false">💬 Mentor EduCap</button>
@@ -1283,11 +1282,7 @@ document.addEventListener("DOMContentLoaded", () => {
       orientation: "1. Décris ce que tu aimes faire.\n2. Note les matières ou compétences où tu progresses.\n3. Choisis une compétence à tester avec un petit projet.\n4. Compare les prérequis et les débouchés à l’aide de sources fiables."
     };
     const niveaux = {scolaire:"Pour ton parcours scolaire",campus:"Pour ton parcours universitaire",competences:"Pour ta formation professionnelle"};
-    answer.textContent = niveaux[parcours] + " :\n\n" + conseils[besoin] + sujetTexte + "\n\nCette aide donne une méthode générale, pas une correction automatique vérifiée. Tu peux poser ta question à Mentor EduCap en ouvrant l’assistant externe.";
+    answer.textContent = niveaux[parcours] + " :\n\n" + conseils[besoin] + sujetTexte + "\n\nCette aide propose une méthode générale pour t’aider à avancer. Pour un résultat fiable, compare toujours avec ton cours et les consignes de ton professeur.";
     answer.hidden = false;
-  });
-
-  root.querySelector("#educap-aide-externe").addEventListener("click", () => {
-    window.open("https://chatgpt.com/", "_blank", "noopener,noreferrer");
   });
 });
