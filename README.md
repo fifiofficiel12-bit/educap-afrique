@@ -23,13 +23,15 @@ Le site utilise le projet Supabase associé au dépôt. Le navigateur utilise un
 
 Les comptes peuvent nécessiter une confirmation d'adresse e-mail selon les paramètres d'authentification du projet. Vérifier les paramètres de redirection et l'envoi d'e-mails dans Supabase avant le lancement public.
 
-## À construire et tester avant le lancement
+## État du projet et contrôles avant ouverture publique
 
-- Espaces formateur et administrateur complets avec contrôle des rôles et validation des cours.
-- Parcours de récupération du mot de passe et vérification complète des e-mails.
-- Tests de bout en bout sur le site déployé, notamment création de compte, connexion, affichage des cours et inscriptions.
-- Paiement annuel Money Fusion à 750 FCFA : la fonction de création de transaction et le retour de paiement sont déployés côté Supabase. Le paiement réel et la confirmation complète par webhook restent à tester avant l'ouverture publique.
-- Récupération du mot de passe par e-mail et formulaire de définition d'un nouveau mot de passe.
-- Vérification des avertissements de sécurité Supabase restants.
+- L’espace apprenant comprend la création de compte, la connexion, la déconnexion, le catalogue public des cours et la séparation entre aperçu et contenu complet.
+- Le formulaire de récupération du mot de passe utilise l’e-mail Supabase ; le lien de retour et le changement de mot de passe doivent encore être vérifiés en navigateur.
+- Les utilisateurs connectés peuvent envoyer une candidature formateur. L’administration peut l’accepter ou la refuser ; l’acceptation active le rôle formateur via un déclencheur de base de données.
+- L’espace administrateur permet de consulter les candidatures et de contrôler les cours. Les tests de bout en bout de ces écrans restent à réaliser.
+- Le paiement annuel Money Fusion est fixé à 750 FCFA. La fonction de création de transaction est active (version 11) et le webhook est actif (version 8), mais aucun paiement n’est confirmé dans la base. Le test réel n’a pas été effectué.
+- La base contient 69 cours, dont 43 publiés ; les 43 cours publiés sont présents dans le catalogue public. La conformité de chaque leçon avec les progressions officielles doit être contrôlée avant de la présenter comme validée.
+- Les derniers commits GitHub ne prouvent pas à eux seuls que Cloudflare sert déjà la dernière version. Le déploiement public et les tests navigateur restent à confirmer.
+- Supabase signale encore des avertissements de sécurité et de configuration d’authentification à examiner avant l’ouverture publique.
 
-Le code poussé sur GitHub n'implique pas à lui seul que le dernier déploiement Cloudflare soit terminé. Vérifier le déploiement de production avant de communiquer le lancement.
+Ne finalise pas les deux transactions de test déjà en attente et ne considère aucun abonnement comme payé tant que Money Fusion et Supabase ne l’ont pas confirmé.
