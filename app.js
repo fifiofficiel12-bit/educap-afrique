@@ -1608,3 +1608,102 @@ document.addEventListener("DOMContentLoaded", () => {
     answer.hidden = false;
   });
 });
+
+
+// Parcours d'inscription guidé : une étape à la fois.
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("#parcours-form");
+  if (!form || form.dataset.assistantWizard === "ready") return;
+  form.dataset.assistantWizard = "ready";
+
+  const stepOne = document.createElement("div");
+  stepOne.className = "parcours-step";
+  stepOne.dataset.step = "1";
+  const stepTwo = document.createElement("div");
+  stepTwo.className = "parcours-step";
+  stepTwo.dataset.step = "2";
+  const progress = document.createElement("div");
+  progress.className = "parcours-progress";
+  progress.setAttribute("aria-live", "polite");
+  const progressText = document.createElement("p");
+  progressText.className = "muted";
+  const progressBar = document.createElement("div");
+  progressBar.className = "parcours-progress-track";
+  const progressFill = document.createElement("span");
+  progressBar.append(progressFill);
+  progress.append(progressText, progressBar);
+
+  const children = Array.from(form.children);
+  let secondStep = false;
+  children.forEach((node) => {
+    if (node.id === "bloc-scolaire" || node.id === "bloc-campus" || node.id === "bloc-competences") secondStep = true;
+    (secondStep ? stepTwo : stepOne).appendChild(node);
+  });
+
+  const submit = stepTwo.querySelector('button[type="submit"]');
+  if (submit) {
+    submit.dataset.finalSubmit = "true";
+    submit.textContent = "Enregistrer mon parcours";
+    submit.hidden = true;
+  }
+  const result = stepTwo.querySelector("#resultat-parcours");
+  const nav = document.createElement("div");
+  nav.className = "parcours-step-actions";
+  const back = document.createElement("button");
+  back.type = "button";
+  back.className = "btn btn-secondary";
+  back.textContent = "← Retour";
+  const next = document.createElement("button");
+  next.type = "button";
+  next.className = "btn btn-primary";
+  next.textContent = "Continuer →";
+  nav.append(back, next);
+  stepOne.appendChild(nav);
+  stepTwo.appendChild(nav.cloneNode(true));
+  const actionsTwo = stepTwo.querySelector(".parcours-step-actions");
+  const backTwo = actionsTwo.querySelector("button");
+  const nextTwo = actionsTwo.querySelectorAll("button")[1];
+  if (submit) actionsTwo.insertBefore(submit, actionsTwo.firstChild);
+  if (result) actionsTwo.appendChild(result);
+
+  form.replaceChildren(progress, stepOne, stepTwo);
+  let current = 1;
+  const renderStep = (step) => {
+    current = step;
+    stepOne.hidden = step !== 1;
+    stepTwo.hidden = step !== 2;
+    progressText.textContent = step === 1 ? "Étape 1 sur 2 — Pays et parcours" : "Étape 2 sur 2 — Précise ton niveau";
+    progressFill.style.width = step === 1 ? "50%" : "100%";
+    if (submit) submit.hidden = step !== 2;
+    const currentNext = step === 1 ? next : nextTwo;
+    currentNext.textContent = step === 1 ? "Continuer →" : "Vérifier et enregistrer →";
+  };
+  const validRequired = (elements) => {
+    for (const el of elements) {
+      if (el.disabled || el.type === "hidden" || el.closest("[hidden]")) continue;
+      if (!el.checkValidity()) {
+        el.reportValidity();
+        el.focus();
+        return false;
+      }
+    }
+    return true;
+  };
+  next.addEventListener("click", () => {
+    const required = [form.querySelector("#pays"), form.querySelector("#domaine")].filter(Boolean);
+    if (!validRequired(required)) return;
+    renderStep(2);
+    form.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  back.addEventListener("click", () => renderStep(1));
+  backTwo.addEventListener("click", () => {
+    renderStep(1);
+    form.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  nextTwo.addEventListener("click", () => {
+    const visibleRequired = Array.from(stepTwo.querySelectorAll("select[required], input[required], textarea[required]"));
+    if (!validRequired(visibleRequired)) return;
+    if (submit) submit.click();
+  });
+  renderStep(1);
+});
