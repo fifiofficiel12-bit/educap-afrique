@@ -391,6 +391,32 @@ document.addEventListener("DOMContentLoaded", () => {
     authMessage.hidden = false;
   };
 
+  const formaterContenuCours = (contenu) => {
+    const lignes = String(contenu || "").replace(/\r/g, "").split("\n");
+    let html = "", paragraphe = [], liste = [];
+    const fermerParagraphe = () => {
+      if (paragraphe.length) { html += "<p>" + echapperHTML(paragraphe.join(" ")) + "</p>"; paragraphe = []; }
+    };
+    const fermerListe = () => {
+      if (liste.length) { html += "<ul>" + liste.map(item => "<li>" + echapperHTML(item) + "</li>").join("") + "</ul>"; liste = []; }
+    };
+    lignes.forEach((ligne) => {
+      const t = ligne.trim();
+      if (!t) { fermerParagraphe(); fermerListe(); return; }
+      const titre = t.match(/^(#{1,3})\s+(.+)$/) || t.match(/^((?:PARTIE|CHAPITRE|LEÇON|LECON|OBJECTIF|EXERCICE|CORRECTION|MÉTHODE|METHODE|INTRODUCTION|CONCLUSION)\b.*)$/i);
+      if (titre) {
+        fermerParagraphe(); fermerListe();
+        const texte = Array.isArray(titre) && titre.length > 2 ? titre[2] : titre[1];
+        html += "<h5>" + echapperHTML(texte.replace(/^#{1,3}\s+/, "")) + "</h5>";
+      } else if (/^(?:[-*•]|\d+[.)])\s+/.test(t)) {
+        fermerParagraphe(); liste.push(t.replace(/^(?:[-*•]|\d+[.)])\s+/, ""));
+      } else {
+        fermerListe(); paragraphe.push(t);
+      }
+    });
+    fermerParagraphe(); fermerListe();
+    return html || "<p>Le contenu détaillé de ce cours n’a pas encore été renseigné.</p>";
+  };
   const echapperHTML = (valeur) => String(valeur ?? "").replace(/[&<>"']/g, (caractere) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[caractere]);
@@ -516,7 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <p class="course-meta">${echapperHTML(meta || "Cours EduCap Afrique")}</p>
         <h4>${echapperHTML(element.title)}</h4>
         <p>${echapperHTML(element.description || "")}</p>
-        ${element.content ? `<details><summary>Consulter le contenu</summary><p>${echapperHTML(element.content)}</p></details>` : ""}
+        ${element.content ? `<section class="lesson-preview"><h5>Contenu du cours</h5><div class="lesson-content">${formaterContenuCours(element.content)}</div></section>` : `<p class="course-empty-note">Le contenu détaillé sera ajouté prochainement.</p>`}
         <button class="btn ${inscrit ? "btn-secondary" : "btn-primary"}" type="button" data-inscrire-cours="${echapperHTML(element.id)}" ${inscrit ? "disabled" : ""}>
           ${inscrit ? "Déjà dans mes cours" : "M’inscrire gratuitement"}
         </button>
