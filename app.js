@@ -926,9 +926,9 @@ document.addEventListener("DOMContentLoaded", () => {
   section.innerHTML = `
     <div class="container">
       <div class="welcome-panel prof-ia-panel">
-        <span class="eyebrow">🎓 Ton professeur particulier</span>
-        <h2>Apprends avec EduCap IA</h2>
-        <p>Tu n'es pas seul devant une leçon : explique ce que tu veux apprendre, réponds aux questions et progresse étape par étape. Tu peux écrire ou parler.</p>
+        <span class="eyebrow">🎓 Mentor EduCap · accompagnement pédagogique</span>
+        <h2 id="professeur-ia-titre">Ton professeur particulier</h2>
+        <p>Pose ta question directement ici, écris ou dicte ta réponse, puis progresse étape par étape. Le service de dialogue nécessite une connexion à ton compte et la disponibilité du service IA.</p>
         <div class="prof-ia-grid">
           <label>Ton niveau
             <input id="prof-ia-niveau" maxlength="100" placeholder="Ex. Terminale D, Licence 1" />
@@ -1248,6 +1248,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <label for="educap-aide-sujet">Précise le sujet (facultatif)</label>
       <textarea id="educap-aide-sujet" maxlength="500" placeholder="Ex. : équations du second degré, dissertation, comptabilité…"></textarea>
       <button type="button" class="action principal" id="educap-aide-conseil">Obtenir une méthode gratuite</button>
+      <button type="button" class="action" id="educap-aide-dialogue">Discuter avec mon professeur EduCap</button>
       <button type="button" class="action" id="educap-aide-inscription">M’aider à choisir mon parcours / m’inscrire</button>
       <div id="educap-aide-reponse" hidden aria-live="polite"></div>
       
@@ -1268,6 +1269,17 @@ document.addEventListener("DOMContentLoaded", () => {
   root.querySelector("#educap-aide-fermer").addEventListener("click", () => {
     panel.classList.remove("ouvert");
     toggle.setAttribute("aria-expanded", "false");
+  });
+
+  root.querySelector("#educap-aide-dialogue").addEventListener("click", () => {
+    const professeur = document.querySelector("#professeur-ia");
+    panel.classList.remove("ouvert");
+    toggle.setAttribute("aria-expanded", "false");
+    if (professeur) {
+      professeur.scrollIntoView({ behavior: "smooth", block: "start" });
+      const champ = document.querySelector("#prof-ia-message");
+      window.setTimeout(() => champ?.focus({ preventScroll: true }), 450);
+    }
   });
 
   root.querySelector("#educap-aide-inscription").addEventListener("click", () => {
