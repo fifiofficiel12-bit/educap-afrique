@@ -89,6 +89,11 @@
     .affiliate-copy-row input { flex:1 1 280px; min-width:0; }
     .affiliate-commission-list { padding-left:20px; }
     .affiliate-commission-list li { margin:10px 0; overflow-wrap:anywhere; }
+    #affiliate-withdrawal-form { display:grid; gap:8px; max-width:520px; }
+    #affiliate-withdrawal-form label { font-weight:600; margin-top:8px; }
+    #affiliate-withdrawal-form input,#affiliate-withdrawal-form select { min-height:44px; padding:10px; border:1px solid #bdcec5; border-radius:8px; font:inherit; }
+    #affiliate-withdrawal-submit { margin-top:12px; }
+    #affiliate-withdrawal-message { padding:12px; border-radius:8px; background:#f3f7ff; }
     .affiliate-admin-panel { margin-top:24px; padding:20px; border:1px solid #dce8e2; border-radius:14px; background:#f8fbff; }
     .affiliate-admin-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin:12px 0 24px; }
     .affiliate-admin-card { overflow-wrap:anywhere; }
@@ -828,13 +833,33 @@
           <article class="card"><h3>À verser</h3><p class="affiliate-stat"><span id="affiliate-pending">0</span> FCFA</p></article>
           <article class="card"><h3>Déjà versées</h3><p class="affiliate-stat"><span id="affiliate-paid">0</span> FCFA</p></article>
         </div>
+        <div class="card" id="affiliate-withdrawal-card">
+          <h3>Retirer tes gains</h3>
+          <p>Tu peux demander un retrait dès que ton solde validé atteint <strong>1 000 FCFA</strong>. Choisis ton service Mobile Money et indique le numéro à créditer. Une seule demande peut être en cours à la fois.</p>
+          <p>Solde disponible : <strong id="affiliate-withdrawable">0 FCFA</strong></p>
+          <form id="affiliate-withdrawal-form">
+            <label for="affiliate-withdrawal-operator">Service de paiement</label>
+            <select id="affiliate-withdrawal-operator" required>
+              <option value="">Choisir un service</option>
+              <option value="orange_money">Orange Money</option>
+              <option value="mtn_momo">MTN MoMo</option>
+              <option value="moov_money">Moov Money</option>
+              <option value="wave">Wave</option>
+            </select>
+            <label for="affiliate-withdrawal-number">Numéro Mobile Money</label>
+            <input id="affiliate-withdrawal-number" type="tel" inputmode="tel" autocomplete="tel" placeholder="Ex. 07 00 00 00 00" required minlength="8" maxlength="20">
+            <button class="btn btn-primary" id="affiliate-withdrawal-submit" type="submit">Demander mon retrait</button>
+          </form>
+          <p id="affiliate-withdrawal-message" role="status" aria-live="polite" hidden></p>
+          <h4>Mes demandes de retrait</h4><ul id="affiliate-withdrawal-list" class="affiliate-commission-list"></ul>
+        </div>
         <div class="card"><h3>Suivi simple de tes abonnements</h3><p class="muted">Chaque ligne correspond à un abonnement payé grâce à ton lien et indique l’état de ta commission.</p><ul id="affiliate-commission-list" class="affiliate-commission-list"></ul></div>
       </div>
       <div id="affiliate-admin-panel" class="affiliate-admin-panel" hidden>
         <h3>Administration des affiliations</h3>
         <p>Valide ou suspends les affiliés, puis contrôle chaque commission avant de l’approuver et de la marquer comme payée.</p>
         <h4>Demandes et résultats des affiliés</h4><div id="affiliate-admin-affiliates" class="affiliate-admin-list"></div>
-        <h4>Commissions à contrôler</h4><div id="affiliate-admin-commissions" class="affiliate-admin-list"></div>
+        <h4>Commissions à contrôler</h4><div id="affiliate-admin-commissions" class="affiliate-admin-list"></div><h4>Demandes de retrait</h4><div id="affiliate-admin-withdrawals" class="affiliate-admin-list"></div>
       </div>
     </div>
   </section>
