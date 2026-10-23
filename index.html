@@ -64,6 +64,15 @@
       font-weight: 700;
     }
 
+
+    .parcours-shortcuts { margin: 24px 0 8px; }
+    .parcours-shortcuts .card { display:flex; flex-direction:column; align-items:flex-start; }
+    .parcours-shortcuts .btn { margin-top:auto; }
+    .parcours-form { scroll-margin-top: 24px; }
+    .parcours-form label { line-height:1.45; }
+    .parcours-form .muted { margin-top:4px; }
+    @media (max-width: 640px) { .parcours-shortcuts { grid-template-columns:1fr; } }
+
     [hidden] {
       display: none !important;
     }
@@ -322,11 +331,33 @@
           <p>Sélectionnez votre domaine et votre niveau pour préparer la suite de votre parcours.</p>
         </div>
 
+        <div class="card-grid parcours-shortcuts" aria-label="Choix rapide du parcours">
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">📚</div>
+            <h3>Je suis élève</h3>
+            <p>Primaire, collège, lycée, BEPC ou BAC.</p>
+            <button class="btn btn-primary" type="button" data-choix-parcours="scolaire">Choisir Scolaire</button>
+          </article>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">🎓</div>
+            <h3>Je suis étudiant</h3>
+            <p>Université, grande école, filière ou concours.</p>
+            <button class="btn btn-primary" type="button" data-choix-parcours="campus">Choisir Campus</button>
+          </article>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">💼</div>
+            <h3>Je veux apprendre un métier</h3>
+            <p>Numérique, bureautique, gestion, langues et métiers.</p>
+            <button class="btn btn-primary" type="button" data-choix-parcours="competences">Choisir Compétences</button>
+          </article>
+        </div>
+
         <form class="parcours-form" id="parcours-form">
           <label for="pays">1. Dans quel pays étudiez-vous ?</label>
           <select id="pays" name="pays" required><option value="">Choisissez votre pays</option><option value="CI">Côte d’Ivoire</option><option value="ML">Mali</option><option value="SN">Sénégal</option><option value="BF">Burkina Faso</option><option value="BJ">Bénin</option><option value="TG">Togo</option><option value="NE">Niger</option><option value="GN">Guinée</option><option value="CM">Cameroun</option><option value="GA">Gabon</option><option value="CD">République démocratique du Congo</option><option value="CG">République du Congo</option><option value="MA">Maroc</option><option value="DZ">Algérie</option><option value="TN">Tunisie</option><option value="GH">Ghana</option><option value="NG">Nigeria</option><option value="KE">Kenya</option><option value="UG">Ouganda</option><option value="RW">Rwanda</option><option value="ET">Éthiopie</option><option value="ZA">Afrique du Sud</option><option value="OTHER">Autre pays africain</option></select>
-          <p class="muted">Les parcours sont adaptés progressivement aux programmes de chaque pays.</p>
-          <label for="domaine">2. Quel parcours souhaitez-vous suivre ?</label>
+          <p class="muted">Choisis ton pays pour que les contenus puissent être filtrés au mieux. Les programmes nationaux sont ajoutés progressivement.</p>
+          <label for="domaine">2. Choisis ton profil</label>
+          <p class="muted">Tu peux changer de parcours à tout moment.</p>
 
           <select id="domaine" name="domaine" required>
             <option value="">Sélectionnez un domaine</option>
@@ -336,7 +367,7 @@
           </select>
 
           <div id="bloc-scolaire" hidden>
-            <label for="classe">2. Votre classe</label>
+            <label for="classe">3. Ta classe actuelle</label>
 
             <select id="classe" name="classe">
               <option value="">Sélectionnez votre classe</option>
@@ -356,7 +387,7 @@
             </select>
 
             <div id="bloc-serie" hidden>
-              <label for="serie">3. Votre série</label>
+              <label for="serie">4. Ta série (si elle s’applique)</label>
 
               <select id="serie" name="serie">
                 <option value="">Sélectionnez votre série</option>
@@ -369,7 +400,7 @@
           <div id="bloc-campus" hidden>
             <p class="notice"><strong>Choisis ton établissement.</strong> EduCap Afrique accueille les étudiants des universités et grandes écoles ainsi que les candidats aux écoles de formation. Aucun établissement n'est présélectionné : c'est toi qui choisis.</p>
 
-            <label for="niveau-campus">2. Ton niveau ou cycle</label>
+            <label for="niveau-campus">3. Ton niveau ou cycle</label>
             <select id="niveau-campus" name="niveau-campus">
               <option value="">Choisis ton niveau ou cycle</option>
               <option>Licence 1</option><option>Licence 2</option><option>Licence 3</option>
@@ -378,7 +409,7 @@
               <option>Autre niveau supérieur</option>
             </select>
 
-            <label for="etablissement-campus">3. Université ou école</label>
+            <label for="etablissement-campus">4. Ton université ou école</label>
             <select id="etablissement-campus" name="etablissement-campus">
               <option value="">Choisis ton établissement</option>
               <optgroup label="Universités publiques">
@@ -407,7 +438,7 @@
               <option>Autre établissement</option>
             </select>
 
-            <label for="domaine-campus">4. Filière, spécialité ou concours préparé</label>
+            <label for="domaine-campus">5. Ta filière, spécialité ou concours</label>
             <input id="domaine-campus" name="domaine-campus" list="filieres-campus" maxlength="160" placeholder="Ex. Droit, soins infirmiers, formation d’instituteur…">
             <datalist id="filieres-campus">
               <option value="Droit"></option><option value="Économie et gestion"></option>
@@ -422,7 +453,7 @@
           </div>
 
           <div id="bloc-competences" hidden>
-            <label for="formation">2. Ta formation souhaitée</label>
+            <label for="formation">3. La formation que tu souhaites apprendre</label>
 
             <select id="formation" name="formation">
               <option value="">Sélectionne une formation</option>
@@ -463,7 +494,7 @@
           </div>
 
           <button class="btn btn-primary" type="submit">
-            Préparer mon parcours →
+            Enregistrer mon parcours →
           </button>
 
           <div
