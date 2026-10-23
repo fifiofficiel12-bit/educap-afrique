@@ -35,11 +35,11 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadAdmin(){
     if(!adminPanel||profile?.role!=="admin")return;
     adminPanel.hidden=false;
-    const list=$("affiliate-admin-affiliates"), comm=$("affiliate-admin-commissions");
-    list.textContent="Chargement…";comm.textContent="Chargement…";
+    const list=$("affiliate-admin-affiliates"), comm=$("affiliate-admin-commissions"), withdrawals=$("affiliate-admin-withdrawals");
+    list.textContent="Chargement…";comm.textContent="Chargement…";if(withdrawals)withdrawals.textContent="Chargement…";
     try{
       const data=await adminCall("list_admin");
-      list.replaceChildren();comm.replaceChildren();
+      list.replaceChildren();comm.replaceChildren();if(withdrawals)withdrawals.replaceChildren();
       if(!data.affiliates.length)list.textContent="Aucune demande d’affiliation.";
       data.affiliates.forEach(a=>{
         const card=document.createElement("article");card.className="card affiliate-admin-card";
@@ -68,7 +68,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         comm.append(card);
       });
-    }catch(e){list.textContent=e.message;comm.textContent="Chargement impossible.";}
+      if(withdrawals){
+        if(!data.withdrawals?.length)withdrawals.textContent="Aucune demande de retrait.";
+        (data.withdrawals||[]).forEach(w=>{
+          const card=document.createElement("article");card.className="card affiliate-admin-card";
+          const h=document.createElement("h4");h.textContent=money(w.amount)+" · "+({pending:"En attente",approved:"À verser",paid:"Versé",rejected:"Refusé"})[w.status];
+          const p=document.createElement("p");p.textContent="Affilié "+w.affiliate_id+" · "+({orange_money:"Orange Money",mtn_momo:"MTN MoMo",moov_money:"Moov Money",wave:"Wave"})[w.mobile_money_operator]+" · "+w.mobile_money_number;
+          card.append(h,p);
+          if(w.status==="pending"||w.status==="approved"){
+            const b=document.createElement("button");b.type="button";b.className="btn btn-primary";
+            b.textContent=w.status==="pending"?"Valider la demande":"Confirmer le versement";
+            b.onclick=async()=>{try{await adminCall(w.status==="pending"?"approve_withdrawal":"mark_withdrawal_paid",w.id);await loadAdmin();say("Demande de retrait mise à jour.",true);}catch(e){say(e.message);}};
+            card.append(b);
+          }
+          withdrawals.append(card);
+        });
+      }
+    }catch(e){list.textContent=e.message;comm.textContent="Chargement impossible.";if(withdrawals)withdrawals.textContent="Chargement impossible."}
   }
 
   async function load(sessionInfo){
@@ -95,10 +111,45 @@ document.addEventListener("DOMContentLoaded", () => {
       const [clicks,refs,comm]=await Promise.all([
         db.from("affiliate_clicks").select("id",{count:"exact",head:true}).eq("affiliate_id",session.user.id),
         db.from("affiliate_referrals").select("id",{count:"exact",head:true}).eq("affiliate_id",session.user.id),
-        db.from("affiliate_commissions").select("id,amount,status,category_at_payment,created_at").eq("affiliate_id",session.user.id).order("created_at",{ascending:false}).limit(1000)
+        db.from("affiliate_commissions").select("id,amount,status,category_at_payment,created_at,withdrawal_id").eq("affiliate_id",session.user.id).order("created_at",{ascending:false}).limit(1000)
       ]);
-      if(clicks.error||refs.error||comm.error){say("Certaines statistiques ne sont pas disponibles.");return;}
+      const withdrawalsResult=await db.from("affiliate_withdrawals").select("id,amount,mobile_money_operator,mobile_money_number,status,created_at,paid_at").eq("affiliate_id",session.user.id).order("created_at",{ascending:false}).limit(100);
+      if(clicks.error||refs.error||comm.error||withdrawalsResult.error){say("Certaines statistiques ne sont pas disponibles.");return;}
       const rows=comm.data||[];
+      const available=rows.filter(x=>x.status==="approved"&&!x.withdrawal_id).reduce((s,x)=>s+x.amount,0);
+      if($("affiliate-withdrawable"))$("affiliate-withdrawable").textContent=money(available);
+      const withdrawalForm=$("affiliate-withdrawal-form");
+      if(withdrawalForm&&!withdrawalForm.dataset.bound){
+        withdrawalForm.dataset.bound="1";
+        withdrawalForm.addEventListener("submit",async event=>{
+          event.preventDefault();
+          const button=$("affiliate-withdrawal-submit"), feedback=$("affiliate-withdrawal-message");
+          button.disabled=true;
+          try{
+            const operator=$("affiliate-withdrawal-operator").value;
+            const phone=$("affiliate-withdrawal-number").value.trim();
+            const {data,error}=await db.rpc("request_affiliate_withdrawal",{p_operator:operator,p_number:phone});
+            if(error)throw error;
+            if(data?.success!==true)throw new Error(data?.message||"La demande n’a pas pu être envoyée.");
+            feedback.textContent="Demande envoyée : "+money(data.amount)+". Elle sera vérifiée par EduCap Afrique avant le versement.";
+            feedback.hidden=false;feedback.style.color="#075b46";withdrawalForm.reset();
+            await load(session);
+          }catch(error){feedback.textContent=error.message||"Demande impossible. Réessaie.";feedback.hidden=false;feedback.style.color="#b42318";}
+          finally{button.disabled=false;}
+        });
+      }
+      const withdrawalList=$("affiliate-withdrawal-list");
+      if(withdrawalList){
+        withdrawalList.replaceChildren();
+        const statuses={pending:"En attente de vérification",approved:"Validée, en attente de versement",paid:"Versée",rejected:"Refusée"};
+        const operators={orange_money:"Orange Money",mtn_momo:"MTN MoMo",moov_money:"Moov Money",wave:"Wave"};
+        if(!withdrawalsResult.data?.length)withdrawalList.textContent="Aucune demande pour le moment.";
+        (withdrawalsResult.data||[]).forEach(w=>{
+          const li=document.createElement("li");
+          li.textContent=new Date(w.created_at).toLocaleDateString("fr-FR")+" — "+money(w.amount)+" — "+operators[w.mobile_money_operator]+" — "+statuses[w.status];
+          withdrawalList.append(li);
+        });
+      }
       const notice=$("affiliate-notice");
       const paidRows=rows.filter(x=>["pending","approved","paid"].includes(x.status));
       if(notice){
