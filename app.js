@@ -672,6 +672,17 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Erreur de connexion Supabase :", error.message);
         return;
       }
+      const pendingReferralUser = localStorage.getItem("educap_pending_referral_user_id");
+      const pendingReferralCode = localStorage.getItem("educap_pending_referral_code");
+      if (pendingReferralUser && pendingReferralCode && pendingReferralUser === data.user?.id) {
+        const { error: attributionError } = await clientSupabase.rpc("capture_affiliate_referral", { p_code: pendingReferralCode });
+        if (!attributionError) {
+          localStorage.removeItem("educap_pending_referral_user_id");
+          localStorage.removeItem("educap_pending_referral_code");
+        } else {
+          console.warn("Attribution affiliée à finaliser :", attributionError.message);
+        }
+      }
       messageAuth("Connexion réussie.", true);
       await afficherCompte(data.session);
     } finally {
@@ -700,6 +711,20 @@ document.addEventListener("DOMContentLoaded", () => {
       if (error) {
         messageAuth("Création du compte impossible : " + error.message);
         return;
+      }
+      const codeAffiliation = localStorage.getItem("educap_referral_code");
+      if (codeAffiliation && data.user?.id) {
+        localStorage.setItem("educap_pending_referral_user_id", data.user.id);
+        localStorage.setItem("educap_pending_referral_code", codeAffiliation);
+        if (data.session) {
+          const { error: attributionError } = await clientSupabase.rpc("capture_affiliate_referral", { p_code: codeAffiliation });
+          if (!attributionError) {
+            localStorage.removeItem("educap_pending_referral_user_id");
+            localStorage.removeItem("educap_pending_referral_code");
+          } else {
+            console.warn("Attribution affiliée à finaliser après connexion :", attributionError.message);
+          }
+        }
       }
       inscriptionForm.reset();
       if (data.session) {
