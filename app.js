@@ -324,6 +324,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const mesCoursFormateur = document.querySelector("#mes-cours-formateur");
   const espaceAdmin = document.querySelector("#espace-admin");
   const coursAValider = document.querySelector("#cours-a-valider");
+  const teacherApplicationSection = document.querySelector("#teacher-application-section");
+  const teacherApplicationForm = document.querySelector("#teacher-application-form");
+  const teacherApplicationStatus = document.querySelector("#teacher-application-status");
+  const teacherApplicationsList = document.querySelector("#teacher-applications-list");
 
   // Paiement annuel : le serveur Supabase valide la session et initie la transaction.
   const paiementForm = document.querySelector("#paiement-form");
@@ -390,6 +394,160 @@ document.addEventListener("DOMContentLoaded", () => {
     authMessage.style.color = succes ? "#16803c" : "#b42318";
     authMessage.hidden = false;
   };
+
+  async function chargerCandidatureFormateur(utilisateur, profil) {
+    if (!teacherApplicationSection || !teacherApplicationStatus || !teacherApplicationForm) return;
+    if (["admin", "formateur"].includes(profil?.role)) return;
+    teacherApplicationStatus.hidden = true;
+    teacherApplicationForm.hidden = false;
+    const { data, error } = await clientSupabase
+      .from("teacher_applications")
+      .select("status, subject_area, admin_notes, created_at")
+      .eq("user_id", utilisateur.id)
+      .maybeSingle();
+    if (error) {
+      teacherApplicationStatus.textContent = "Impossible de vérifier ta candidature pour le moment. Réessaie plus tard.";
+      teacherApplicationStatus.hidden = false;
+      return;
+    }
+    if (!data) return;
+    teacherApplicationForm.hidden = true;
+    const statuts = {
+      pending: "Ta candidature est en attente d’examen par l’équipe EduCap Afrique.",
+      approved: "Ta candidature est acceptée. Ton espace formateur est activé ; reconnecte-toi si nécessaire.",
+      rejected: "Ta candidature n’a pas été retenue pour le moment." + (data.admin_notes ? " Motif : " + data.admin_notes : "")
+    };
+    teacherApplicationStatus.textContent = statuts[data.status] || "Statut de candidature : " + data.status;
+    teacherApplicationStatus.hidden = false;
+  }
+
+  teacherApplicationForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const bouton = teacherApplicationForm.querySelector('button[type="submit"]');
+    if (bouton) bouton.disabled = true;
+    try {
+      const { data: sessionInfo, error: sessionError } = await clientSupabase.auth.getSession();
+      const utilisateur = sessionInfo?.session?.user;
+      if (sessionError || !utilisateur) {
+        messageAuth("Connecte-toi pour envoyer une candidature formateur.");
+        return;
+      }
+      const donnees = new FormData(teacherApplicationForm);
+      const { data: profil } = await clientSupabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", utilisateur.id)
+        .maybeSingle();
+      const candidature = {
+        user_id: utilisateur.id,
+        full_name: String(profil?.full_name || utilisateur.user_metadata?.full_name || utilisateur.email || "Candidat").trim(),
+        email: String(utilisateur.email || "").trim(),
+        subject_area: String(donnees.get("subject_area") || "").trim(),
+        institution: String(donnees.get("institution") || "").trim() || null,
+        qualifications: String(donnees.get("qualifications") || "").trim(),
+        evidence_url: String(donnees.get("evidence_url") || "").trim() || null,
+        status: "pending"
+      };
+      if (candidature.subject_area.length < 2 || candidature.qualifications.length < 20) {
+        messageAuth("Précise le domaine enseigné et ajoute au moins 20 caractères sur ta formation ou ton expérience.");
+        return;
+      }
+      const { error } = await clientSupabase.from("teacher_applications").insert([candidature]);
+      if (error) {
+        if (error.code === "23505") {
+          messageAuth("Une candidature existe déjà pour ce compte. Actualise la page pour voir son statut.");
+        } else {
+          console.error("Candidature formateur :", error);
+          messageAuth("Envoi impossible : vérifie les champs puis réessaie.");
+        }
+        return;
+      }
+      teacherApplicationForm.reset();
+      messageAuth("Candidature envoyée. Tu recevras le statut dans ton espace après examen.", true);
+      const { data: nouveauProfil } = await clientSupabase.from("profiles").select("role").eq("id", utilisateur.id).maybeSingle();
+      await chargerCandidatureFormateur(utilisateur, nouveauProfil || {role:"apprenant"});
+    } catch (erreur) {
+      console.error("Candidature formateur :", erreur);
+      messageAuth("Erreur de connexion. Réessaie plus tard.");
+    } finally {
+      if (bouton) bouton.disabled = false;
+    }
+  });
+
+  async function chargerCandidaturesAdmin() {
+    if (!teacherApplicationsList) return;
+    teacherApplicationsList.textContent = "Chargement des candidatures…";
+    const { data, error } = await clientSupabase
+      .from("teacher_applications")
+      .select("id, user_id, full_name, email, subject_area, institution, qualifications, evidence_url, status, created_at")
+      .order("created_at", { ascending: false });
+    if (error) {
+      teacherApplicationsList.textContent = "Impossible de charger les candidatures : " + error.message;
+      return;
+    }
+    teacherApplicationsList.replaceChildren();
+    if (!data?.length) {
+      teacherApplicationsList.textContent = "Aucune candidature formateur pour le moment.";
+      return;
+    }
+    data.forEach((candidature) => {
+      const carte = document.createElement("article");
+      carte.className = "course-item";
+      const titre = document.createElement("h3");
+      titre.textContent = candidature.full_name + " — " + candidature.subject_area;
+      const details = document.createElement("p");
+      details.textContent = candidature.email + (candidature.institution ? " · " + candidature.institution : "") + " · " +
+        ({pending:"En attente",approved:"Acceptée",rejected:"Refusée"}[candidature.status] || candidature.status);
+      const experience = document.createElement("p");
+      experience.textContent = candidature.qualifications;
+      carte.append(titre, details, experience);
+      if (candidature.evidence_url) {
+        try {
+          const url = new URL(candidature.evidence_url);
+          if (url.protocol === "https:") {
+            const lien = document.createElement("a");
+            lien.href = url.href; lien.target = "_blank"; lien.rel = "noopener noreferrer";
+            lien.textContent = "Consulter le portfolio / justificatif";
+            carte.append(lien);
+          }
+        } catch (_) {}
+      }
+      if (candidature.status === "pending") {
+        ["approved", "rejected"].forEach((statut) => {
+          const bouton = document.createElement("button");
+          bouton.type = "button"; bouton.className = "btn " + (statut === "approved" ? "btn-primary" : "btn-secondary");
+          bouton.textContent = statut === "approved" ? "Accepter et activer le formateur" : "Refuser";
+          bouton.addEventListener("click", async () => {
+            bouton.disabled = true;
+            try {
+              const { data: sessionInfo } = await clientSupabase.auth.getSession();
+              const administrateur = sessionInfo.session?.user;
+              if (!administrateur) throw new Error("Session administrateur expirée.");
+              const { error: majError } = await clientSupabase
+                .from("teacher_applications")
+                .update({
+                  status: statut,
+                  reviewed_by: administrateur.id,
+                  reviewed_at: new Date().toISOString(),
+                  admin_notes: statut === "rejected" ? "Demande refusée après examen." : null
+                })
+                .eq("id", candidature.id);
+              if (majError) throw majError;
+              messageAuth(statut === "approved" ? "Candidature acceptée ; le rôle formateur est activé." : "Candidature refusée.");
+              await chargerCandidaturesAdmin();
+              if (statut === "approved") await afficherCompte(sessionInfo.session);
+            } catch (erreur) {
+              messageAuth("Action impossible : " + (erreur.message || "réessaie plus tard."));
+            } finally {
+              bouton.disabled = false;
+            }
+          });
+          carte.append(bouton);
+        });
+      }
+      teacherApplicationsList.append(carte);
+    });
+  }
 
   // Récupération et réinitialisation du mot de passe via le lien envoyé par Supabase.
   const recuperationForm = document.querySelector("#recuperation-form");
@@ -633,6 +791,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const nom = profil?.full_name || utilisateur.email || "apprenant";
     const role = profil?.role || "apprenant";
+    if (teacherApplicationSection) {
+      teacherApplicationSection.hidden = ["admin", "formateur"].includes(role);
+    }
+    if (["admin", "formateur"].includes(role) && teacherApplicationSection) {
+      teacherApplicationSection.hidden = true;
+    }
     if (compteBienvenue) {
       const detailsParcours = profil?.parcours === "campus"
         ? [profil?.niveau_campus, profil?.domaine_campus].filter(Boolean).join(" · ")
@@ -650,7 +814,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (espaceFormateur) espaceFormateur.hidden = !["formateur", "admin"].includes(role);
     if (espaceAdmin) espaceAdmin.hidden = role !== "admin";
     document.body.classList.toggle("is-admin", role === "admin");
+    if (role !== "admin" && role !== "formateur") {
+      await chargerCandidatureFormateur(utilisateur, profil);
+    }
     if (role === "admin") {
+      await chargerCandidaturesAdmin();
       const indicateurs = [
         ["admin-total-apprenants", () => clientSupabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "apprenant")],
         ["admin-total-formateurs", () => clientSupabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "formateur")],
