@@ -89,12 +89,12 @@
   <main>
     <section class="hero" id="accueil">
       <div class="container hero-content">
-        <span class="eyebrow">🇨🇮 Une plateforme pensée pour apprendre en Côte d’Ivoire</span>
+        <span class="eyebrow">🌍 Une plateforme d’apprentissage pour toute l’Afrique</span>
 
         <h1>Le savoir d’aujourd’hui, <span>les réussites de demain.</span></h1>
 
         <p>
-          Des cours, des exercices et des parcours pour réussir à l’école, à l’université et dans la vie professionnelle, avec des exemples proches des réalités ivoiriennes.
+          Des cours, des exercices et des parcours scolaires, universitaires et professionnels adaptés au pays et au programme que vous choisissez.
         </p>
 
         <div class="hero-actions">
@@ -276,8 +276,8 @@
           </article>
         </div>
         <div class="welcome-panel" style="margin-top:24px">
-          <h3>Références pédagogiques ivoiriennes</h3>
-          <p>Pour les contenus scolaires, la priorité est donnée aux programmes éducatifs, guides d’exécution et progressions publiés par les services pédagogiques du ministère ivoirien. Les ressources doivent être vérifiées avant d’être présentées comme conformes à un programme officiel.</p>
+          <h3>Références pédagogiques par pays</h3>
+          <p>Les ressources pédagogiques doivent être sélectionnées selon le pays choisi. Les références officielles seront ajoutées et vérifiées pays par pays avant qu’un contenu soit présenté comme conforme à un programme national.</p>
           <ul>
             <li><a href="https://dpfc-ci.net/?page_id=63" target="_blank" rel="noopener noreferrer">Programmes éducatifs et guides d’exécution</a></li>
             <li><a href="https://dpfc-ci.net/?page_id=283" target="_blank" rel="noopener noreferrer">Programmes du primaire</a></li>
@@ -285,7 +285,7 @@
             <li><a href="https://dpfc-ci.net/?page_id=5267" target="_blank" rel="noopener noreferrer">Progressions annuelles 2026–2027</a></li>
           </ul>
         </div>
-        <p class="video-note">Les vidéos externes non vérifiées ont été retirées de cette page. Les prochains contenus audiovisuels devront être produits ou sélectionnés selon les critères éditoriaux ivoiriens d’EduCap Afrique. Les liens officiels ci-dessus servent de références pédagogiques ; leur présence ne signifie pas que la plateforme est agréée par le ministère.</p>
+        <p class="video-note">Les contenus pédagogiques seront progressivement adaptés aux programmes des pays sélectionnés. Une ressource ne doit pas être considérée comme officiellement validée sans vérification auprès des sources éducatives compétentes du pays concerné.</p>
       </div>
     </section>
 
@@ -295,7 +295,7 @@
           <h2>Une plateforme dédiée à l’apprentissage et aux compétences en Afrique</h2>
           <p>
             EduCap Afrique veut rendre l'apprentissage plus accessible,
-            avec une attention particulière aux besoins des apprenants en Côte d'Ivoire.
+            en tenant compte des systèmes éducatifs et des réalités de chaque pays africain.
           </p>
         </div>
 
@@ -323,7 +323,10 @@
         </div>
 
         <form class="parcours-form" id="parcours-form">
-          <label for="domaine">1. Quel parcours souhaitez-vous suivre ?</label>
+          <label for="pays">1. Dans quel pays étudiez-vous ?</label>
+          <select id="pays" name="pays" required><option value="">Choisissez votre pays</option><option value="CI">Côte d’Ivoire</option><option value="ML">Mali</option><option value="SN">Sénégal</option><option value="BF">Burkina Faso</option><option value="BJ">Bénin</option><option value="TG">Togo</option><option value="NE">Niger</option><option value="GN">Guinée</option><option value="CM">Cameroun</option><option value="GA">Gabon</option><option value="CD">République démocratique du Congo</option><option value="CG">République du Congo</option><option value="MA">Maroc</option><option value="DZ">Algérie</option><option value="TN">Tunisie</option><option value="GH">Ghana</option><option value="NG">Nigeria</option><option value="KE">Kenya</option><option value="UG">Ouganda</option><option value="RW">Rwanda</option><option value="ET">Éthiopie</option><option value="ZA">Afrique du Sud</option><option value="OTHER">Autre pays africain</option></select>
+          <p class="muted">Les parcours sont adaptés progressivement aux programmes de chaque pays.</p>
+          <label for="domaine">2. Quel parcours souhaitez-vous suivre ?</label>
 
           <select id="domaine" name="domaine" required>
             <option value="">Sélectionnez un domaine</option>
