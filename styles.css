@@ -999,3 +999,16 @@ body.is-admin #abonnement-edc, body.is-admin #rechoisir-parcours { display:none 
 .course-content-readable p{margin:0 0 14px}
 .course-content-readable ul{padding-left:22px}
 @media(max-width:700px){.header-inner{flex-direction:row;align-items:center;min-height:64px;gap:10px}.main-nav{flex:1;min-width:0;overflow-x:auto;flex-wrap:nowrap;gap:8px;padding:8px 0;scrollbar-width:thin}.main-nav a{font-size:12px;padding:7px 9px;background:#f1f6ff;border-radius:8px;min-height:36px}.logo{font-size:19px;white-space:nowrap}.lesson-reader>summary,.course-item details>summary{padding:13px 14px}.course-content-readable{padding:14px;font-size:15px;line-height:1.75}.course-item .btn{width:100%;align-self:stretch}}
+
+
+/* Formulaire de parcours en étapes, plus lisible sur mobile. */
+.parcours-step[hidden] { display: none !important; }
+.parcours-progress { margin: 0 0 22px; }
+.parcours-progress-track { height: 7px; overflow: hidden; border-radius: 99px; background: #e3eaf6; }
+.parcours-progress-track span { display:block; height:100%; width:50%; border-radius:99px; background:var(--vert); transition:width .2s ease; }
+.parcours-step-actions { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; margin-top:22px; }
+.parcours-step-actions .btn { min-width:150px; }
+@media (max-width:560px) {
+  .parcours-step-actions { display:grid; grid-template-columns:1fr; }
+  .parcours-step-actions .btn { width:100%; }
+}
