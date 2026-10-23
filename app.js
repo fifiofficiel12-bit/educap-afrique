@@ -75,9 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const classeChoisie = classe.value.trim();
     const classeNormalisee = normaliser(classeChoisie);
 
-    const entree = Object.entries(seriesParClasse).find(
+    const entree = pays?.value === "CI" ? Object.entries(seriesParClasse).find(
       ([nom]) => normaliser(nom) === classeNormalisee
-    );
+    ) : null;
 
     const series = entree ? entree[1] : [];
 
@@ -189,9 +189,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const classeNormalisee = normaliser(donnees.classe);
-        const entree = Object.entries(seriesParClasse).find(
+        const entree = donnees.pays === "CI" ? Object.entries(seriesParClasse).find(
           ([nom]) => normaliser(nom) === classeNormalisee
-        );
+        ) : null;
         const seriesRequises = entree ? entree[1] : [];
 
         if (
