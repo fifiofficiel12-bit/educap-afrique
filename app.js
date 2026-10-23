@@ -391,6 +391,39 @@ document.addEventListener("DOMContentLoaded", () => {
     authMessage.hidden = false;
   };
 
+  // Vérifie le retour du prestataire sur le paiement précis du compte connecté.
+  const verifierRetourPaiement = async (session) => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("paiement") !== "retour") return;
+    if (!session?.user?.id) {
+      messageAuth("Retour du paiement reçu. Connecte-toi avec le même compte pour vérifier son état.");
+      return;
+    }
+    const commande = params.get("commande") || "";
+    if (!/^[0-9a-f-]{36}$/i.test(commande)) {
+      messageAuth("Retour du prestataire reçu, mais la référence de paiement est absente. Consulte ton espace ou contacte le support avant de payer à nouveau.");
+      return;
+    }
+    const { data: paiement, error } = await clientSupabase
+      .from("payments")
+      .select("status, amount, subscription_ends_at")
+      .eq("id", commande)
+      .eq("user_id", session.user.id)
+      .maybeSingle();
+    if (error || !paiement) {
+      messageAuth("Impossible de vérifier cette transaction pour le moment. Ne paie pas une deuxième fois : actualise la page dans quelques instants.");
+      return;
+    }
+    if (paiement.status === "paid" && Number(paiement.amount) === 750 &&
+        paiement.subscription_ends_at && new Date(paiement.subscription_ends_at) > new Date()) {
+      messageAuth("Paiement confirmé : ton abonnement annuel EduCap Afrique est actif.", true);
+    } else if (paiement.status === "pending") {
+      messageAuth("Paiement encore en attente de confirmation du prestataire. Actualise cette page dans quelques instants et ne relance pas un deuxième paiement.");
+    } else {
+      messageAuth("Le paiement n’est pas confirmé. Vérifie l’état de la transaction ou contacte le support avant de réessayer.");
+    }
+  };
+
   const formaterContenuCours = (contenu) => {
     const lignes = String(contenu || "").replace(/\r/g, "").split("\n");
     let html = "", paragraphe = [], liste = [];
@@ -621,7 +654,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <p class="course-meta">${echapperHTML(meta || "Cours EduCap Afrique")}</p>
         <h4>${echapperHTML(element.title)}</h4>
         <p>${echapperHTML(element.description || "")}</p>
-        ${abonnementActif && element.content ? `<section class="lesson-preview"><h5>Leçon complète</h5><div class="lesson-content">${formaterContenuCours(element.content)}</div></section>` : abonnementActif ? `<p class="course-empty-note">Le contenu complet de cette leçon sera ajouté prochainement.</p>` : `<section class="course-empty-note"><strong>Aperçu gratuit.</strong><p>Le titre et la description sont accessibles gratuitement. L’accès à la leçon complète nécessite l’abonnement annuel à 750 FCFA.</p></section>`}
+        ${(abonnementActif || ["admin", "formateur"].includes(role)) && element.content ? `<section class="lesson-preview"><h5>Leçon complète</h5><div class="lesson-content">${formaterContenuCours(element.content)}</div></section>` : abonnementActif ? `<p class="course-empty-note">Le contenu complet de cette leçon sera ajouté prochainement.</p>` : `<section class="course-empty-note"><strong>Aperçu gratuit.</strong><p>Le titre et la description sont accessibles gratuitement. L’accès à la leçon complète nécessite l’abonnement annuel à 750 FCFA.</p></section>`}
         ${abonnementActif ? `<button class="btn ${inscrit ? "btn-secondary" : "btn-primary"}" type="button" data-inscrire-cours="${echapperHTML(element.id)}" ${inscrit ? "disabled" : ""}>${inscrit ? "Déjà dans mes cours" : "Ajouter à mes cours"}</button>` : `<a class="btn btn-primary" href="#paiement-form">S’abonner — 750 FCFA/an</a>`}
       </article>`;
     }).join("");
@@ -829,9 +862,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       afficherCompte(data.session);
+      verifierRetourPaiement(data.session);
     });
     clientSupabase.auth.onAuthStateChange((_evenement, session) => {
       afficherCompte(session);
+      verifierRetourPaiement(session);
     });
   }
 
