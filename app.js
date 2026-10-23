@@ -186,7 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const donnees = {
-        pays: paysChoisi,
+        // La table parcours_apprenants exige un identifiant UUID et ne stocke pas le pays.
+        id: crypto.randomUUID(),
         domaine: domaineChoisi,
         classe: null,
         serie: null,
