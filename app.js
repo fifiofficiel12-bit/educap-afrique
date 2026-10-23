@@ -426,12 +426,34 @@ document.addEventListener("DOMContentLoaded", () => {
           : profil?.parcours === "scolaire"
             ? [profil?.classe, profil?.serie].filter(Boolean).join(" · ")
             : "";
-      compteBienvenue.textContent = "Bienvenue " + nom + " — espace " + role + "." +
-        (profil?.pays ? " Pays : " + profil.pays + "." : "") +
-        (detailsParcours ? " Ton parcours : " + detailsParcours + "." : " Choisis ton parcours pour personnaliser tes cours.");
+      compteBienvenue.textContent = role === "admin"
+        ? "Bienvenue " + nom + " — espace créateur. Aucun parcours apprenant ni paiement n’est requis pour administrer la plateforme."
+        : "Bienvenue " + nom + " — espace " + role + "." +
+          (profil?.pays ? " Pays : " + profil.pays + "." : "") +
+          (detailsParcours ? " Ton parcours : " + detailsParcours + "." : " Choisis ton parcours pour personnaliser tes cours.");
     }
     if (espaceFormateur) espaceFormateur.hidden = !["formateur", "admin"].includes(role);
     if (espaceAdmin) espaceAdmin.hidden = role !== "admin";
+    document.body.classList.toggle("is-admin", role === "admin");
+    if (role === "admin") {
+      const indicateurs = [
+        ["admin-total-apprenants", () => clientSupabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "apprenant")],
+        ["admin-total-formateurs", () => clientSupabase.from("profiles").select("id", { count: "exact", head: true }).eq("role", "formateur")],
+        ["admin-total-publies", () => clientSupabase.from("courses").select("id", { count: "exact", head: true }).eq("published", true)],
+        ["admin-total-attente", () => clientSupabase.from("courses").select("id", { count: "exact", head: true }).eq("published", false)],
+        ["admin-total-inscriptions", () => clientSupabase.from("enrollments").select("id", { count: "exact", head: true })],
+        ["admin-total-paiements", () => clientSupabase.from("payments").select("id", { count: "exact", head: true }).eq("status", "paid")]
+      ];
+      await Promise.all(indicateurs.map(async ([id, requete]) => {
+        const cible = document.getElementById(id);
+        if (!cible) return;
+        try {
+          const { count, error } = await requete();
+          cible.textContent = error ? "—" : new Intl.NumberFormat("fr-FR").format(count || 0);
+          if (error) console.warn("Indicateur administrateur indisponible :", id, error.message);
+        } catch (_) { cible.textContent = "—"; }
+      }));
+    }
     if (!listeCours) return;
     listeCours.textContent = "Chargement des cours…";
 
