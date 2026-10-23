@@ -604,6 +604,19 @@
             <section id="espace-formateur" class="teacher-panel" hidden>
               <h3>Mon espace formateur</h3>
               <p class="muted">Crée un cours ou une fiche. Tout nouveau contenu reste en brouillon jusqu'à validation par l'administration.</p>
+              <section class="lesson-builder">
+                <h4>Préparer un cours avec l’assistant pédagogique</h4>
+                <p>Génère une trame de séance pour préparer ton cours avant de le dispenser. Complète et vérifie les exemples, les corrections et les références avant utilisation.</p>
+                <div class="lesson-builder-grid">
+                  <div class="form-group"><label for="prep-sujet">Sujet précis</label><input id="prep-sujet" maxlength="180" placeholder="Ex. Les fonctions affines"></div>
+                  <div class="form-group"><label for="prep-niveau">Niveau</label><input id="prep-niveau" maxlength="100" placeholder="Ex. 3e, Terminale D, Licence 1"></div>
+                  <div class="form-group"><label for="prep-duree">Durée</label><select id="prep-duree"><option value="30">30 minutes</option><option value="45">45 minutes</option><option value="60" selected>1 heure</option><option value="90">1 h 30</option><option value="120">2 heures</option></select></div>
+                  <div class="form-group"><label for="prep-type">Objectif de séance</label><select id="prep-type"><option value="decouverte">Découverte d’une notion</option><option value="revision">Révision d’examen</option><option value="pratique">Application pratique</option><option value="evaluation">Évaluation et correction</option></select></div>
+                </div>
+                <button id="generer-plan-cours" class="btn btn-primary" type="button">Préparer la séance</button>
+                <p class="muted">Cet outil crée une trame guidée à partir de tes informations ; ce n’est pas un moteur d’IA connecté.</p>
+                <div id="plan-cours-resultat" class="lesson-plan-result" aria-live="polite" hidden></div>
+              </section>
               <form id="cours-form" class="teacher-form">
                 <div class="form-group">
                   <label for="cours-titre">Titre du cours</label>
