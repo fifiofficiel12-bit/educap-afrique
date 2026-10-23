@@ -391,6 +391,112 @@ document.addEventListener("DOMContentLoaded", () => {
     authMessage.hidden = false;
   };
 
+  // Récupération et réinitialisation du mot de passe via le lien envoyé par Supabase.
+  const recuperationForm = document.querySelector("#recuperation-form");
+  const nouveauMotDePasseForm = document.querySelector("#nouveau-mot-de-passe-form");
+  const motDePasseOublieBouton = document.querySelector("#mot-passe-oublie");
+  const retourConnexionBouton = document.querySelector("#retour-connexion");
+
+  const afficherFormulaireRecuperation = () => {
+    if (authForms) authForms.hidden = true;
+    if (compteConnecte) compteConnecte.hidden = true;
+    if (recuperationForm) recuperationForm.hidden = true;
+    if (nouveauMotDePasseForm) nouveauMotDePasseForm.hidden = false;
+    messageAuth("Choisis un nouveau mot de passe pour terminer la réinitialisation.", true);
+    nouveauMotDePasseForm?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  motDePasseOublieBouton?.addEventListener("click", () => {
+    const emailConnexion = document.querySelector("#connexion-email")?.value.trim() || "";
+    const champEmail = document.querySelector("#recuperation-email");
+    if (champEmail) champEmail.value = emailConnexion;
+    if (authForms) authForms.hidden = true;
+    if (recuperationForm) recuperationForm.hidden = false;
+    if (nouveauMotDePasseForm) nouveauMotDePasseForm.hidden = true;
+    if (recuperationForm && champEmail) {
+      recuperationForm.scrollIntoView({ behavior: "smooth", block: "center" });
+      champEmail.focus({ preventScroll: true });
+    }
+  });
+
+  retourConnexionBouton?.addEventListener("click", () => {
+    if (recuperationForm) recuperationForm.hidden = true;
+    if (nouveauMotDePasseForm) nouveauMotDePasseForm.hidden = true;
+    if (authForms) authForms.hidden = false;
+    document.querySelector("#connexion-email")?.focus();
+  });
+
+  recuperationForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const bouton = recuperationForm.querySelector('button[type="submit"]');
+    if (bouton) bouton.disabled = true;
+    try {
+      const email = String(new FormData(recuperationForm).get("email") || "").trim();
+      if (!email) {
+        messageAuth("Saisis l’adresse e-mail de ton compte.");
+        return;
+      }
+      const { error } = await clientSupabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/?action=reset-password"
+      });
+      if (error) {
+        messageAuth("Impossible d’envoyer le lien : " + error.message);
+        return;
+      }
+      messageAuth("Si cette adresse correspond à un compte, un e-mail de réinitialisation va être envoyé. Vérifie aussi les courriers indésirables.", true);
+      recuperationForm.reset();
+    } catch (erreur) {
+      console.error("Erreur de récupération du mot de passe :", erreur);
+      messageAuth("Erreur de connexion. Vérifie Internet et réessaie.");
+    } finally {
+      if (bouton) bouton.disabled = false;
+    }
+  });
+
+  nouveauMotDePasseForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const bouton = nouveauMotDePasseForm.querySelector('button[type="submit"]');
+    if (bouton) bouton.disabled = true;
+    try {
+      const donnees = new FormData(nouveauMotDePasseForm);
+      const password = String(donnees.get("password") || "");
+      const confirmation = String(donnees.get("confirmation") || "");
+      if (password.length < 8) {
+        messageAuth("Le mot de passe doit contenir au moins 8 caractères.");
+        return;
+      }
+      if (password !== confirmation) {
+        messageAuth("Les deux mots de passe ne correspondent pas.");
+        return;
+      }
+      const { data: sessionInfo } = await clientSupabase.auth.getSession();
+      if (!sessionInfo?.session) {
+        messageAuth("Le lien de réinitialisation a expiré ou a déjà été utilisé. Demande un nouveau lien.");
+        return;
+      }
+      const { error } = await clientSupabase.auth.updateUser({ password });
+      if (error) {
+        messageAuth("Impossible de modifier le mot de passe : " + error.message);
+        return;
+      }
+      nouveauMotDePasseForm.reset();
+      nouveauMotDePasseForm.hidden = true;
+      if (authForms) authForms.hidden = true;
+      if (compteConnecte) compteConnecte.hidden = false;
+      const url = new URL(window.location.href);
+      url.searchParams.delete("action");
+      url.hash = "";
+      window.history.replaceState({}, document.title, url.pathname + url.search);
+      messageAuth("Mot de passe modifié avec succès. Tu peux maintenant utiliser ton nouveau mot de passe.", true);
+      await afficherCompte(sessionInfo.session);
+    } catch (erreur) {
+      console.error("Erreur de réinitialisation :", erreur);
+      messageAuth("Erreur de connexion. Réessaie avec le lien reçu par e-mail.");
+    } finally {
+      if (bouton) bouton.disabled = false;
+    }
+  });
+
   // Vérifie le retour du prestataire sur le paiement précis du compte connecté.
   const verifierRetourPaiement = async (session) => {
     const params = new URLSearchParams(window.location.search);
@@ -865,6 +971,10 @@ document.addEventListener("DOMContentLoaded", () => {
       verifierRetourPaiement(data.session);
     });
     clientSupabase.auth.onAuthStateChange((_evenement, session) => {
+      if (_evenement === "PASSWORD_RECOVERY") {
+        afficherFormulaireRecuperation();
+        return;
+      }
       afficherCompte(session);
       verifierRetourPaiement(session);
     });
