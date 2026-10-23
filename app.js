@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("[data-choix-parcours]").forEach((bouton) => {
     bouton.addEventListener("click", () => {
       const parcours = bouton.getAttribute("data-choix-parcours");
-      if (domaine && ["scolaire", "campus", "competences", "formation"].includes(parcours)) {
+      if (domaine && ["scolaire", "campus", "competences"].includes(parcours)) {
         domaine.value = parcours;
         actualiserChamps();
         formulaire.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("[data-parcours]").forEach((lien) => {
     lien.addEventListener("click", () => {
       const parcours = lien.getAttribute("data-parcours");
-      if (domaine && ["scolaire", "campus", "competences", "formation"].includes(parcours)) {
+      if (domaine && ["scolaire", "campus", "competences"].includes(parcours)) {
         domaine.value = parcours;
         actualiserChamps();
       }
@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const domaineChoisi = domaine?.value?.trim() || "";
 
-      if (!["scolaire", "campus", "competences", "formation"].includes(domaineChoisi)) {
+      if (!["scolaire", "campus", "competences"].includes(domaineChoisi)) {
         afficherMessage("Choisis un domaine avant de continuer.");
         return;
       }
@@ -725,7 +725,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const assistantChoisirParcours = (parcours) => {
-    if (domaine && ["scolaire", "campus", "competences", "formation"].includes(parcours)) {
+    if (domaine && ["scolaire", "campus", "competences"].includes(parcours)) {
       // Formation est visible dans l'interface; le parcours complet sera finalisé dans le formulaire.
       domaine.value = parcours;
       actualiserChamps();
