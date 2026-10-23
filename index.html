@@ -364,82 +364,58 @@
           </div>
 
           <div id="bloc-campus" hidden>
-            <label for="niveau-campus">2. Votre niveau universitaire</label>
+            <p class="notice"><strong>Choisis ton établissement.</strong> EduCap Afrique accueille les étudiants des universités et grandes écoles ainsi que les candidats aux écoles de formation. Aucun établissement n'est présélectionné : c'est toi qui choisis.</p>
 
+            <label for="niveau-campus">2. Ton niveau ou cycle</label>
             <select id="niveau-campus" name="niveau-campus">
-              <option value="">Sélectionnez votre niveau</option>
-              <option>Licence 1</option>
-              <option>Licence 2</option>
-              <option>Licence 3</option>
-              <option>Master 1</option>
-              <option>Master 2</option>
-              <option>Doctorat</option>
-              <option>Autre formation supérieure</option>
+              <option value="">Choisis ton niveau ou cycle</option>
+              <option>Licence 1</option><option>Licence 2</option><option>Licence 3</option>
+              <option>Master 1</option><option>Master 2</option><option>Doctorat</option>
+              <option>Préparation au concours</option><option>Formation professionnelle</option>
+              <option>Autre niveau supérieur</option>
             </select>
 
-            <div class="notice">
-              <strong>Parcours INJS — informations utiles à chaque étudiant</strong>
-              <p>Choisis la filière qui correspond à ta formation. Les niveaux, conditions d’accès, concours, pièces à fournir, frais et dates d’inscription doivent être confirmés auprès de l’INJS : ils peuvent varier selon le cycle et l’année.</p>
-              <p><strong>Filières universitaires :</strong> ENSEPS — Éducation et Motricité (EM), Management du Sport (MS), Entraînement Sportif (ES), Activités Physiques Adaptées (APA) ; ENSEP — Andragogie, Loisir, Entrepreneuriat Jeunesse et Conduite de Projets (ECJP), Gérontologie.</p>
-              <p><strong>Cycles professionnels :</strong> ENSEPS — Maîtrise d’EPS, Conseillat d’EPS, Inspectorat Jeunesse et Sport, Inspectorat Pédagogique EPS, Professorat Professionnel d’EPS, Agrégation d’Enseignement Général du Secondaire ; ENSEP — Maîtrise Adjointe d’EP, Maîtrise d’EP, Inspectorat Jeunesse et Sport Option EP, Inspectorat Pédagogique EP, Conseillat d’EP, Professorat Professionnel d’EP, Agrégation d’Enseignement Général du Secondaire (EP).</p>
-              <p><strong>Formations à la carte :</strong> Moniteur sportif, Officiel de compétition, Entraîneur Fitness, Maître-nageur, Promoteur d’événements sportifs, Gestionnaire d’infrastructures sportives, Garde du corps, Fabricant de matériel sportif, Photographie, Peinture, Entrepreneuriat / Comptabilité, Broderie, Aviculture, Pâtisserie, Maraîchage, Coupe / Couture et Art floral.</p>
-            </div>
-            <p class="muted">Pages officielles de l’INJS : consulte-les pour les conditions d’accès, les maquettes, les concours et les informations actualisées.</p>
-            <ul>
-              <li><a href="https://www.injsabidjan.ci/formations/" target="_blank" rel="noopener noreferrer">Vue d’ensemble de toutes les formations INJS</a></li>
-              <li><a href="https://www.injsabidjan.ci/cursus-universitaire/" target="_blank" rel="noopener noreferrer">Filières universitaires (ENSEPS / ENSEP)</a></li>
-              <li><a href="https://www.injsabidjan.ci/cursus-prof/" target="_blank" rel="noopener noreferrer">Cycles professionnels EPS / EP</a></li>
-              <li><a href="https://www.injsabidjan.ci/formation-de-courte-et-moyenne-duree/" target="_blank" rel="noopener noreferrer">Formations à la carte</a></li>
-              <li><a href="https://www.injsabidjan.ci/maquettes-de-formation-education-motricite-em/" target="_blank" rel="noopener noreferrer">Maquette officielle — Éducation et Motricité (EM)</a></li>
-              <li><a href="https://www.injsabidjan.ci/maquettes-de-formation-management-du-sport-ms/" target="_blank" rel="noopener noreferrer">Maquette officielle — Management du Sport (MS)</a></li>
-              <li><a href="https://www.injsabidjan.ci/maquettes-de-formation-entrainement-sportif-es/" target="_blank" rel="noopener noreferrer">Maquette officielle — Entraînement Sportif (ES)</a></li>
-              <li><a href="https://www.injsabidjan.ci/maquettes-de-formation-activite-physique-adaptee-apa/" target="_blank" rel="noopener noreferrer">Maquette officielle — Activités Physiques Adaptées (APA)</a></li>
-              <li><a href="https://www.injsabidjan.ci/notre-institut/" target="_blank" rel="noopener noreferrer">Présentation des écoles et structures de l’INJS</a></li>
-            </ul>
-
-            <label for="domaine-campus">3. Votre domaine d’études</label>
-
-            <select id="domaine-campus" name="domaine-campus">
-              <option value="">Sélectionnez votre domaine</option>
-              <optgroup label="INJS — Filières universitaires ENSEPS (STAPS)">
-                <option>INJS — Éducation et Motricité (EM)</option>
-                <option>INJS — Management du Sport (MS)</option>
-                <option>INJS — Entraînement Sportif (ES)</option>
-                <option>INJS — Activités Physiques Adaptées (APA)</option>
+            <label for="etablissement-campus">3. Université ou école</label>
+            <select id="etablissement-campus" name="etablissement-campus">
+              <option value="">Choisis ton établissement</option>
+              <optgroup label="Universités publiques">
+                <option>Université Félix Houphouët-Boigny (Abidjan)</option>
+                <option>Université Nangui Abrogoua (Abidjan)</option>
+                <option>Université Jean Lorougnon Guédé (Daloa)</option>
+                <option>Université Alassane Ouattara (Bouaké)</option>
+                <option>Université Peleforo Gon Coulibaly (Korhogo)</option>
+                <option>Université de San Pedro</option>
+                <option>Université virtuelle de Côte d’Ivoire (UVCI)</option>
               </optgroup>
-              <optgroup label="INJS — Filières universitaires ENSEP">
-                <option>INJS — Andragogie</option>
-                <option>INJS — Loisir</option>
-                <option>INJS — Entrepreneuriat Jeunesse et Conduite de Projets (ECJP)</option>
-                <option>INJS — Gérontologie</option>
+              <optgroup label="Écoles et instituts de formation">
+                <option>INJS — Institut National de la Jeunesse et des Sports</option>
+                <option>INFAS — Institut National de Formation des Agents de Santé</option>
+                <option>CAFOP — Centre d’Animation et de Formation Pédagogique</option>
+                <option>ENS — École Normale Supérieure</option>
+                <option>INP-HB — Institut National Polytechnique Félix Houphouët-Boigny</option>
+                <option>École de formation des instituteurs / CAFOP</option>
+                <option>Autre école ou institut public</option>
               </optgroup>
-              <optgroup label="INJS — Cycle professionnel ENSEPS / EPS">
-                <option>INJS — Maîtrise d’EPS</option>
-                <option>INJS — Conseillat d’EPS</option>
-                <option>INJS — Inspectorat Jeunesse et Sport</option>
-                <option>INJS — Inspectorat Pédagogique EPS</option>
-                <option>INJS — Professorat Professionnel d’EPS</option>
-                <option>INJS — Agrégation d’Enseignement Général du Secondaire</option>
+              <optgroup label="Universités et grandes écoles privées">
+                <option>Université privée</option>
+                <option>Grande école privée</option>
+                <option>Institut privé spécialisé</option>
               </optgroup>
-              <optgroup label="INJS — Cycle professionnel ENSEP">
-                <option>INJS — Maîtrise Adjointe d’EP</option>
-                <option>INJS — Maîtrise d’EP</option>
-                <option>INJS — Inspectorat Jeunesse et Sport Option EP</option>
-                <option>INJS — Inspectorat Pédagogique EP</option>
-                <option>INJS — Conseillat d’EP</option>
-                <option>INJS — Professorat Professionnel d’EP</option>
-                <option>INJS — Agrégation d’Enseignement Général du Secondaire (EP)</option>
-              </optgroup>
-              <optgroup label="Autres domaines universitaires">
-                <option>Droit</option>
-                <option>Économie et gestion</option>
-                <option>Informatique</option>
-                <option>Santé</option>
-                <option>Sciences et technologies</option>
-                <option>Lettres et sciences humaines</option>
-                <option>Autre</option>
-              </optgroup>
+              <option>Autre établissement</option>
             </select>
+
+            <label for="domaine-campus">4. Filière, spécialité ou concours préparé</label>
+            <input id="domaine-campus" name="domaine-campus" list="filieres-campus" maxlength="160" placeholder="Ex. Droit, soins infirmiers, formation d’instituteur…">
+            <datalist id="filieres-campus">
+              <option value="Droit"></option><option value="Économie et gestion"></option>
+              <option value="Informatique"></option><option value="Santé / soins infirmiers"></option>
+              <option value="Sciences et technologies"></option><option value="Lettres et sciences humaines"></option>
+              <option value="Éducation et formation des enseignants"></option>
+              <option value="Éducation physique et sport"></option><option value="Management du sport"></option>
+              <option value="Agriculture et développement rural"></option><option value="Commerce et marketing"></option>
+              <option value="Comptabilité et finance"></option><option value="Autre filière"></option>
+            </datalist>
+            <p class="muted">Les formations, concours, conditions d’accès et dates varient selon l’établissement. Vérifie toujours les informations auprès de l’école concernée.</p>
           </div>
 
           <div id="bloc-competences" hidden>
