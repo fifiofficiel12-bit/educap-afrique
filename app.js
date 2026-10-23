@@ -836,3 +836,126 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
+
+// ============================================================
+// COACH INTELLIGENT EDUCAP — outil d'étude immédiatement utilisable
+// Fonctionne côté navigateur, sans inventer de cours officiels.
+// ============================================================
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.querySelector("#coach-intelligent")) return;
+  const section = document.createElement("section");
+  section.id = "coach-intelligent";
+  section.className = "section";
+  section.innerHTML = `
+    <div class="container">
+      <div class="welcome-panel coach-panel">
+        <span class="eyebrow">✨ EduCap Intelligence</span>
+        <h2>Ton coach d’apprentissage personnel</h2>
+        <p>Construis un plan de travail, entraîne-toi avec des questions et identifie la prochaine étape. L’outil adapte ses conseils à ton objectif.</p>
+        <form id="coach-form" class="coach-form">
+          <label>Ton parcours
+            <select id="coach-domaine" required>
+              <option value="scolaire">Élève — collège / lycée</option>
+              <option value="campus">Étudiant — université</option>
+              <option value="competences">Développer une compétence professionnelle</option>
+              <option value="recherche">Chercheur / recherche documentaire</option>
+            </select>
+          </label>
+          <label>Ton niveau
+            <select id="coach-niveau" required>
+              <option>Débutant</option><option>Intermédiaire</option><option>Avancé</option>
+              <option>4e</option><option>3e — BEPC</option><option>Seconde</option><option>Première</option><option>Terminale A1</option><option>Terminale A2</option><option>Terminale C</option><option>Terminale D</option><option>Licence</option><option>Master</option><option>Doctorat</option>
+            </select>
+          </label>
+          <label>Ton objectif
+            <select id="coach-objectif" required>
+              <option value="comprendre">Comprendre une notion difficile</option>
+              <option value="revision">Réviser pour un examen</option>
+              <option value="exercice">M’entraîner avec des exercices</option>
+              <option value="projet">Préparer un projet ou un mémoire</option>
+              <option value="competence">Apprendre une compétence pratique</option>
+              <option value="recherche">Organiser une recherche fiable</option>
+            </select>
+          </label>
+          <label>La matière ou le sujet à travailler
+            <input id="coach-sujet" required maxlength="120" placeholder="Ex. : dissertation, équations, comptabilité, Excel…" />
+          </label>
+          <label>Temps disponible aujourd’hui
+            <select id="coach-temps"><option value="15">15 minutes</option><option value="30" selected>30 minutes</option><option value="45">45 minutes</option><option value="60">1 heure</option><option value="90">1 h 30</option></select>
+          </label>
+          <button class="btn btn-primary" type="submit">Créer mon plan intelligent →</button>
+        </form>
+        <div id="coach-resultat" class="coach-result" hidden aria-live="polite"></div>
+      </div>
+    </div>`;
+  const videos = document.querySelector("#videos");
+  if (videos?.parentNode) videos.parentNode.insertBefore(section, videos.nextSibling);
+  else document.querySelector("main")?.appendChild(section);
+
+  const style = document.createElement("style");
+  style.textContent = `
+    .coach-panel{max-width:920px;margin:auto}
+    .coach-panel h2{font-size:clamp(28px,4vw,38px);margin:14px 0}
+    .coach-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:24px}
+    .coach-form label{display:grid;gap:7px;font-weight:700;font-size:14px}
+    .coach-form input,.coach-form select{width:100%;min-height:48px;padding:11px 13px;border:1px solid #d3def0;border-radius:10px;background:#fff;color:#172642}
+    .coach-form button{align-self:end;min-height:48px}
+    .coach-result{margin-top:24px;padding:22px;border-radius:16px;background:#f1f6ff;border:1px solid #cfe0ff}
+    .coach-result h3{margin-top:0}.coach-result li{margin:9px 0}
+    .coach-quiz{margin-top:18px;padding-top:16px;border-top:1px solid #cfe0ff}
+    .coach-quiz input{margin-right:8px}
+    @media(max-width:650px){.coach-form{grid-template-columns:1fr}.coach-form button{width:100%}}
+  `;
+  document.head.appendChild(style);
+
+  const form = document.querySelector("#coach-form");
+  const output = document.querySelector("#coach-resultat");
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const domaine = document.querySelector("#coach-domaine").value;
+    const niveau = document.querySelector("#coach-niveau").value;
+    const objectif = document.querySelector("#coach-objectif").value;
+    const sujet = document.querySelector("#coach-sujet").value.trim();
+    const minutes = Number(document.querySelector("#coach-temps").value);
+    if (!sujet) return;
+    const blocs = domaine === "recherche" || objectif === "recherche"
+      ? [
+          ["Clarifier la question", "Transforme le sujet en une question précise et délimite le thème."],
+          ["Chercher des sources", "Privilégie les ouvrages, articles scientifiques, institutions et documents originaux. Note auteur, date et référence."],
+          ["Évaluer les preuves", "Compare plusieurs sources, distingue faits, interprétations et limites."],
+          ["Synthétiser", "Résume les résultats avec tes propres mots et conserve les références pour éviter le plagiat."]
+        ]
+      : objectif === "competence" || domaine === "competences"
+      ? [
+          ["Comprendre l’usage", "Écris ce que tu veux être capable de réaliser concrètement à la fin."],
+          ["Observer un exemple", "Étudie une démonstration ou un modèle simple lié à « " + sujet + " »."],
+          ["Pratiquer", "Réalise une petite tâche toi-même et note chaque étape."],
+          ["Vérifier", "Teste le résultat, repère l’erreur la plus importante et recommence."]
+        ]
+      : objectif === "projet"
+      ? [
+          ["Définir le livrable", "Écris le résultat attendu, le public concerné et les critères de réussite."],
+          ["Faire le plan", "Découpe « " + sujet + " » en petites tâches ordonnées."],
+          ["Réaliser une première version", "Produis une version courte plutôt que d’attendre un résultat parfait."],
+          ["Relire et améliorer", "Vérifie les sources, la cohérence, les calculs et les consignes."]
+        ]
+      : [
+          ["Rappeler ce que tu sais", "Sans regarder le cours, note trois idées que tu connais déjà sur « " + sujet + " »."],
+          ["Comprendre la notion", "Relis la définition, explique-la avec tes propres mots et invente un exemple."],
+          ["T’entraîner activement", "Résous une question ou un exercice sans regarder la correction, puis compare ta méthode."],
+          ["Corriger et mémoriser", "Explique pourquoi chaque erreur est arrivée et écris une règle courte à retenir."]
+        ];
+    const total = minutes;
+    const weights = [0.15,0.3,0.4,0.15];
+    const esc = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const steps = blocs.map((b,i)=>'<li><strong>'+Math.max(2,Math.round(total*weights[i]))+' min — '+esc(b[0])+':</strong> '+esc(b[1])+'</li>').join("");
+    const quizPrompt = domaine === "recherche" || objectif === "recherche"
+      ? "Quelle différence fais-tu entre une source primaire et une source secondaire ?"
+      : "Explique « " + sujet + " » en deux phrases, puis donne un exemple concret.";
+    output.innerHTML = '<h3>Ton plan de travail personnalisé</h3><p><strong>Parcours :</strong> '+esc(domaine)+' · <strong>Niveau :</strong> '+esc(niveau)+' · <strong>Objectif :</strong> '+esc(objectif)+'</p><ol>'+steps+'</ol><div class="coach-quiz"><h3>Défi de rappel actif</h3><p>'+esc(quizPrompt)+'</p><label for="coach-reponse"><strong>Ta réponse</strong></label><textarea id="coach-reponse" rows="4" maxlength="1500" placeholder="Écris ta réponse ici, puis vérifie si elle est claire, exacte et illustrée…"></textarea><p class="muted">Conseil : essaie d’abord sans consulter le cours. Cet outil t’aide à t’organiser ; il ne prétend pas corriger automatiquement une réponse ni remplacer les sources de ton cours.</p><button type="button" class="btn btn-secondary" id="coach-imprimer">Imprimer / enregistrer mon plan</button></div>';
+    output.hidden = false;
+    document.querySelector("#coach-imprimer")?.addEventListener("click",()=>window.print());
+    output.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+});
