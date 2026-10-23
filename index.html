@@ -121,7 +121,7 @@
       <div class="container">
         <div class="section-heading">
           <h2>Choisissez votre parcours</h2>
-          <p>Quatre domaines complémentaires : Scolaire, Campus, Compétences et Formation, pour accompagner chaque apprenant dans sa progression.</p>
+          <p>Trois domaines pour commencer : Scolaire, Campus et Compétences. Les autres parcours seront ajoutés progressivement.</p>
         </div>
 
         <div class="card-grid">
@@ -152,15 +152,7 @@
             </a>
           </article>
 
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">🧑‍🏫</div>
-            <h3>EduCap Formation</h3>
-            <p>Des formations structurées pour apprendre un métier, se spécialiser ou développer de nouvelles compétences professionnelles.</p>
-            <a class="card-link" href="#inscription" data-parcours="formation">
-              Découvrir les formations →
-            </a>
-          </article>
-        </div>
+</div>
       </div>
     </section>
 
@@ -228,10 +220,10 @@
               <summary>Tutoriel 1 — Choisir son parcours</summary>
               <ol>
                 <li>Appuie sur « Commencer » ou « Préparer ton parcours ».</li>
-                <li>Choisis Scolaire, Campus, Compétences ou Formation.</li>
+                <li>Choisis Scolaire, Campus ou Compétences.</li>
                 <li>Pour Scolaire, choisis ta classe puis ta série si elle est demandée.</li>
                 <li>Pour Campus, choisis ton niveau et ton domaine d’études.</li>
-                <li>Pour Compétences ou Formation, choisis le parcours souhaité, puis envoie le formulaire.</li>
+                <li>Pour Compétences, choisis le parcours souhaité, puis envoie le formulaire.</li>
               </ol>
             </details>
             <details class="video-steps">
@@ -359,13 +351,7 @@
             <p>Numérique, bureautique, langues et outils pratiques.</p>
             <button class="btn btn-primary" type="button" data-choix-parcours="competences">Choisir Compétences</button>
           </article>
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">🧑‍🏫</div>
-            <h3>Je cherche une formation</h3>
-            <p>Parcours structurés pour apprendre un métier ou se spécialiser.</p>
-            <button class="btn btn-primary" type="button" data-choix-parcours="formation">Choisir Formation</button>
-          </article>
-        </div>
+</div>
 
         <form class="parcours-form" id="parcours-form">
           <label for="pays">1. Dans quel pays étudiez-vous ?</label>
@@ -379,7 +365,6 @@
             <option value="scolaire">EduCap Scolaire</option>
             <option value="campus">EduCap Campus</option>
             <option value="competences">EduCap Compétences</option>
-            <option value="formation">EduCap Formation</option>
           </select>
 
           <div id="bloc-scolaire" hidden>
@@ -572,21 +557,9 @@
           <div id="compte-connecte" hidden>
             <p id="compte-bienvenue"></p>
             <section class="form-card" id="abonnement-edc" style="margin:20px 0">
-              <h3>Abonnement annuel EduCap Afrique</h3>
-              <p>Accès annuel : <strong>750 FCFA</strong></p>
-              <form id="paiement-form">
-                <div class="form-group">
-                  <label for="paiement-nom">Nom complet</label>
-                  <input id="paiement-nom" name="nomclient" autocomplete="name" maxlength="100" required>
-                </div>
-                <div class="form-group">
-                  <label for="paiement-telephone">Numéro Mobile Money</label>
-                  <input id="paiement-telephone" name="numeroSend" type="tel" inputmode="tel" placeholder="Ex. 0700000000" maxlength="20" required>
-                </div>
-                <button class="btn btn-primary" id="paiement-bouton" type="submit">Payer 750 FCFA</button>
-                <p class="muted">Le paiement sera activé après vérification par le serveur.</p>
-              </form>
-              <div id="paiement-message" class="parcours-result" role="status" aria-live="polite" hidden></div>
+              <h3>Accès aux cours</h3>
+              <p><strong>Aucun paiement n’est demandé pour le moment.</strong></p>
+              <p class="muted">Consulte d’abord les cours réellement disponibles dans ton espace. L’abonnement ne sera proposé qu’après vérification des contenus, de leur accès et du fonctionnement du paiement.</p>
             </section>
             <div class="account-actions">
               <a class="btn btn-primary" id="rechoisir-parcours" href="#inscription">Rechoisir mon parcours</a>
