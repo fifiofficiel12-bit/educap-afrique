@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const classeNormalisee = normaliser(donnees.classe);
-        const entree = donnees.pays === "CI" ? Object.entries(seriesParClasse).find(
+        const entree = paysChoisi === "CI" ? Object.entries(seriesParClasse).find(
           ([nom]) => normaliser(nom) === classeNormalisee
         ) : null;
         const seriesRequises = entree ? entree[1] : [];
@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const { error: erreurProfilParcours } = await clientSupabase
           .from("profiles")
           .update({
-            pays: donnees.pays,
+            pays: paysChoisi,
             parcours: domaineChoisi,
             classe: donnees.classe,
             serie: donnees.serie,
