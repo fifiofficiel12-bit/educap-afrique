@@ -325,7 +325,64 @@ document.addEventListener("DOMContentLoaded", () => {
   const espaceAdmin = document.querySelector("#espace-admin");
   const coursAValider = document.querySelector("#cours-a-valider");
 
-  // Le paiement est désactivé tant que l'accès aux contenus n'est pas validé.
+  // Paiement annuel : le serveur Supabase valide la session et initie la transaction.
+  const paiementForm = document.querySelector("#paiement-form");
+  paiementForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const bouton = paiementForm.querySelector('button[type="submit"]');
+    const message = document.querySelector("#paiement-message");
+    const afficherPaiement = (texte, succes = false) => {
+      if (!message) return;
+      message.textContent = texte;
+      message.style.color = succes ? "#16803c" : "#b42318";
+      message.hidden = false;
+    };
+    if (bouton) bouton.disabled = true;
+    try {
+      const { data: sessionInfo, error: sessionError } = await clientSupabase.auth.getSession();
+      const session = sessionInfo?.session;
+      if (sessionError || !session) {
+        afficherPaiement("Connecte-toi à ton compte avant de payer.");
+        return;
+      }
+      const f = new FormData(paiementForm);
+      const nomclient = String(f.get("nomclient") || "").trim();
+      const numeroSend = String(f.get("numeroSend") || "").replace(/\\s+/g, "");
+      if (nomclient.length < 2 || !/^\\+?[0-9]{8,15}$/.test(numeroSend)) {
+        afficherPaiement("Vérifie ton nom complet et ton numéro Mobile Money.");
+        return;
+      }
+      afficherPaiement("Vérification de la demande de paiement…", true);
+      const response = await fetch(SUPABASE_URL + "/functions/v1/create-money-fusion-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_PUBLIC_KEY,
+          "Authorization": "Bearer " + session.access_token
+        },
+        body: JSON.stringify({ nomclient, numeroSend })
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.url) {
+        afficherPaiement(payload.error || "Le paiement n'est pas disponible pour le moment. Aucun paiement n'a été lancé.");
+        return;
+      }
+      const paiementUrl = new URL(payload.url);
+      if (paiementUrl.protocol !== "https:" || !["payin.moneyfusion.net", "pay.moneyfusion.net"].includes(paiementUrl.hostname)) {
+        afficherPaiement("Adresse de paiement non reconnue. Aucun paiement n'a été lancé.");
+        return;
+      }
+      afficherPaiement("Redirection sécurisée vers le prestataire de paiement…", true);
+      window.location.assign(paiementUrl.href);
+    } catch (erreur) {
+      console.error("Erreur de paiement :", erreur);
+      afficherPaiement("Erreur de connexion. Vérifie Internet et réessaie.");
+    } finally {
+      if (bouton) bouton.disabled = false;
+    }
+  });
+
+
 
   const messageAuth = (message, succes = false) => {
     if (!authMessage) return;
