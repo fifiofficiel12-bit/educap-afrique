@@ -662,6 +662,44 @@
       </div>
     </section>
 
+
+  <!-- Assistant guidé pour accompagner l'inscription -->
+  <aside id="assistant-inscription" class="assistant-inscription" aria-label="Assistant d'inscription">
+    <button id="assistant-toggle" class="assistant-toggle" type="button" aria-expanded="false" aria-controls="assistant-panneau">
+      <span aria-hidden="true">🤝</span> Besoin d'aide pour t'inscrire ?
+    </button>
+    <section id="assistant-panneau" class="assistant-panneau" hidden>
+      <header class="assistant-entete">
+        <div><strong>Assistant EduCap Afrique</strong><p>Je te guide jusqu'à la création de ton compte.</p></div>
+        <button id="assistant-fermer" type="button" aria-label="Fermer l'assistant">×</button>
+      </header>
+      <div id="assistant-messages" class="assistant-messages" aria-live="polite">
+        <p class="assistant-bulle assistant-bot">Bonjour ! Je peux t'aider à choisir ton parcours, enregistrer tes informations puis créer ton compte. On commence ?</p>
+      </div>
+      <div id="assistant-choix" class="assistant-choix">
+        <button type="button" data-assistant-action="start">Oui, m'accompagner</button>
+        <button type="button" data-assistant-action="go-register">J'ai déjà choisi mon parcours</button>
+      </div>
+    </section>
+  </aside>
+  <style>
+    .assistant-inscription{position:fixed;right:18px;bottom:18px;z-index:1000;font-family:inherit}
+    .assistant-toggle{border:0;border-radius:999px;padding:14px 18px;background:#1457d9;color:#fff;font-weight:700;box-shadow:0 8px 26px #0002;cursor:pointer}
+    .assistant-panneau{width:min(370px,calc(100vw - 28px));height:min(560px,calc(100vh - 110px));background:#fff;border:1px solid #d8e2ef;border-radius:18px;box-shadow:0 14px 45px #0003;display:flex;flex-direction:column;overflow:hidden;margin-bottom:10px}
+    .assistant-panneau[hidden]{display:none}
+    .assistant-entete{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#1457d9;color:#fff;padding:15px}
+    .assistant-entete p{font-size:13px;margin:5px 0 0;color:#eef4ff}
+    .assistant-entete button{background:transparent;color:#fff;border:0;font-size:26px;cursor:pointer}
+    .assistant-messages{padding:14px;overflow:auto;flex:1;background:#f7f9fc}
+    .assistant-bulle{padding:11px 13px;border-radius:13px;margin:0 0 10px;line-height:1.45;font-size:14px;white-space:pre-wrap}
+    .assistant-bot{background:#fff;border:1px solid #e0e7ef;margin-right:18px}
+    .assistant-user{background:#e1edff;margin-left:18px}
+    .assistant-choix{padding:12px;display:grid;gap:8px;border-top:1px solid #e0e7ef}
+    .assistant-choix button{padding:10px;border:1px solid #1457d9;border-radius:10px;background:#fff;color:#1457d9;font-weight:600;cursor:pointer;text-align:left}
+    .assistant-choix button:hover{background:#eef4ff}
+    @media(max-width:480px){.assistant-inscription{right:10px;bottom:10px}.assistant-toggle{padding:12px 14px;font-size:13px}.assistant-panneau{height:min(70vh,560px)}}
+  </style>
+
   <footer class="site-footer">
     <div class="container">
       <p><strong>EduCap Afrique</strong></p>
