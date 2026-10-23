@@ -642,10 +642,19 @@
               <div id="mes-cours-formateur" class="course-list"></div>
             </section>
 
-            <section id="espace-admin" class="teacher-panel" hidden>
-              <h3>Espace administration — validation des cours</h3>
-              <p class="muted">Vérifie les contenus avant de les rendre visibles aux apprenants.</p>
+            <section id="espace-admin" class="admin-dashboard" hidden>
+              <div class="admin-heading"><div><span class="admin-eyebrow">ESPACE CRÉATEUR</span><h2>Tableau de bord administrateur</h2><p>Vue d’ensemble de la plateforme EduCap Afrique.</p></div><span class="admin-live"><i></i> Administration</span></div>
+              <div class="admin-stats">
+                <article class="admin-stat"><span>Apprenants</span><strong id="admin-total-apprenants">—</strong><small>Comptes enregistrés</small></article>
+                <article class="admin-stat"><span>Formateurs</span><strong id="admin-total-formateurs">—</strong><small>Comptes formateurs</small></article>
+                <article class="admin-stat"><span>Cours publiés</span><strong id="admin-total-publies">—</strong><small>Contenus visibles</small></article>
+                <article class="admin-stat"><span>À valider</span><strong id="admin-total-attente">—</strong><small>Cours en attente</small></article>
+                <article class="admin-stat"><span>Inscriptions aux cours</span><strong id="admin-total-inscriptions">—</strong><small>Apprenants inscrits</small></article>
+                <article class="admin-stat"><span>Paiements confirmés</span><strong id="admin-total-paiements">—</strong><small>Transactions validées</small></article>
+              </div>
+              <div class="admin-section-title"><div><h3>Gestion des contenus</h3><p>Contrôle les cours avant leur mise en ligne.</p></div></div>
               <div id="cours-a-valider" class="course-list"></div>
+              <div class="admin-footnote">Les chiffres reflètent les données accessibles dans Supabase.</div>
             </section>
           </div>
         </div>
