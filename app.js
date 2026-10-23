@@ -533,16 +533,36 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!listeCours) return;
     listeCours.textContent = "Chargement des cours…";
 
-    const { data: tousLesCours, error: erreurCours } = await clientSupabase
-      .from("courses")
-      .select("id, title, description, category, subject, classe, serie, content, pays")
+    // Le catalogue ne contient que les métadonnées publiques, jamais le contenu complet.
+    const { data: catalogue, error: erreurCours } = await clientSupabase
+      .from("course_catalogue")
+      .select("id, title, description, category, subject, classe, serie, pays, published, created_at")
       .eq("published", true)
       .order("created_at", { ascending: false });
 
     if (erreurCours) {
-      listeCours.textContent = "Impossible de charger les cours : " + erreurCours.message;
+      listeCours.textContent = "Impossible de charger le catalogue : " + erreurCours.message;
       return;
     }
+
+    // L'accès au contenu complet dépend exclusivement d'un abonnement confirmé côté base.
+    const { data: paiementsActifs, error: erreurAbonnement } = await clientSupabase
+      .from("payments")
+      .select("subscription_ends_at")
+      .eq("user_id", utilisateur.id)
+      .eq("status", "paid")
+      .gt("subscription_ends_at", new Date().toISOString())
+      .limit(1);
+    const abonnementActif = !erreurAbonnement && Boolean(paiementsActifs?.length);
+    let contenusCours = [];
+    if (abonnementActif || ["admin", "formateur"].includes(role)) {
+      const { data: details, error: erreurDetails } = await clientSupabase
+        .from("courses")
+        .select("id, content")
+        .eq("published", true);
+      if (!erreurDetails) contenusCours = details || [];
+    }
+    const contenuParId = new Map(contenusCours.map(c => [c.id, c.content]));
 
     const { data: inscriptions, error: erreurInscriptions } = await clientSupabase
       .from("enrollments")
@@ -562,9 +582,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const parcours = profil?.parcours || "scolaire";
     const classeProfil = profil?.classe || "";
     const serieProfil = profil?.serie || "";
-    const cours = (tousLesCours || []).filter((element) => {
+    const cours = (catalogue || []).map(element => ({
+      ...element,
+      content: contenuParId.get(element.id) || null
+    })).filter((element) => {
       if (element.category !== parcours) return false;
-      if (element.pays && profil?.pays && element.pays !== profil.pays) return false;
+      if (element.pays && profil?.pays) {
+        const paysCours = normaliser(element.pays).replace(/[’']/g, "");
+        const paysProfil = normaliser(profil.pays).replace(/[’']/g, "");
+        const memePays = paysCours === paysProfil ||
+          (paysProfil === "ci" && paysCours === "cote divoire");
+        if (!memePays) return false;
+      }
       if (parcours === "scolaire") {
         if (element.classe && classeProfil && element.classe !== classeProfil) return false;
         if (element.serie && serieProfil && element.serie !== serieProfil) return false;
@@ -592,10 +621,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <p class="course-meta">${echapperHTML(meta || "Cours EduCap Afrique")}</p>
         <h4>${echapperHTML(element.title)}</h4>
         <p>${echapperHTML(element.description || "")}</p>
-        ${element.content ? `<section class="lesson-preview"><h5>Contenu du cours</h5><div class="lesson-content">${formaterContenuCours(element.content)}</div></section>` : `<p class="course-empty-note">Le contenu détaillé sera ajouté prochainement.</p>`}
-        <button class="btn ${inscrit ? "btn-secondary" : "btn-primary"}" type="button" data-inscrire-cours="${echapperHTML(element.id)}" ${inscrit ? "disabled" : ""}>
-          ${inscrit ? "Déjà dans mes cours" : "M’inscrire gratuitement"}
-        </button>
+        ${abonnementActif && element.content ? `<section class="lesson-preview"><h5>Leçon complète</h5><div class="lesson-content">${formaterContenuCours(element.content)}</div></section>` : abonnementActif ? `<p class="course-empty-note">Le contenu complet de cette leçon sera ajouté prochainement.</p>` : `<section class="course-empty-note"><strong>Aperçu gratuit.</strong><p>Le titre et la description sont accessibles gratuitement. L’accès à la leçon complète nécessite l’abonnement annuel à 750 FCFA.</p></section>`}
+        ${abonnementActif ? `<button class="btn ${inscrit ? "btn-secondary" : "btn-primary"}" type="button" data-inscrire-cours="${echapperHTML(element.id)}" ${inscrit ? "disabled" : ""}>${inscrit ? "Déjà dans mes cours" : "Ajouter à mes cours"}</button>` : `<a class="btn btn-primary" href="#paiement-form">S’abonner — 750 FCFA/an</a>`}
       </article>`;
     }).join("");
 
