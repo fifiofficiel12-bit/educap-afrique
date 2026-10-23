@@ -652,6 +652,30 @@
             <p class="muted">Seuls les cours publiés par EduCap Afrique s'affichent ici.</p>
             <div id="liste-cours" class="course-list" aria-live="polite"></div>
 
+            <section id="teacher-application-section" class="form-card" hidden>
+              <h3>Devenir formateur EduCap Afrique</h3>
+              <p>Présente ton expérience. L’équipe EduCap Afrique examinera ta demande avant d’activer ton espace formateur.</p>
+              <form id="teacher-application-form">
+                <div class="form-group">
+                  <label for="teacher-subject-area">Matière ou domaine enseigné</label>
+                  <input id="teacher-subject-area" name="subject_area" maxlength="160" required placeholder="Ex. Mathématiques, comptabilité, bureautique">
+                </div>
+                <div class="form-group">
+                  <label for="teacher-institution">Établissement ou organisme (facultatif)</label>
+                  <input id="teacher-institution" name="institution" maxlength="180" placeholder="Nom de l’établissement ou organisme">
+                </div>
+                <div class="form-group">
+                  <label for="teacher-qualifications">Formation et expérience</label>
+                  <textarea id="teacher-qualifications" name="qualifications" rows="4" maxlength="3000" required placeholder="Présente tes diplômes, ton expérience et les niveaux que tu peux accompagner."></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="teacher-evidence-url">Lien vers un portfolio ou un justificatif (facultatif)</label>
+                  <input id="teacher-evidence-url" name="evidence_url" type="url" maxlength="500" placeholder="https://...">
+                </div>
+                <button class="btn btn-primary" type="submit">Envoyer ma candidature</button>
+              </form>
+              <p id="teacher-application-status" class="parcours-result" role="status" aria-live="polite" hidden></p>
+            </section>
             <section id="espace-formateur" class="teacher-panel" hidden>
               <h3>Mon espace formateur</h3>
               <p class="muted">Crée un cours ou une fiche. Tout nouveau contenu reste en brouillon jusqu'à validation par l'administration.</p>
@@ -731,6 +755,8 @@
                 <article class="admin-stat"><span>Inscriptions aux cours</span><strong id="admin-total-inscriptions">—</strong><small>Apprenants inscrits</small></article>
                 <article class="admin-stat"><span>Paiements confirmés</span><strong id="admin-total-paiements">—</strong><small>Transactions validées</small></article>
               </div>
+              <div class="admin-section-title"><div><h3>Candidatures des formateurs</h3><p>Vérifie les compétences avant d’accorder l’accès de publication.</p></div></div>
+              <div id="teacher-applications-list" class="course-list" aria-live="polite"></div>
               <div class="admin-section-title"><div><h3>Gestion des contenus</h3><p>Contrôle les cours avant leur mise en ligne.</p></div></div>
               <div id="cours-a-valider" class="course-list"></div>
               <div class="admin-footnote">Les chiffres reflètent les données accessibles dans Supabase.</div>
