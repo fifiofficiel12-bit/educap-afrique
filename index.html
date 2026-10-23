@@ -583,6 +583,7 @@
                 <input id="connexion-password" name="password" type="password" autocomplete="current-password" minlength="8" required>
               </div>
               <button class="btn btn-primary" type="submit">Me connecter</button>
+              <button class="btn btn-secondary" id="mot-passe-oublie" type="button">Mot de passe oublié ?</button>
             </form>
             <form id="inscription-form" class="form-card">
               <h3>Je crée mon compte</h3>
@@ -602,6 +603,28 @@
               <p class="muted">Les comptes créés ici ont le rôle apprenant. Les rôles formateur et administrateur sont attribués séparément.</p>
             </form>
           </div>
+          <form id="recuperation-form" class="form-card" hidden>
+            <h3>Réinitialiser mon mot de passe</h3>
+            <p class="muted">Saisis l’adresse e-mail de ton compte. Nous t’enverrons un lien de réinitialisation.</p>
+            <div class="form-group">
+              <label for="recuperation-email">Adresse e-mail</label>
+              <input id="recuperation-email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Envoyer le lien</button>
+            <button class="btn btn-secondary" id="retour-connexion" type="button">Retour à la connexion</button>
+          </form>
+          <form id="nouveau-mot-de-passe-form" class="form-card" hidden>
+            <h3>Choisir un nouveau mot de passe</h3>
+            <div class="form-group">
+              <label for="nouveau-mot-de-passe">Nouveau mot de passe (8 caractères minimum)</label>
+              <input id="nouveau-mot-de-passe" name="password" type="password" autocomplete="new-password" minlength="8" required>
+            </div>
+            <div class="form-group">
+              <label for="confirmation-mot-de-passe">Confirmer le nouveau mot de passe</label>
+              <input id="confirmation-mot-de-passe" name="confirmation" type="password" autocomplete="new-password" minlength="8" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Enregistrer le nouveau mot de passe</button>
+          </form>
           <div id="compte-connecte" hidden>
             <p id="compte-bienvenue"></p>
             <section class="form-card" id="abonnement-edc" style="margin:20px 0">
