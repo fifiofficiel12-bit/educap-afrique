@@ -186,8 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const donnees = {
-        // La table parcours_apprenants exige un identifiant UUID et ne stocke pas le pays.
-        id: crypto.randomUUID(),
+        // La colonne id est générée automatiquement par Supabase.
         domaine: domaineChoisi,
         classe: null,
         serie: null,
