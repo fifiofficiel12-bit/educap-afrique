@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const serie = document.querySelector("#serie");
   const niveauCampus = document.querySelector("#niveau-campus");
   const domaineCampus = document.querySelector("#domaine-campus");
+  const etablissementCampus = document.querySelector("#etablissement-campus");
   const formation = document.querySelector("#formation");
   const formulaire = document.querySelector("#parcours-form");
   const resultat = document.querySelector("#resultat-parcours");
@@ -120,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (classe) classe.required = choix === "scolaire";
     if (niveauCampus) niveauCampus.required = choix === "campus";
     if (domaineCampus) domaineCampus.required = choix === "campus";
+    if (etablissementCampus) etablissementCampus.required = choix === "campus";
     if (formation) formation.required = choix === "competences";
 
     actualiserSeries();
@@ -195,11 +197,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (domaineChoisi === "campus") {
         donnees.niveau_campus = niveauCampus?.value?.trim() || null;
-        donnees.domaine_campus = domaineCampus?.value?.trim() || null;
+        const etablissementChoisi = etablissementCampus?.value?.trim() || "";
+        const filiereChoisie = domaineCampus?.value?.trim() || "";
+        donnees.domaine_campus = etablissementChoisi && filiereChoisie
+          ? etablissementChoisi + " — " + filiereChoisie
+          : null;
 
-        if (!donnees.niveau_campus || !donnees.domaine_campus) {
+        if (!donnees.niveau_campus || !etablissementChoisi || !filiereChoisie) {
           afficherMessage(
-            "Choisis ton niveau universitaire et ton domaine d’études."
+            "Choisis ton niveau, ton université ou école, puis ta filière ou ton concours."
           );
           return;
         }
