@@ -414,9 +414,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!data) return;
     teacherApplicationForm.hidden = true;
     const statuts = {
-      pending: "Ta candidature est en attente d’examen par l’équipe EduCap Afrique.",
-      approved: "Ta candidature est acceptée. Ton espace formateur est activé ; reconnecte-toi si nécessaire.",
-      rejected: "Ta candidature n’a pas été retenue pour le moment." + (data.admin_notes ? " Motif : " + data.admin_notes : "")
+      pending: "Demande reçue ! L’équipe EduCap Afrique doit la valider. Après validation, tu pourras publier des cours et créer une classe virtuelle depuis « Mon espace formateur ».",
+      approved: "Félicitations ! Ton accès formateur est activé. Déconnecte-toi puis reconnecte-toi si l’espace formateur n’apparaît pas. Tu pourras ensuite publier des cours et créer une classe virtuelle.",
+      rejected: "Ta demande n’a pas été acceptée pour le moment." + (data.admin_notes ? " Motif : " + data.admin_notes : "")
     };
     teacherApplicationStatus.textContent = statuts[data.status] || "Statut de candidature : " + data.status;
     teacherApplicationStatus.hidden = false;
@@ -464,7 +464,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       teacherApplicationForm.reset();
-      messageAuth("Candidature envoyée. Tu recevras le statut dans ton espace après examen.", true);
+      messageAuth("Ta demande d’accès formateur a bien été envoyée. Après validation par l’équipe EduCap Afrique, tu pourras publier des cours et créer une classe virtuelle.", true);
       const { data: nouveauProfil } = await clientSupabase.from("profiles").select("role").eq("id", utilisateur.id).maybeSingle();
       await chargerCandidatureFormateur(utilisateur, nouveauProfil || {role:"apprenant"});
     } catch (erreur) {
