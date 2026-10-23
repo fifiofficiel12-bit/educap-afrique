@@ -1148,11 +1148,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if(!user){afficherEtat("rejoindre-classe-message","Connecte-toi pour rejoindre une classe.");return;}
       const code=String(new FormData(rejoindreClasseForm).get("code")||"").trim().toUpperCase();
       if(!/^[A-F0-9]{8}$/.test(code)){afficherEtat("rejoindre-classe-message","Saisis le code de 8 caractères donné par ton enseignant.");return;}
-      const {data:classe,error:ce}=await clientSupabase.from("classes_virtuelles").select("id").eq("code_invitation",code).maybeSingle();
-      if(ce||!classe){afficherEtat("rejoindre-classe-message","Code introuvable. Vérifie le code auprès de ton enseignant.");return;}
-      const {error}=await clientSupabase.from("membres_classes_virtuelles").insert([{classe_id:classe.id,apprenant_id:user.id}]);
-      if(error&&error.code!=="23505")throw error;
-      afficherEtat("rejoindre-classe-message",error?"Tu fais déjà partie de cette classe.":"Tu as rejoint la classe avec succès.",true);
+      const {error}=await clientSupabase.rpc("rejoindre_classe_virtuelle",{p_code:code});
+      if(error) {
+        afficherEtat("rejoindre-classe-message",error.message?.includes("invalide")?"Code introuvable. Vérifie le code auprès de ton enseignant.":"Impossible de rejoindre cette classe. Vérifie le code et réessaie.");
+        return;
+      }
+      afficherEtat("rejoindre-classe-message","Tu as rejoint la classe avec succès.",true);
       rejoindreClasseForm.reset();
       const {data:profil}=await clientSupabase.from("profiles").select("role").eq("id",user.id).maybeSingle();
       await chargerClassesVirtuelles(user,profil?.role||"apprenant");
