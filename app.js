@@ -814,6 +814,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (espaceFormateur) espaceFormateur.hidden = !["formateur", "admin"].includes(role);
     if (espaceAdmin) espaceAdmin.hidden = role !== "admin";
+    await chargerClassesVirtuelles(utilisateur, role);
     document.body.classList.toggle("is-admin", role === "admin");
     if (role !== "admin" && role !== "formateur") {
       await chargerCandidatureFormateur(utilisateur, profil);
@@ -1074,6 +1075,89 @@ document.addEventListener("DOMContentLoaded", () => {
     } finally {
       if (bouton) bouton.disabled = false;
     }
+  });
+
+  // Classes virtuelles : création enseignant et adhésion par code d'invitation.
+  const creerClasseForm = document.querySelector("#creer-classe-form");
+  const rejoindreClasseForm = document.querySelector("#rejoindre-classe-form");
+  const afficherEtat = (id, texte, ok = false) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = texte;
+    el.style.color = ok ? "#16803c" : "#b42318";
+    el.hidden = false;
+  };
+
+  async function chargerClassesVirtuelles(utilisateur, role) {
+    const listeEnseignant = document.querySelector("#mes-classes-formateur");
+    const listeApprenant = document.querySelector("#mes-classes-apprenant");
+    if (["formateur","admin"].includes(role) && listeEnseignant) {
+      const q = clientSupabase.from("classes_virtuelles").select("id,nom,description,niveau,domaine,code_invitation,created_at").order("created_at",{ascending:false});
+      const {data,error} = role === "admin" ? await q : await q.eq("enseignant_id",utilisateur.id);
+      if (error) { listeEnseignant.textContent = "Impossible de charger les classes. Vérifie les autorisations Supabase."; }
+      else if (!data?.length) { listeEnseignant.textContent = "Tu n’as pas encore créé de classe virtuelle."; }
+      else {
+        listeEnseignant.replaceChildren();
+        data.forEach(c => {
+          const card=document.createElement("article"); card.className="course-item";
+          const title=document.createElement("h4"); title.textContent=c.nom;
+          const info=document.createElement("p"); info.textContent=[c.domaine,c.niveau,c.description].filter(Boolean).join(" · ");
+          const code=document.createElement("p"); code.textContent="Code à partager aux élèves : "+c.code_invitation;
+          const copy=document.createElement("button"); copy.type="button"; copy.className="btn btn-secondary"; copy.textContent="Copier le code";
+          copy.addEventListener("click", async()=>{try{await navigator.clipboard.writeText(c.code_invitation);copy.textContent="Code copié";}catch(_){code.textContent="Code à partager : "+c.code_invitation+" (sélectionne et copie ce code)";}});
+          const count=document.createElement("p"); count.textContent="Chargement des inscrits…";
+          clientSupabase.from("membres_classes_virtuelles").select("id",{count:"exact",head:true}).eq("classe_id",c.id).then(({count:n,error:e})=>{count.textContent=e?"Nombre d’élèves indisponible":"Apprenants inscrits : "+(n||0);});
+          card.append(title,info,code,copy,count); listeEnseignant.append(card);
+        });
+      }
+    }
+    if (listeApprenant) {
+      const {data:members,error} = await clientSupabase.from("membres_classes_virtuelles").select("classe_id,joined_at").eq("apprenant_id",utilisateur.id);
+      if (error) { listeApprenant.textContent="Impossible de charger tes classes pour le moment."; return; }
+      if (!members?.length) { listeApprenant.textContent="Tu n’as rejoint aucune classe virtuelle pour le moment."; return; }
+      const ids=members.map(m=>m.classe_id);
+      const {data:classes,error:ce}=await clientSupabase.from("classes_virtuelles").select("id,nom,niveau,domaine,description").in("id",ids);
+      if(ce){listeApprenant.textContent="Impossible de charger les informations des classes.";return;}
+      listeApprenant.replaceChildren();
+      (classes||[]).forEach(c=>{const card=document.createElement("article");card.className="course-item";const title=document.createElement("h4");title.textContent=c.nom;const info=document.createElement("p");info.textContent=[c.domaine,c.niveau,c.description].filter(Boolean).join(" · ");card.append(title,info);listeApprenant.append(card);});
+    }
+  }
+
+  creerClasseForm?.addEventListener("submit", async event => {
+    event.preventDefault();
+    const btn=creerClasseForm.querySelector('button[type="submit"]'); if(btn)btn.disabled=true;
+    try {
+      const {data:s}=await clientSupabase.auth.getSession(); const user=s.session?.user;
+      if(!user){afficherEtat("creer-classe-message","Connecte-toi pour créer une classe.");return;}
+      const f=new FormData(creerClasseForm);
+      const {data:profil}=await clientSupabase.from("profiles").select("role").eq("id",user.id).maybeSingle();
+      if(!["formateur","admin"].includes(profil?.role)){afficherEtat("creer-classe-message","Seuls les formateurs validés peuvent créer une classe.");return;}
+      const {error}=await clientSupabase.from("classes_virtuelles").insert([{enseignant_id:user.id,nom:String(f.get("nom")||"").trim(),domaine:String(f.get("domaine")||"scolaire"),niveau:String(f.get("niveau")||"").trim()||null,description:String(f.get("description")||"").trim()||null}]);
+      if(error)throw error;
+      creerClasseForm.reset();afficherEtat("creer-classe-message","Classe virtuelle créée. Partage son code d’invitation aux élèves.",true);
+      await chargerClassesVirtuelles(user,profil.role);
+    } catch(e){console.error(e);afficherEtat("creer-classe-message","Création impossible : vérifie les autorisations et réessaie.");}
+    finally{if(btn)btn.disabled=false;}
+  });
+
+  rejoindreClasseForm?.addEventListener("submit", async event => {
+    event.preventDefault();
+    const btn=rejoindreClasseForm.querySelector('button[type="submit"]');if(btn)btn.disabled=true;
+    try {
+      const {data:s}=await clientSupabase.auth.getSession();const user=s.session?.user;
+      if(!user){afficherEtat("rejoindre-classe-message","Connecte-toi pour rejoindre une classe.");return;}
+      const code=String(new FormData(rejoindreClasseForm).get("code")||"").trim().toUpperCase();
+      if(!/^[A-F0-9]{8}$/.test(code)){afficherEtat("rejoindre-classe-message","Saisis le code de 8 caractères donné par ton enseignant.");return;}
+      const {data:classe,error:ce}=await clientSupabase.from("classes_virtuelles").select("id").eq("code_invitation",code).maybeSingle();
+      if(ce||!classe){afficherEtat("rejoindre-classe-message","Code introuvable. Vérifie le code auprès de ton enseignant.");return;}
+      const {error}=await clientSupabase.from("membres_classes_virtuelles").insert([{classe_id:classe.id,apprenant_id:user.id}]);
+      if(error&&error.code!=="23505")throw error;
+      afficherEtat("rejoindre-classe-message",error?"Tu fais déjà partie de cette classe.":"Tu as rejoint la classe avec succès.",true);
+      rejoindreClasseForm.reset();
+      const {data:profil}=await clientSupabase.from("profiles").select("role").eq("id",user.id).maybeSingle();
+      await chargerClassesVirtuelles(user,profil?.role||"apprenant");
+    }catch(e){console.error(e);afficherEtat("rejoindre-classe-message","Impossible de rejoindre cette classe pour le moment.");}
+    finally{if(btn)btn.disabled=false;}
   });
 
   coursForm?.addEventListener("submit", async (event) => {
