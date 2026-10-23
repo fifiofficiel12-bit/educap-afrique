@@ -966,3 +966,15 @@ body.is-admin #abonnement-edc, body.is-admin #rechoisir-parcours { display:none 
 .course-empty-note{padding:12px 14px;border-left:3px solid #e3a008;background:#fff8e5;color:#77520a!important;font-size:14px;}
 .course-item .btn{align-self:flex-start;}
 @media(max-width:600px){.course-item{border-radius:16px}.lesson-content{font-size:14px}}
+
+/* Atelier de préparation pédagogique des enseignants */
+.lesson-builder{margin:8px 0 28px;padding:clamp(18px,3vw,28px);border:1px solid #cbdcf5;border-radius:20px;background:linear-gradient(145deg,#f5f9ff,#fff);box-shadow:0 12px 32px rgba(27,68,130,.07)}
+.lesson-builder h4{margin:0 0 8px;color:#173f7a;font-size:clamp(19px,2.4vw,24px)}
+.lesson-builder>p{color:#52637a;line-height:1.7}
+.lesson-builder-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0}
+.lesson-builder .form-group{min-width:0}
+.lesson-builder label{display:block;margin-bottom:7px;font-weight:750;color:#263b59}
+.lesson-builder input,.lesson-builder select{width:100%;min-height:44px;padding:10px 12px;border:1px solid #cbd7e8;border-radius:10px;background:#fff;color:#172642;font:inherit}
+.lesson-plan-result{margin-top:16px;padding:16px;border:1px solid #b9d8c4;border-radius:12px;background:#f0fbf3;color:#205335;line-height:1.65}
+.lesson-plan-result h5{margin:0 0 8px;font-size:17px}
+@media(max-width:600px){.lesson-builder-grid{grid-template-columns:1fr}.lesson-builder{border-radius:15px}}
