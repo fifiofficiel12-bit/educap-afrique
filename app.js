@@ -1248,6 +1248,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <label for="educap-aide-sujet">Précise le sujet (facultatif)</label>
       <textarea id="educap-aide-sujet" maxlength="500" placeholder="Ex. : équations du second degré, dissertation, comptabilité…"></textarea>
       <button type="button" class="action principal" id="educap-aide-conseil">Obtenir une méthode gratuite</button>
+      <button type="button" class="action" id="educap-aide-inscription">M’aider à choisir mon parcours / m’inscrire</button>
       <div id="educap-aide-reponse" hidden aria-live="polite"></div>
       
       <button type="button" class="action" id="educap-aide-fermer">Fermer</button>
@@ -1267,6 +1268,19 @@ document.addEventListener("DOMContentLoaded", () => {
   root.querySelector("#educap-aide-fermer").addEventListener("click", () => {
     panel.classList.remove("ouvert");
     toggle.setAttribute("aria-expanded", "false");
+  });
+
+  root.querySelector("#educap-aide-inscription").addEventListener("click", () => {
+    const formulaire = document.querySelector("#parcours-form");
+    panel.classList.remove("ouvert");
+    toggle.setAttribute("aria-expanded", "false");
+    formulaire?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const message = document.querySelector("#resultat-parcours");
+    if (message) {
+      message.textContent = "Mentor EduCap t’accompagne : choisis ton pays et ton parcours, puis complète les champs affichés.";
+      message.style.color = "#123d75";
+      message.hidden = false;
+    }
   });
 
   root.querySelector("#educap-aide-conseil").addEventListener("click", () => {
