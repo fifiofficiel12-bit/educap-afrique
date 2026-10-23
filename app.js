@@ -417,6 +417,56 @@ document.addEventListener("DOMContentLoaded", () => {
     fermerParagraphe(); fermerListe();
     return html || "<p>Le contenu détaillé de ce cours n’a pas encore été renseigné.</p>";
   };
+
+  const boutonGenererPlan = document.querySelector("#generer-plan-cours");
+  boutonGenererPlan?.addEventListener("click", () => {
+    const sujet = document.querySelector("#prep-sujet")?.value.trim();
+    const niveau = document.querySelector("#prep-niveau")?.value.trim();
+    const duree = Number(document.querySelector("#prep-duree")?.value || 60);
+    const type = document.querySelector("#prep-type")?.value || "decouverte";
+    const resultatPlan = document.querySelector("#plan-cours-resultat");
+    if (!sujet || !niveau) { messageAuth("Indique le sujet précis et le niveau des apprenants."); return; }
+    const objectif = {
+      decouverte: "Faire comprendre une notion et savoir l’expliquer.",
+      revision: "Rappeler les notions clés, la méthode et les erreurs fréquentes.",
+      pratique: "Appliquer les connaissances dans une situation concrète.",
+      evaluation: "Mesurer les acquis, expliquer les erreurs et prévoir une remédiation."
+    }[type];
+    const minutes = (part) => Math.max(3, Math.round(duree * part));
+    const plan = [
+      "FICHE DE PRÉPARATION PÉDAGOGIQUE",
+      "Sujet : " + sujet, "Niveau : " + niveau, "Durée : " + duree + " minutes", "",
+      "1. OBJECTIFS", "- " + objectif, "- Définir les notions essentielles et les employer correctement.", "- Résoudre une tâche adaptée au niveau et justifier sa démarche.", "",
+      "2. PRÉREQUIS", "- Identifier les connaissances nécessaires.", "- Poser une question diagnostique et reprendre les bases si nécessaire.", "",
+      "3. MATÉRIEL ET RESSOURCES", "- Tableau, cahier, support et exercices adaptés.", "- Ajouter les références exactes du programme ou du manuel utilisé.", "",
+      "4. DÉROULEMENT DE LA SÉANCE",
+      "A. Mise en situation — " + minutes(0.10) + " min", "Présenter une question ou un exemple concret lié à " + sujet + " et faire exprimer les idées initiales.",
+      "B. Explication progressive — " + minutes(0.35) + " min", "Définir les mots-clés, expliquer les idées étape par étape et vérifier la compréhension.",
+      "C. Exemple corrigé par l’enseignant — " + minutes(0.20) + " min", "Énoncé : [ajouter un exemple]. Méthode : [expliquer le choix]. Étapes : [détailler le raisonnement]. Conclusion : [réponse et vérification].",
+      "D. Exercices progressifs — " + minutes(0.25) + " min", "Exercice 1, application directe : [énoncé].", "Exercice 2, transfert ou difficulté supérieure : [énoncé].",
+      "E. Vérification des acquis — " + minutes(0.10) + " min", "Poser une question de synthèse ou demander une explication avec les mots de l’apprenant.", "",
+      "5. TRACE ÉCRITE À RETENIR", "- Définition et idée principale : [compléter].", "- Étapes ou méthode : [compléter].", "- Exemple de référence : [compléter et vérifier].", "- Erreurs fréquentes et prévention : [compléter].", "",
+      "6. CORRIGÉ EXPLIQUÉ", "Pour chaque exercice, indiquer les données, la méthode, le raisonnement, la réponse finale et une vérification.", "",
+      "7. DIFFÉRENCIATION", "- Soutien : exercice guidé pour les apprenants en difficulté.", "- Approfondissement : variante plus complexe.", "- Travail personnel : [consigne, durée et critères de réussite].", "",
+      "8. BILAN DE L’ENSEIGNANT", "- Objectifs atteints ? Difficultés observées ? Notions à reprendre ?", "",
+      "IMPORTANT : cette trame est un point de départ. Compléter les exemples, exercices, corrigés et références exactes avant la séance."
+    ].join("\n");
+    const titre = document.querySelector("#cours-titre");
+    const matiere = document.querySelector("#cours-matiere");
+    const description = document.querySelector("#cours-description");
+    const contenu = document.querySelector("#cours-contenu");
+    if (titre && !titre.value.trim()) titre.value = sujet;
+    if (matiere && !matiere.value.trim()) matiere.value = sujet;
+    if (description && !description.value.trim()) description.value = "Séance de " + duree + " minutes pour le niveau " + niveau + ", avec objectifs, explications, exercices et bilan.";
+    if (contenu) contenu.value = plan;
+    resultatPlan.hidden = false;
+    resultatPlan.innerHTML = "<h5>Trame prête à compléter</h5><p>La préparation a été insérée dans le formulaire de cours. Complète le contenu disciplinaire et vérifie les réponses avant de l’enregistrer.</p><button type='button' class='btn btn-secondary' id='aller-formulaire-cours'>Compléter le cours</button>";
+    resultatPlan.querySelector("#aller-formulaire-cours")?.addEventListener("click", () => {
+      document.querySelector("#cours-form")?.scrollIntoView({behavior:"smooth",block:"start"});
+      contenu?.focus();
+    });
+  });
+
   const echapperHTML = (valeur) => String(valeur ?? "").replace(/[&<>"']/g, (caractere) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[caractere]);
