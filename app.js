@@ -6,6 +6,7 @@ const SUPABASE_PUBLIC_KEY =
   "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR";
 
 document.addEventListener("DOMContentLoaded", () => {
+  const pays = document.querySelector("#pays");
   const domaine = document.querySelector("#domaine");
   const classe = document.querySelector("#classe");
   const serie = document.querySelector("#serie");
@@ -162,7 +163,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      const paysChoisi = pays?.value?.trim() || "";
+      if (!paysChoisi) {
+        afficherMessage("Choisis ton pays pour personnaliser ton parcours.");
+        return;
+      }
+
       const donnees = {
+        pays: paysChoisi,
         domaine: domaineChoisi,
         classe: null,
         serie: null,
@@ -228,6 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const { error: erreurProfilParcours } = await clientSupabase
           .from("profiles")
           .update({
+            pays: donnees.pays,
             parcours: domaineChoisi,
             classe: donnees.classe,
             serie: donnees.serie,
@@ -380,7 +389,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const { data: profil, error: erreurProfil } = await clientSupabase
       .from("profiles")
-      .select("full_name, role, parcours, classe, serie, niveau_campus, domaine_campus, formation")
+      .select("full_name, role, pays, parcours, classe, serie, niveau_campus, domaine_campus, formation")
       .eq("id", utilisateur.id)
       .maybeSingle();
 
@@ -400,6 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ? [profil?.classe, profil?.serie].filter(Boolean).join(" · ")
             : "";
       compteBienvenue.textContent = "Bienvenue " + nom + " — espace " + role + "." +
+        (profil?.pays ? " Pays : " + profil.pays + "." : "") +
         (detailsParcours ? " Ton parcours : " + detailsParcours + "." : " Choisis ton parcours pour personnaliser tes cours.");
     }
     if (espaceFormateur) espaceFormateur.hidden = !["formateur", "admin"].includes(role);
@@ -409,7 +419,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const { data: tousLesCours, error: erreurCours } = await clientSupabase
       .from("courses")
-      .select("id, title, description, category, subject, classe, serie, content")
+      .select("id, title, description, category, subject, classe, serie, content, pays")
       .eq("published", true)
       .order("created_at", { ascending: false });
 
@@ -438,6 +448,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const serieProfil = profil?.serie || "";
     const cours = (tousLesCours || []).filter((element) => {
       if (element.category !== parcours) return false;
+      if (element.pays && profil?.pays && element.pays !== profil.pays) return false;
       if (parcours === "scolaire") {
         if (element.classe && classeProfil && element.classe !== classeProfil) return false;
         if (element.serie && serieProfil && element.serie !== serieProfil) return false;
@@ -474,7 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (["formateur", "admin"].includes(role)) {
       const requeteBrouillons = clientSupabase.from("courses")
-        .select("id, title, description, category, subject, classe, serie, content, published, created_at, teacher_id")
+        .select("id, title, description, category, subject, classe, serie, content, pays, published, created_at, teacher_id")
         .order("created_at", { ascending: false });
       const { data: coursGeres, error: erreurGeres } = role === "admin"
         ? await requeteBrouillons
@@ -608,6 +619,7 @@ document.addEventListener("DOMContentLoaded", () => {
         title: titre,
         description: String(f.get("description") || "").trim() || null,
         category: String(f.get("category") || ""),
+        pays: String(f.get("pays") || ""),
         subject: String(f.get("subject") || "").trim() || null,
         classe: String(f.get("classe") || "").trim() || null,
         serie: String(f.get("serie") || "").trim() || null,
