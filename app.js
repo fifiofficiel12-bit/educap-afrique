@@ -1707,3 +1707,28 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   renderStep(1);
 });
+
+
+// Navigation latérale : menu mobile et repère de rubrique active.
+document.addEventListener("DOMContentLoaded", () => {
+  const header = document.querySelector(".site-header");
+  const toggle = document.querySelector("#menu-toggle");
+  const nav = document.querySelector("#navigation-edcap");
+  if (!header || !toggle || !nav) return;
+
+  toggle.addEventListener("click", () => {
+    const open = header.classList.toggle("menu-open");
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.querySelector("span").textContent = open ? "Fermer" : "Menu";
+  });
+
+  nav.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.querySelectorAll(".nav-link").forEach((item) => item.classList.remove("active"));
+      if (link.classList.contains("nav-link")) link.classList.add("active");
+      header.classList.remove("menu-open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.querySelector("span").textContent = "Menu";
+    });
+  });
+});
