@@ -206,7 +206,7 @@
       detail.appendChild(panel);
       panel.scrollIntoView({behavior:"smooth",block:"center"});
     };
-    const normaliserClasse = value => String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/([0-9]+)eme/g,"$1e").replace(/[^a-z0-9]/g,"");
+    const normaliserClasse = value => String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/([0-9]+)eme/g,"$1e").replace(/seconde/g,"2nde").replace(/premiere/g,"1ere").replace(/terminale/g,"terminale").replace(/[^a-z0-9]/g,"");
     const correspondAuParcours = lesson => {
       if (!parcoursCharge || !profilApprenant || lesson.path !== profilApprenant.domaine) return false;
       if (lesson.path === "campus") {
