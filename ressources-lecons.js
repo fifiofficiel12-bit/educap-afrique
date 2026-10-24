@@ -96,6 +96,51 @@
         question:"Pour f(x) = x² − 4x, combien vaut f'(3) ?",
         choices:["−2","2","6"],
         answer:1, explanation:"f'(x) = 2x − 4, donc f'(3) = 6 − 4 = 2."
+      },
+      {
+        id:"term-philo-liberte", level:"Terminale A1 / A2", subject:"Philosophie",
+        title:"La liberté consiste-t-elle à faire tout ce que l’on veut ?",
+        objective:"Définir les notions, construire une problématique et organiser une argumentation philosophique.",
+        course:[
+          "La liberté peut désigner l’absence de contrainte, la capacité de choisir ou l’autonomie, c’est-à-dire la possibilité d’agir selon des raisons que l’on reconnaît comme siennes.",
+          "Faire tout ce que l’on désire semble exprimer la liberté, mais les désirs peuvent entrer en conflit entre eux ou avec les droits d’autrui.",
+          "Une dissertation ne doit pas simplement répondre oui ou non : elle examine la difficulté, confronte des arguments et construit une réponse nuancée."
+        ],
+        example:"Problématique possible : si être libre signifie satisfaire tous ses désirs, comment expliquer que certaines règles puissent protéger la liberté de chacun ? Plan d’entraînement : I. La liberté semble supposer le choix ; II. l’absence de toute limite peut nuire à soi-même et aux autres ; III. des règles justifiées et discutées peuvent rendre possible une liberté responsable.",
+        summary:"Définir liberté et désir, faire apparaître une tension, formuler une question directrice, puis soutenir chaque partie par un argument expliqué et un exemple pertinent.",
+        question:"Quel est le rôle principal d’une problématique dans une dissertation ?",
+        choices:["Répéter le sujet sans le questionner","Faire apparaître le problème à examiner et guider le raisonnement","Donner la conclusion dès la première phrase"],
+        answer:1, explanation:"La problématique transforme le sujet en problème philosophique et organise la réflexion."
+      },
+      {
+        id:"term-physique-mouvement", level:"Terminale C / D", subject:"Physique-Chimie",
+        title:"Mouvement rectiligne uniformément varié",
+        objective:"Relier accélération constante, vitesse et déplacement dans un mouvement rectiligne.",
+        course:[
+          "Dans un mouvement rectiligne uniformément varié, l’accélération a est constante sur l’intervalle étudié.",
+          "La vitesse à l’instant t s’écrit v(t) = v₀ + at, avec v₀ la vitesse initiale.",
+          "La position s’écrit x(t) = x₀ + v₀t + ½at², si l’axe, l’origine des temps et les unités sont cohérents."
+        ],
+        example:"Un mobile part avec v₀ = 2 m/s et une accélération a = 3 m/s². Après 4 s, v = 2 + 3 × 4 = 14 m/s. Le déplacement est Δx = 2 × 4 + ½ × 3 × 4² = 8 + 24 = 32 m.",
+        summary:"Identifier les données, convertir les unités si nécessaire, choisir la formule adaptée puis vérifier l’unité et la cohérence du résultat.",
+        question:"Un mobile a v₀ = 5 m/s et a = 2 m/s². Quelle est sa vitesse après 3 s ?",
+        choices:["6 m/s","11 m/s","15 m/s"],
+        answer:1, explanation:"v = v₀ + at = 5 + 2 × 3 = 11 m/s."
+      },
+      {
+        id:"troisieme-equation", level:"3e", subject:"Mathématiques",
+        title:"Résoudre une équation du premier degré",
+        objective:"Isoler l’inconnue en effectuant la même opération sur les deux membres.",
+        course:[
+          "Une équation est une égalité contenant une ou plusieurs inconnues.",
+          "Pour conserver l’égalité, on ajoute, soustrait, multiplie ou divise les deux membres par la même valeur autorisée.",
+          "Après résolution, remplacer l’inconnue par la valeur trouvée permet de vérifier la solution."
+        ],
+        example:"Résoudre 3x + 5 = 20. Soustraire 5 des deux côtés : 3x = 15. Diviser par 3 : x = 5. Vérification : 3 × 5 + 5 = 20.",
+        summary:"Regrouper les termes, isoler l’inconnue et vérifier la solution dans l’équation initiale.",
+        question:"Quelle est la solution de 4x − 6 = 10 ?",
+        choices:["x = 1","x = 4","x = 16"],
+        answer:1, explanation:"Ajouter 6 donne 4x = 16, puis diviser par 4 donne x = 4."
       }
     ];
     const section=document.createElement("section");
