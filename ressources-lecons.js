@@ -148,7 +148,7 @@
         <div class="efl-block"><h3>2. Exemple corrigé</h3><p class="efl-example">${esc(u.example)}</p></div>
         <div class="efl-block"><h3>3. Résumé</h3><p>${esc(u.summary)}</p></div>
         <div class="efl-block"><h3>4. Mini-quiz</h3><p>${esc(u.question)}</p><div class="efl-choices">${u.choices.map((c,i)=>`<label class="efl-choice"><input type="radio" name="efl-answer" value="${i}"><span>${esc(c)}</span></label>`).join("")}</div><button class="efl-action" type="button" id="efl-check">Vérifier ma réponse</button><div id="efl-feedback" class="efl-feedback" role="status"></div></div>
-        <p style="font-size:12px;color:#617089;margin-top:14px">Fiche pédagogique originale EduCap Afrique. Elle complète l’étude du cours et ne remplace pas le programme officiel ni les explications de l’enseignant.</p>`;
+        <p style="font-size:12px;color:#617089;margin-top:14px">EduCap Afrique — apprendre, pratiquer et vérifier ses acquis.</p>`;
       panel.querySelector("#efl-check").addEventListener("click",()=>{
         const selected=panel.querySelector('input[name="efl-answer"]:checked');
         const feedback=panel.querySelector("#efl-feedback");
