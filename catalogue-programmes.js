@@ -38,6 +38,21 @@
       {name:"EPS",url:"https://dpfc-ci.net/?page_id=63",note:"Progressions officielles selon le cycle."}
     ];
 
+    // Premier contenu détaillé vérifié dans un document DPFC indexé : Mathématiques Terminale A1.
+    // À enrichir progressivement avec les autres PDF officiels, classe par classe.
+    const verifiedLessons = {
+      "tleA1|Mathématiques": {
+        source: "https://dpfc-ci.net/dpfc/programmes/maths/11.%20Prog%20%C3%89duct%20MATHS%20TA1%20CND%200923.pdf",
+        sourceLabel: "Programme éducatif DPFC — Mathématiques Terminale A1",
+        themes: [
+          {theme:"Calculs algébriques", lessons:["Systèmes linéaires dans ℝ × ℝ"]},
+          {theme:"Fonctions numériques", lessons:["Étude de fonctions polynômes et de fonctions rationnelles","Fonction logarithme népérien","Fonction exponentielle népérienne","Primitives et calcul intégral","Suites numériques"]},
+          {theme:"Organisation et traitement de données", lessons:["Statistique à deux variables"]},
+          {theme:"Modélisation d’un phénomène aléatoire", lessons:["Probabilités"]}
+        ]
+      }
+    };
+
     const section = document.createElement("section");
     section.id = "catalogue-programmes-officiels";
     section.className = "section";
@@ -72,7 +87,7 @@
       #catalogue-programmes-officiels .ep-subject h4{margin:0 0 7px}
       #catalogue-programmes-officiels .ep-subject p{font-size:13px;color:#617089;margin:0 0 10px}
       #catalogue-programmes-officiels .ep-subject a,#catalogue-programmes-officiels .ep-official-links a{color:#1754a5;font-weight:700;text-decoration:underline}
-      #catalogue-programmes-officiels .ep-official-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;font-size:13px}
+      #catalogue-programmes-officiels .ep-official-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;font-size:13px}\n      #catalogue-programmes-officiels .ep-verified-programme{margin:18px 0;padding:16px;border:1px solid #b9d8c5;background:#f5fbf7;border-radius:12px}\n      #catalogue-programmes-officiels .ep-theme{margin:12px 0;padding:10px 12px;background:#fff;border-radius:8px}\n      #catalogue-programmes-officiels .ep-theme ol{margin:8px 0 0;padding-left:22px}\n      #catalogue-programmes-officiels .ep-theme li{margin:5px 0}
       @media(max-width:600px){#catalogue-programmes-officiels .ep-subject-grid{grid-template-columns:1fr}}
     `;
     document.head.appendChild(style);
@@ -100,7 +115,9 @@
         if(level.cycle==="Lycée") return !["EDHC","Éducation musicale","Arts plastiques"].includes(s.name);
         return true;
       });
-      result.innerHTML=`<h3 style="margin:20px 0 4px">${escape(level.name)} — matières à organiser</h3>
+      const detail = verifiedLessons[level.id + "|Mathématiques"];
+      const lessonHtml = detail ? `<section class="ep-verified-programme"><h4>Mathématiques — séquences et leçons référencées</h4><p>Contenu relevé dans le document DPFC lié ci-dessous. La progression de l’année doit être recoupée avec le calendrier officiel 2026–2027.</p>${detail.themes.map(t=>`<div class="ep-theme"><strong>${escape(t.theme)}</strong><ol>${t.lessons.map(l=>`<li>${escape(l)}</li>`).join("")}</ol></div>`).join("")}<a href="${detail.source}" target="_blank" rel="noopener noreferrer">${escape(detail.sourceLabel)} ↗</a></section>` : "";
+      result.innerHTML=`<h3 style="margin:20px 0 4px">${escape(level.name)} — matières à organiser</h3>${lessonHtml}
         <p style="color:#617089;font-size:13px">Statut : référentiel à vérifier et à compléter. Aucun chapitre n’est déclaré officiellement couvert par ce simple catalogue.</p>
         <div class="ep-subject-grid">${list.map(s=>`<article class="ep-subject"><h4>${escape(s.name)}</h4><p>${escape(s.note)}</p><a href="${s.url}" target="_blank" rel="noopener noreferrer">Consulter les références DPFC ↗</a></article>`).join("")}</div>`;
     };
