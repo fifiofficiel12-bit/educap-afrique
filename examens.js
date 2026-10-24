@@ -27,7 +27,9 @@
         </article>
         <div id="examens-edcap-session" style="margin-top:20px"></div>
       </div>`;
-      footer.before(section);
+      const espacePersonnel = document.querySelector("#espace-personnel");
+      if (espacePersonnel) espacePersonnel.insertAdjacentElement("afterend", section);
+      else footer.before(section);
     }
     const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
     const labelType = t => ({ancien_sujet:"Ancien sujet",sujet_entrainement:"Sujet d’entraînement",examen_blanc:"Examen blanc",evaluation_finale:"Examen final",concours:"Concours"}[t] || "Épreuve");
