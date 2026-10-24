@@ -52,6 +52,51 @@
         choices:["1","−1","i"],
         answer:1, explanation:"Par définition de l’unité imaginaire, i² = −1."
       }
+      ,{
+        id:"a1-log", level:"Terminale A1", subject:"Mathématiques",
+        title:"Équations avec le logarithme népérien",
+        objective:"Utiliser les propriétés du logarithme pour résoudre une équation simple.",
+        course:[
+          "Le logarithme népérien ln(x) est défini seulement pour x strictement positif.",
+          "Pour a > 0 et b > 0, ln(a) + ln(b) = ln(ab).",
+          "La fonction ln est strictement croissante sur ]0;+∞[ : ln(a) = ln(b) équivaut à a = b, avec a et b positifs."
+        ],
+        example:"Résoudre ln(x) = ln(5). Condition : x > 0. Comme ln est injective sur les réels positifs, x = 5. La solution est donc {5}.",
+        summary:"Écrire d’abord la condition x > 0. Simplifier les logarithmes, puis résoudre en vérifiant que les solutions respectent le domaine.",
+        question:"Quelle est la condition de définition de ln(x) ?",
+        choices:["x ≥ 0","x > 0","x ≠ 0"],
+        answer:1, explanation:"Le logarithme népérien est défini uniquement pour un argument strictement positif."
+      },
+      {
+        id:"a1-suites", level:"Terminale A1", subject:"Mathématiques",
+        title:"Reconnaître une suite arithmétique",
+        objective:"Identifier une suite arithmétique et calculer un terme à partir de sa raison.",
+        course:[
+          "Une suite (uₙ) est arithmétique si la différence entre deux termes consécutifs est constante.",
+          "Cette constante r s’appelle la raison : uₙ₊₁ = uₙ + r.",
+          "Si le premier terme est u₀, alors uₙ = u₀ + nr."
+        ],
+        example:"Une suite arithmétique vérifie u₀ = 4 et r = 3. Alors u₅ = 4 + 5 × 3 = 19.",
+        summary:"Repérer la différence constante, identifier le premier terme et la raison, puis appliquer la formule adaptée à l’indice de départ.",
+        question:"Si u₀ = 2 et r = 4, quelle est la valeur de u₃ ?",
+        choices:["6","10","14"],
+        answer:2, explanation:"u₃ = u₀ + 3r = 2 + 3 × 4 = 14."
+      },
+      {
+        id:"tc-derivee", level:"Terminale C", subject:"Mathématiques",
+        title:"Dérivée et sens de variation",
+        objective:"Calculer une dérivée simple et relier son signe aux variations d’une fonction.",
+        course:[
+          "La dérivée de xⁿ est nxⁿ⁻¹ pour les puissances usuelles où la formule s’applique.",
+          "Si f'(x) est positive sur un intervalle, f y est croissante; si f'(x) est négative, f y est décroissante.",
+          "Pour conclure sur un intervalle, vérifier le signe de la dérivée sur tout cet intervalle."
+        ],
+        example:"Pour f(x) = x² − 4x, f'(x) = 2x − 4. La dérivée est négative si x < 2, nulle en 2 et positive si x > 2. La fonction décroît jusqu’à 2 puis croît après 2.",
+        summary:"Calculer f'(x), résoudre f'(x) = 0, étudier le signe de f' puis en déduire les variations.",
+        question:"Pour f(x) = x² − 4x, combien vaut f'(3) ?",
+        choices:["−2","2","6"],
+        answer:1, explanation:"f'(x) = 2x − 4, donc f'(3) = 6 − 4 = 2."
+      }
     ];
     const section=document.createElement("section");
     section.id="educap-fiches-lecons";
