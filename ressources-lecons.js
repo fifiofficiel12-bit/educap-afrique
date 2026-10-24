@@ -203,6 +203,86 @@
         answer:1, explanation:"Le contrôle du pouvoir contribue à prévenir les abus et à protéger les libertés."
       },
       {
+        id:"term-francais-argumentation", level:"Terminale A / C / D", subject:"Français",
+        title:"Construire un paragraphe argumentatif",
+        objective:"Défendre une idée à l’aide d’un argument, d’une explication et d’un exemple.",
+        course:["Une thèse est l’idée que l’on cherche à défendre ou à réfuter.","Un argument donne une raison en faveur de la thèse; l’explication montre pourquoi cette raison est valable.","Un exemple concret illustre l’argument. Les connecteurs logiques rendent le raisonnement lisible."],
+        example:"Sujet : la lecture est-elle utile aux jeunes ? Thèse : la lecture enrichit la réflexion. Argument : elle expose le lecteur à des idées différentes. Explication : comparer des points de vue aide à mieux examiner ses propres opinions. Exemple : un roman peut amener à réfléchir aux conséquences d’une décision.",
+        summary:"Un paragraphe solide présente une idée précise, la justifie, l’explique et l’illustre avant de passer à l’idée suivante.",
+        question:"Quel élément explique pourquoi une raison soutient la thèse ?",
+        choices:["Le titre seul","L’explication de l’argument","Une répétition de la thèse"], answer:1, explanation:"L’explication relie clairement l’argument à l’idée défendue."
+      },
+      {
+        id:"term-anglais-present", level:"Collège / Lycée", subject:"Anglais",
+        title:"Parler des habitudes au présent simple",
+        objective:"Former des phrases affirmatives et négatives au présent simple.",
+        course:["Le présent simple décrit notamment les habitudes, les faits généraux et les routines.","Avec he, she et it, le verbe prend généralement -s ou -es à la forme affirmative.","À la forme négative, on utilise do not/don’t ou does not/doesn’t, puis la base verbale."],
+        example:"I study every evening. She studies every evening. They do not play on Monday. He doesn’t play on Monday.",
+        summary:"Repérer le sujet, choisir la forme verbale adaptée et utiliser do/does pour les questions et les négations.",
+        question:"Choisis la phrase correcte.",
+        choices:["She study every day.","She studies every day.","She does studies every day."], answer:1, explanation:"À la troisième personne du singulier, on ajoute généralement -s au verbe à l’affirmatif."
+      },
+      {
+        id:"term-histoire-colonisation", level:"3e / Terminale", subject:"Histoire-Géographie",
+        title:"Comprendre les causes et les conséquences de la colonisation",
+        objective:"Organiser une réponse historique en distinguant causes, acteurs et conséquences.",
+        course:["L’étude historique distingue les causes économiques, politiques, stratégiques et idéologiques sans les confondre.","Une réponse structurée situe les faits dans le temps et identifie les acteurs et leurs intérêts.","Les conséquences peuvent être politiques, économiques, sociales et culturelles; elles doivent être expliquées à partir de faits précis."],
+        example:"Pour analyser une situation coloniale, présenter d’abord le contexte et les intérêts des puissances, puis les formes de domination et enfin les conséquences pour les sociétés concernées. Éviter les affirmations générales sans exemple historique.",
+        summary:"Une réponse historique doit être chronologique, contextualisée et appuyée sur des faits, en distinguant causes et conséquences.",
+        question:"Que faut-il faire dans une analyse historique rigoureuse ?",
+        choices:["Énumérer des dates sans expliquer","Distinguer le contexte, les acteurs, les causes et les conséquences","Remplacer les faits par des opinions"], answer:1, explanation:"Une analyse historique explique les événements en les replaçant dans leur contexte."
+      },
+      {
+        id:"term-svt-ecosysteme", level:"Collège / Lycée", subject:"SVT",
+        title:"Écosystème et équilibre du milieu",
+        objective:"Identifier les êtres vivants, leur milieu et les relations alimentaires.",
+        course:["Un écosystème associe un milieu physique et les êtres vivants qui y interagissent.","Une chaîne alimentaire représente un transfert de matière et d’énergie entre organismes.","Une modification d’une population ou du milieu peut avoir des effets sur plusieurs maillons du réseau alimentaire."],
+        example:"Dans une prairie, l’herbe peut être consommée par un insecte herbivore, lui-même mangé par un oiseau. Si la végétation diminue fortement, les herbivores peuvent manquer de nourriture et les prédateurs être affectés à leur tour.",
+        summary:"Décrire le milieu, identifier les organismes et expliquer les relations entre eux avant de conclure sur les conséquences d’un changement.",
+        question:"Que représente une chaîne alimentaire ?",
+        choices:["Une suite de relations alimentaires entre organismes","Une liste sans relation entre espèces","Uniquement les éléments minéraux du sol"], answer:0, explanation:"Une chaîne alimentaire montre qui est consommé par qui dans un milieu."
+      },
+      {
+        id:"term-chimie-quantite", level:"Terminale C / D", subject:"Physique-Chimie",
+        title:"Calculer une quantité de matière",
+        objective:"Utiliser la relation entre masse, masse molaire et quantité de matière.",
+        course:["La quantité de matière n s’exprime en mole (mol).","Pour un échantillon pur de masse m et de masse molaire M, n = m/M, avec des unités compatibles.","Vérifier les unités et convertir les grammes en kilogrammes seulement si la masse molaire est exprimée dans l’unité correspondante."],
+        example:"Un échantillon contient 18 g d’eau. Avec M(H₂O) = 18 g·mol⁻¹, n = 18/18 = 1 mol.",
+        summary:"Identifier m et M, vérifier que les unités concordent, puis appliquer n = m/M.",
+        question:"Quelle quantité de matière correspond à 36 g d’une substance de masse molaire 18 g·mol⁻¹ ?",
+        choices:["0,5 mol","2 mol","18 mol"], answer:1, explanation:"n = m/M = 36/18 = 2 mol."
+      },
+      {
+        id:"term-economie-marche", level:"Terminale / Campus", subject:"Économie",
+        title:"Comprendre l’offre et la demande",
+        objective:"Expliquer comment l’offre, la demande et le prix interagissent sur un marché.",
+        course:["La demande représente les quantités que les acheteurs souhaitent et peuvent acheter à différents prix.","L’offre représente les quantités que les vendeurs souhaitent et peuvent proposer à différents prix.","Le prix d’équilibre correspond, dans le modèle simple, au niveau où quantité offerte et quantité demandée sont égales."],
+        example:"Si le prix d’un produit baisse, davantage d’acheteurs peuvent souhaiter l’acquérir, toutes choses égales par ailleurs. Si les vendeurs proposent peu de produits alors que la demande est élevée, une pression à la hausse sur le prix peut apparaître.",
+        summary:"Préciser le marché étudié, distinguer offre et demande, puis expliquer comment un changement peut influencer le prix et la quantité échangée.",
+        question:"Dans le modèle simple, que désigne le prix d’équilibre ?",
+        choices:["Le prix choisi au hasard","Le prix où offre et demande se rencontrent","Le prix toujours le plus élevé"], answer:1, explanation:"L’équilibre correspond à l’égalité entre la quantité offerte et la quantité demandée."
+      },
+      {
+        id:"term-informatique-algorithme", level:"Collège / Lycée / Campus", subject:"Informatique",
+        title:"Concevoir un algorithme simple",
+        objective:"Décomposer un problème en entrées, traitements et sorties.",
+        course:["Les entrées sont les informations nécessaires au traitement.","Le traitement décrit les opérations à effectuer dans un ordre précis.","Les sorties sont les résultats attendus. Un test avec plusieurs exemples aide à repérer les erreurs."],
+        example:"Objectif : calculer la moyenne de deux notes. Entrées : note1 et note2. Traitement : moyenne = (note1 + note2)/2. Sortie : afficher moyenne. Il faut vérifier que les notes reçues sont valides.",
+        summary:"Décrire le problème, lister les entrées, ordonner les opérations, définir les sorties puis tester le résultat.",
+        question:"Dans un algorithme, à quoi servent les entrées ?",
+        choices:["À fournir les données utilisées","À afficher obligatoirement une image","À remplacer les calculs"], answer:0, explanation:"Les entrées fournissent les données sur lesquelles le traitement va travailler."
+      },
+      {
+        id:"term-comptabilite-bilan", level:"Campus / Compétences", subject:"Comptabilité",
+        title:"Comprendre le bilan comptable",
+        objective:"Distinguer les ressources de l’entreprise et leur utilisation à une date donnée.",
+        course:["Le bilan présente la situation patrimoniale d’une entité à une date déterminée.","L’actif décrit les biens et droits; le passif présente notamment les ressources et les obligations selon la présentation comptable utilisée.","Le bilan respecte l’égalité fondamentale entre total de l’actif et total du passif."],
+        example:"Une entreprise possède du matériel pour 500 000 FCFA et de la trésorerie pour 200 000 FCFA. Son actif total est de 700 000 FCFA. Le bilan complet doit présenter au passif les ressources correspondantes pour le même total.",
+        summary:"Le bilan est une photographie à une date précise. Identifier les éléments, les classer correctement et vérifier l’égalité des totaux.",
+        question:"Que représente principalement le bilan ?",
+        choices:["Uniquement les ventes du mois","La situation patrimoniale à une date donnée","Seulement les bénéfices futurs"], answer:1, explanation:"Le bilan présente les éléments patrimoniaux et les ressources à une date donnée."
+      },
+      {
         id:"term-physique-mouvement", level:"Terminale C / D", subject:"Physique-Chimie",
         title:"Mouvement rectiligne uniformément varié",
         objective:"Relier accélération constante, vitesse et déplacement dans un mouvement rectiligne.",
