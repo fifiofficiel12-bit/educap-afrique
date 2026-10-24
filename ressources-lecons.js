@@ -475,7 +475,7 @@
         if(!selected){feedback.textContent="Choisis une réponse avant de vérifier.";return;}
         const correct=Number(selected.value)===u.answer;
         feedback.textContent=(correct?"Bonne réponse ! Tu as validé cette étape. ":"Pas encore. Relis la leçon puis réessaie. ")+u.explanation;
-        if(correct){completedLessons.add(u.id);panel.querySelector("#efl-next").hidden=false;panel.querySelector(".efl-path-steps span:nth-child(2)").classList.add("active");panel.querySelector(".efl-path-steps span:nth-child(3)").classList.add("active");}
+        if(correct){completedLessons.add(u.id);const newProgress=Math.round((completedLessons.size/units.length)*100);panel.querySelector(".efl-path-top strong").textContent=newProgress+"% terminé";panel.querySelector(".efl-progress-track span").style.width=newProgress+"%";panel.querySelector("#efl-next").hidden=false;panel.querySelector(".efl-path-steps span:nth-child(2)").classList.add("active");panel.querySelector(".efl-path-steps span:nth-child(3)").classList.add("active");}
       });
       const goTo=index=>{if(index>=0&&index<units.length){selector.value=units[index].id;render();selector.scrollIntoView({behavior:"smooth",block:"start"});}};
       panel.querySelector("#efl-prev").addEventListener("click",()=>goTo(currentIndex-1));
