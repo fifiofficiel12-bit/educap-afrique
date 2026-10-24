@@ -57,7 +57,7 @@
           <div class="ep-official-links">
             <a href="https://dpfc-ci.net/?page_id=5267" target="_blank" rel="noopener noreferrer">Progressions annuelles 2026–2027 ↗</a>
             <a href="https://dpfc-ci.net/?page_id=63" target="_blank" rel="noopener noreferrer">Programmes éducatifs et guides d’exécution ↗</a>
-            <a href="https://dpfc-ci.net/?page_id=271" target="_blank" rel="noopener noreferrer">Programmes du secondaire ↗</a>
+            <a href="https://dpfc-ci.net/?page_id=283" target="_blank" rel="noopener noreferrer">Programmes du secondaire ↗</a>
           </div>
         </div>
       </div>`;
