@@ -191,10 +191,21 @@
       detail.appendChild(panel);
       panel.scrollIntoView({behavior:"smooth",block:"center"});
     };
-    const normaliserClasse = value => String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");
+    const normaliserClasse = value => String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/([0-9]+)eme/g,"$1e").replace(/[^a-z0-9]/g,"");
     const correspondAuParcours = lesson => {
       if (!parcoursCharge || !profilApprenant || lesson.path !== profilApprenant.domaine) return false;
-      if (lesson.path !== "scolaire") return true;
+      if (lesson.path === "campus") {
+        const niveau = normaliserClasse(profilApprenant.niveau_campus);
+        if (lesson.niveaux?.length && !lesson.niveaux.some(n => niveau.includes(normaliserClasse(n)))) return false;
+        const domaine = normaliserClasse(profilApprenant.domaine_campus);
+        if (lesson.domaines?.length && !lesson.domaines.some(d => domaine.includes(normaliserClasse(d)))) return false;
+        return true;
+      }
+      if (lesson.path === "competences") {
+        const formation = normaliserClasse(profilApprenant.formation);
+        if (lesson.formations?.length && !lesson.formations.some(f => formation.includes(normaliserClasse(f)))) return false;
+        return true;
+      }
       const classe = normaliserClasse(profilApprenant.classe);
       const series = String(profilApprenant.serie || "").trim().toUpperCase();
       if (!lesson.classes?.length) return false;
@@ -247,8 +258,8 @@
           syncPassedLesson(item);
           updateProgress(); renderLessons();
           detail.querySelector("#classe-quiz-status")?.replaceChildren(document.createTextNode("Séance réussie : progression enregistrée."));
-          const samePath = lessons.filter(x => x.path === item.path);
-          if (samePath.every(x => completed.includes(x.id))) showFinalAssessment(item.path, samePath);
+          const samePath = lessons.filter(correspondAuParcours);
+          if (samePath.length && samePath.every(x => completed.includes(x.id))) showFinalAssessment(item.path, samePath);
         });
       });
       
@@ -273,12 +284,6 @@
         let {data:profile} = await supabaseClient.from("profiles")
           .select("parcours,classe,serie,niveau_campus,domaine_campus,formation")
           .eq("id",signedUser.id).maybeSingle();
-        if (!profile?.parcours) {
-          const latest = await supabaseClient.from("parcours_apprenants")
-            .select("domaine,classe,serie,niveau_campus,domaine_campus,formation")
-            .order("created_at",{ascending:false}).limit(1).maybeSingle();
-          if (latest.data) profile = {...latest.data,parcours:latest.data.domaine};
-        }
         if (!profile?.parcours) {
           parcoursMessage.textContent = "Aucun parcours enregistré. Va dans « Choisir mon parcours », enregistre ta classe et ta série ou ta formation, puis reviens ici.";
           return;
