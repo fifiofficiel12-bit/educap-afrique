@@ -113,6 +113,96 @@
         answer:1, explanation:"La problématique transforme le sujet en problème philosophique et organise la réflexion."
       },
       {
+        id:"term-philo-conscience", level:"Terminale A1 / A2", subject:"Philosophie",
+        title:"La conscience suffit-elle à nous connaître ?",
+        objective:"Distinguer conscience de soi et connaissance complète de soi, puis construire une problématique.",
+        course:[
+          "La conscience permet à une personne de se rendre compte de ses pensées, de ses actes et de son existence.",
+          "Pourtant, nos motivations peuvent nous échapper : habitudes, émotions et influences peuvent orienter nos décisions sans être clairement identifiées.",
+          "Se connaître demande donc aussi un examen critique de ses actes, de ses choix et de leurs conséquences."
+        ],
+        example:"Problématique : si la conscience nous donne accès à nous-mêmes, pourquoi nous arrive-t-il de mal comprendre les raisons de nos actes ? Plan possible : I. La conscience rend possible la réflexion sur soi ; II. elle ne révèle pas toujours toutes nos motivations ; III. l’observation de soi et l’expérience peuvent approfondir la connaissance de soi.",
+        summary:"Définir la conscience et la connaissance de soi, montrer leur lien puis examiner leurs limites à l’aide d’arguments et d’exemples.",
+        question:"Quelle difficulté nourrit cette problématique ?",
+        choices:["La conscience rend toute erreur impossible","Nous pouvons être conscients sans comprendre toutes nos motivations","La connaissance de soi ne concerne jamais les actes"],
+        answer:1, explanation:"La conscience permet de réfléchir sur soi, mais certaines motivations peuvent rester difficiles à reconnaître."
+      },
+      {
+        id:"term-philo-travail", level:"Terminale A1 / A2", subject:"Philosophie",
+        title:"Le travail est-il seulement une contrainte ?",
+        objective:"Analyser les dimensions pénible, sociale et créatrice du travail.",
+        course:[
+          "Le travail exige un effort et peut être vécu comme une obligation nécessaire pour satisfaire des besoins.",
+          "Il permet aussi de produire des biens ou des services, d’acquérir des compétences et de contribuer à la vie collective.",
+          "Il faut distinguer la pénibilité d’une activité et la valeur que cette activité peut prendre pour la personne et la société."
+        ],
+        example:"Problématique : le travail nous impose-t-il seulement une nécessité, ou peut-il aussi contribuer à notre autonomie ? Plan possible : I. Le travail comporte des efforts et des contraintes ; II. il développe des capacités et rend possible une autonomie matérielle ; III. ses effets dépendent notamment des conditions de travail et de la reconnaissance.",
+        summary:"Éviter de présenter le travail comme entièrement négatif ou entièrement positif : examiner les contraintes, les apports et les conditions concrètes.",
+        question:"Quel élément permet de nuancer le jugement sur le travail ?",
+        choices:["Toutes les activités ont toujours les mêmes effets","Les conditions de travail et la reconnaissance","Le travail ne produit aucun résultat"],
+        answer:1, explanation:"Les conditions concrètes influencent la pénibilité, l’autonomie et la reconnaissance liées au travail."
+      },
+      {
+        id:"term-philo-verite", level:"Terminale A1 / A2", subject:"Philosophie",
+        title:"Peut-on être certain de posséder la vérité ?",
+        objective:"Distinguer opinion, croyance, preuve et recherche de la vérité.",
+        course:[
+          "Une opinion est un jugement que l’on peut tenir pour vrai sans disposer d’une justification suffisante.",
+          "La recherche de la vérité exige d’examiner les raisons, les faits et les objections plutôt que de s’appuyer uniquement sur l’assurance personnelle.",
+          "Douter ne signifie pas renoncer à la vérité : un doute méthodique peut aider à corriger les erreurs."
+        ],
+        example:"Problématique : comment distinguer une conviction sincère d’une connaissance justifiée ? Plan possible : I. Nous avons besoin de convictions pour agir ; II. une conviction peut être fausse malgré notre assurance ; III. la vérification, l’argumentation et la confrontation des points de vue renforcent nos jugements.",
+        summary:"Une dissertation sur la vérité doit préciser ce que signifie savoir, identifier les risques de l’opinion et expliquer comment justifier un jugement.",
+        question:"Qu’est-ce qui distingue principalement une connaissance justifiée d’une simple opinion ?",
+        choices:["Le fait d’être répétée souvent","La présence de raisons et de vérifications","Le fait de ne jamais être discutée"],
+        answer:1, explanation:"Une connaissance justifiée s’appuie sur des raisons, des preuves ou des méthodes de vérification."
+      },
+      {
+        id:"term-philo-justice", level:"Terminale A1 / A2", subject:"Philosophie",
+        title:"La justice consiste-t-elle à traiter tout le monde de la même manière ?",
+        objective:"Étudier l’égalité, l’équité et l’application des règles communes.",
+        course:[
+          "L’égalité exige que les personnes placées dans des situations comparables soient traitées selon des règles cohérentes.",
+          "L’équité invite à considérer certaines différences de situation lorsque l’application identique d’une règle produit une injustice.",
+          "Une différence de traitement doit toutefois pouvoir être justifiée par des raisons pertinentes et non par le favoritisme."
+        ],
+        example:"Problématique : une règle identique pour tous garantit-elle toujours un résultat juste ? Plan possible : I. Des règles communes protègent contre l’arbitraire ; II. des situations différentes peuvent demander des réponses adaptées ; III. l’équité doit rester justifiable et compatible avec les droits de chacun.",
+        summary:"Distinguer égalité de traitement et équité, puis rechercher les critères qui rendent une différence de traitement légitime.",
+        question:"Quand une différence de traitement peut-elle être équitable ?",
+        choices:["Lorsqu’elle favorise un ami sans raison","Lorsqu’elle répond à une différence pertinente et peut être justifiée","Lorsqu’elle supprime les droits de certains"],
+        answer:1, explanation:"L’équité peut tenir compte de situations différentes, à condition que les raisons soient pertinentes et justifiables."
+      },
+      {
+        id:"term-philo-bonheur", level:"Terminale A1 / A2", subject:"Philosophie",
+        title:"Le bonheur dépend-il de nous ?",
+        objective:"Examiner le rôle des choix personnels et des circonstances dans la recherche du bonheur.",
+        course:[
+          "Le bonheur désigne généralement un état durable de satisfaction, à distinguer d’un plaisir ponctuel.",
+          "Nos habitudes, nos choix et notre manière d’interpréter les événements peuvent influencer notre bien-être.",
+          "Cependant, la santé, les ressources, les relations et les conditions sociales limitent parfois ce qu’une personne peut décider seule."
+        ],
+        example:"Problématique : pouvons-nous construire notre bonheur par nos choix alors que nous ne maîtrisons pas toutes les circonstances ? Plan possible : I. Nos décisions et nos habitudes comptent ; II. les circonstances extérieures peuvent nous limiter ; III. une recherche réaliste du bonheur associe action personnelle, relations et prise en compte du réel.",
+        summary:"Éviter les réponses absolues : distinguer ce qui dépend de nos choix et ce qui échappe à notre contrôle.",
+        question:"Quelle réponse est la plus nuancée ?",
+        choices:["Tout dépend uniquement de la volonté","Rien ne dépend jamais de nous","Nos choix comptent, mais les circonstances jouent aussi un rôle"],
+        answer:2, explanation:"Le bonheur est influencé à la fois par les choix personnels et par des circonstances que l’on ne contrôle pas entièrement."
+      },
+      {
+        id:"term-philo-etat", level:"Terminale A1 / A2", subject:"Philosophie",
+        title:"L’État limite-t-il ou protège-t-il la liberté ?",
+        objective:"Comprendre la tension entre règles collectives, sécurité et libertés individuelles.",
+        course:[
+          "L’État établit des règles communes et organise des institutions destinées à assurer la vie collective.",
+          "Les lois peuvent limiter certaines actions individuelles, notamment lorsqu’elles portent atteinte aux droits d’autrui.",
+          "Le pouvoir de l’État doit aussi être encadré : des règles arbitraires ou abusives peuvent menacer les libertés qu’il devrait protéger."
+        ],
+        example:"Problématique : comment des institutions qui imposent des limites peuvent-elles en même temps protéger la liberté ? Plan possible : I. L’absence de règles peut exposer les personnes à la violence ; II. des règles communes protègent les droits ; III. le contrôle du pouvoir est nécessaire pour éviter l’arbitraire.",
+        summary:"Analyser les deux fonctions possibles des règles publiques : organiser la liberté commune et risquer de la restreindre abusivement.",
+        question:"Pourquoi le pouvoir de l’État doit-il être encadré ?",
+        choices:["Pour empêcher toute règle commune","Pour réduire le risque d’arbitraire et protéger les droits","Pour rendre toutes les libertés inutiles"],
+        answer:1, explanation:"Le contrôle du pouvoir contribue à prévenir les abus et à protéger les libertés."
+      },
+      {
         id:"term-physique-mouvement", level:"Terminale C / D", subject:"Physique-Chimie",
         title:"Mouvement rectiligne uniformément varié",
         objective:"Relier accélération constante, vitesse et déplacement dans un mouvement rectiligne.",
