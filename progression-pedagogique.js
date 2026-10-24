@@ -41,7 +41,7 @@
         <span class="ep-crumb">Leçon</span><span aria-hidden="true">›</span>
         <span class="ep-crumb">Quiz</span>
       </nav>
-      <div class="ep-muted">Progression de démonstration : coche les étapes après les avoir réalisées.</div>
+      <div class="ep-muted">Coche les étapes au fur et à mesure de ton apprentissage.</div>
       <div class="ep-progress" role="progressbar" aria-label="Progression des étapes de la leçon" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0"><span></span></div>
       <div class="ep-grid">
         <article class="ep-card">
@@ -61,13 +61,13 @@
         </article>
         <article class="ep-card">
           <h4>4. Validation des acquis</h4>
-          <p>Fais un exercice d’application sans aide. La progression ne doit être validée que lorsque le résultat est enregistré dans ton compte.</p>
-          <p class="ep-muted">La progression affichée ici est un exemple local, pas encore un relevé officiel synchronisé à ton compte.</p>
+          <p>Fais un exercice d’application sans aide, puis vérifie tes réponses avant de passer à la suite.</p>
+          <p class="ep-muted">Conseil : reprends les étapes difficiles et recommence les exercices jusqu’à bien maîtriser la notion.</p>
         </article>
       </div>
       <div class="ep-summary">
         <h4 style="margin:0 0 7px">Fiche « Ce qu’il faut retenir »</h4>
-        <p style="margin:0">À la fin de chaque chapitre, une synthèse devra rassembler les notions clés, les définitions, les méthodes, un exemple corrigé et les erreurs fréquentes.</p>
+        <p style="margin:0">Retrouve dans cette synthèse les notions clés, les définitions, les méthodes, un exemple corrigé et les erreurs fréquentes.</p>
       </div>
       <div class="ep-card" style="margin-top:14px">
         <h4>Checklist de la leçon</h4>
@@ -77,7 +77,7 @@
         <label class="ep-check"><input type="checkbox" data-ep-step> <span>J’ai répondu au quiz et lu la correction.</span></label>
         <label class="ep-check"><input type="checkbox" data-ep-step> <span>Je peux expliquer l’essentiel sans regarder le cours.</span></label>
       </div>
-      <p class="ep-warning"><strong>Important :</strong> cette interface définit la méthode pédagogique cible. Le catalogue complet des chapitres officiels et l’enregistrement sécurisé des validations doivent être alimentés et vérifiés matière par matière à partir des documents officiels.</p>
+      
     `;
 
     const hero = classroom.querySelector(".classroom-hero");
