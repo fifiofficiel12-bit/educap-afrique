@@ -1,7 +1,6 @@
 /* EduCap Afrique — parcours Campus et Compétences
  * Les contenus de ce fichier sont des modules pédagogiques originaux de démarrage.
- * Ils ne prétendent pas représenter un syllabus universitaire officiel ni des cas réels d'entreprise.
- * Les programmes officiels et les études de filières doivent être ajoutés avec leurs sources vérifiables.
+ * Modules pratiques avec objectifs, cours, activités, corrigés et quiz.
  */
 (() => {
   "use strict";
