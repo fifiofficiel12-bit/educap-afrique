@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
           notice.textContent="Dernier abonnement confirmé : un apprenant venu grâce à ton lien a payé. Commission : "+money(latest.amount)+". "+statusText+".";
           notice.hidden=false;
         }else{
-          notice.textContent="Dès qu’un apprenant paiera son abonnement annuel grâce à ton lien, cette page affichera la confirmation et ta commission.";
+          notice.textContent="Dès qu’un apprenant paiera une formule EduCap Afrique grâce à ton lien, cette page affichera la confirmation et ta commission.";
           notice.hidden=false;
         }
       }
