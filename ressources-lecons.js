@@ -283,6 +283,86 @@
         choices:["Uniquement les ventes du mois","La situation patrimoniale à une date donnée","Seulement les bénéfices futurs"], answer:1, explanation:"Le bilan présente les éléments patrimoniaux et les ressources à une date donnée."
       },
       {
+        id:"six-maths-fractions", level:"6e / 5e", subject:"Mathématiques",
+        title:"Additionner des fractions simples",
+        objective:"Additionner des fractions de même dénominateur et simplifier le résultat.",
+        course:["Une fraction représente une ou plusieurs parts d’un tout partagé en parts égales.","Pour additionner deux fractions de même dénominateur, on additionne les numérateurs et on conserve le dénominateur.","On simplifie une fraction en divisant le numérateur et le dénominateur par un même diviseur commun non nul."],
+        example:"3/8 + 2/8 = 5/8. Pour 4/10, on divise en haut et en bas par 2 : 4/10 = 2/5.",
+        summary:"Vérifier les dénominateurs, effectuer le calcul puis simplifier si possible.",
+        question:"Combien vaut 2/7 + 3/7 ?",
+        choices:["5/14","5/7","6/7"], answer:1, explanation:"Les dénominateurs sont identiques : (2 + 3)/7 = 5/7."
+      },
+      {
+        id:"quatrieme-maths-pythagore", level:"4e / 3e", subject:"Mathématiques",
+        title:"Utiliser le théorème de Pythagore",
+        objective:"Calculer un côté d’un triangle rectangle à partir des deux autres.",
+        course:["Dans un triangle rectangle, l’hypoténuse est le côté opposé à l’angle droit et c’est le plus long côté.","Le théorème de Pythagore affirme que le carré de l’hypoténuse est égal à la somme des carrés des deux autres côtés.","Avant d’appliquer la formule, identifier l’angle droit et l’hypoténuse."],
+        example:"Un triangle ABC est rectangle en A, avec AB = 3 cm et AC = 4 cm. BC² = 3² + 4² = 9 + 16 = 25, donc BC = 5 cm.",
+        summary:"Identifier l’hypoténuse, écrire l’égalité de Pythagore, remplacer les longueurs et prendre la racine carrée positive.",
+        question:"Un triangle rectangle a des côtés de l’angle droit de 6 cm et 8 cm. Quelle est l’hypoténuse ?",
+        choices:["10 cm","14 cm","100 cm"], answer:0, explanation:"c² = 6² + 8² = 36 + 64 = 100, donc c = 10 cm."
+      },
+      {
+        id:"troisieme-francais-grammaire", level:"3e", subject:"Français",
+        title:"Reconnaître les propositions dans une phrase complexe",
+        objective:"Distinguer phrase simple, propositions indépendantes et proposition subordonnée.",
+        course:["Une phrase simple contient généralement un seul verbe conjugué principal.","Une phrase complexe comporte plusieurs propositions, souvent repérables grâce aux verbes conjugués.","Une proposition subordonnée dépend d’une autre proposition et peut être introduite par un mot subordonnant comme que, quand, parce que ou lorsque."],
+        example:"« Je rentre parce qu’il pleut » contient deux verbes conjugués : « rentre » et « pleut ». « Je rentre » est la principale; « parce qu’il pleut » exprime la cause.",
+        summary:"Repérer les verbes conjugués, délimiter les propositions puis identifier le lien logique ou grammatical entre elles.",
+        question:"Dans « Elle sourit quand elle arrive », quel mot introduit la subordonnée ?",
+        choices:["Elle","quand","sourit"], answer:1, explanation:"« Quand » introduit la proposition subordonnée circonstancielle de temps."
+      },
+      {
+        id:"troisieme-anglais-past", level:"3e / Lycée", subject:"Anglais",
+        title:"Raconter un événement au prétérit",
+        objective:"Utiliser le prétérit pour parler d’une action passée et terminée.",
+        course:["Le prétérit simple décrit une action située dans le passé et considérée comme terminée.","Les verbes réguliers prennent généralement -ed; plusieurs verbes fréquents sont irréguliers et doivent être appris.","À la forme négative, on utilise did not/didn’t suivi de la base verbale."],
+        example:"Yesterday, I visited my aunt. She went to the market. I did not stay long.",
+        summary:"Repérer un marqueur de temps passé, choisir la forme du verbe et utiliser did pour la négation sans conjuguer une deuxième fois le verbe.",
+        question:"Choisis la forme correcte : « Yesterday, he ___ to school. »",
+        choices:["go","went","did went"], answer:1, explanation:"Le prétérit de « go » est « went »."
+      },
+      {
+        id:"term-svt-digestion", level:"3e / Terminale D", subject:"SVT",
+        title:"La digestion et l’absorption des nutriments",
+        objective:"Expliquer la transformation des aliments et le passage des nutriments dans le sang.",
+        course:["La digestion transforme les aliments en molécules plus simples grâce aux actions mécaniques et chimiques du tube digestif.","Les nutriments obtenus peuvent traverser la paroi de l’intestin grêle : c’est l’absorption intestinale.","Le sang transporte ensuite de nombreux nutriments vers les organes qui les utilisent."],
+        example:"L’amidon est progressivement dégradé en sucres simples. Après leur absorption dans l’intestin grêle, ces nutriments passent dans la circulation et peuvent être utilisés par les cellules.",
+        summary:"Distinguer aliments, nutriments, digestion et absorption, puis expliquer le trajet des nutriments vers les organes.",
+        question:"Où se déroule l’essentiel de l’absorption des nutriments ?",
+        choices:["Dans l’intestin grêle","Dans la bouche uniquement","Dans la trachée"], answer:0, explanation:"L’intestin grêle est le principal lieu d’absorption des nutriments."
+      },
+      {
+        id:"term-geographie-population", level:"3e / Terminale", subject:"Histoire-Géographie",
+        title:"Étudier la répartition de la population",
+        objective:"Lire une répartition spatiale et expliquer les facteurs de concentration humaine.",
+        course:["La densité de population correspond au nombre d’habitants rapporté à une superficie, généralement en habitants par km².","La population est souvent plus concentrée là où se trouvent des emplois, des services, des voies de transport ou des conditions favorables à l’habitat.","Une carte doit être lue avec son titre, sa légende, son échelle et sa date avant toute interprétation."],
+        example:"Pour comparer deux régions, relever leur population et leur superficie, calculer ou lire la densité, puis expliquer les écarts en s’appuyant sur des éléments vérifiables comme les activités économiques et les infrastructures.",
+        summary:"Décrire les données avant de les expliquer; distinguer ce que montre la carte et les hypothèses qui nécessitent d’autres informations.",
+        question:"Comment calcule-t-on une densité de population ?",
+        choices:["Superficie divisée par la population","Population divisée par la superficie","Population multipliée par la superficie"], answer:1, explanation:"Densité = population / superficie."
+      },
+      {
+        id:"term-physique-electricite", level:"3e / Terminale C-D", subject:"Physique-Chimie",
+        title:"Loi d’Ohm dans un circuit simple",
+        objective:"Relier tension, résistance et intensité dans un conducteur ohmique.",
+        course:["Pour un conducteur ohmique à température constante, la loi d’Ohm s’écrit U = R × I.","U se mesure en volts, R en ohms et I en ampères.","À partir de deux grandeurs connues, on peut calculer la troisième en transformant la relation."],
+        example:"Une résistance de 6 Ω est traversée par un courant de 2 A. La tension vaut U = R × I = 6 × 2 = 12 V.",
+        summary:"Identifier les grandeurs et leurs unités, choisir U = RI ou sa forme transformée, puis vérifier le résultat.",
+        question:"Une résistance de 4 Ω est soumise à une tension de 12 V. Quelle intensité la traverse ?",
+        choices:["3 A","8 A","48 A"], answer:0, explanation:"I = U/R = 12/4 = 3 A."
+      },
+      {
+        id:"term-maths-pourcentage", level:"3e / Lycée", subject:"Mathématiques",
+        title:"Calculer un pourcentage et une variation",
+        objective:"Calculer une proportion et interpréter une augmentation ou une réduction.",
+        course:["Pour calculer p % d’une quantité N, multiplier N par p/100.","Une augmentation de p % correspond à multiplier la valeur initiale par 1 + p/100.","Une réduction de p % correspond à multiplier la valeur initiale par 1 − p/100."],
+        example:"Un article coûte 10 000 FCFA et bénéficie d’une réduction de 15 %. Réduction = 10 000 × 0,15 = 1 500 FCFA. Nouveau prix = 10 000 − 1 500 = 8 500 FCFA.",
+        summary:"Transformer le pourcentage en nombre décimal, calculer la variation puis l’ajouter ou la retrancher selon la situation.",
+        question:"Après une hausse de 10 %, un montant de 5 000 FCFA devient :",
+        choices:["4 500 FCFA","5 100 FCFA","5 500 FCFA"], answer:2, explanation:"5 000 × 1,10 = 5 500 FCFA."
+      },
+      {
         id:"term-physique-mouvement", level:"Terminale C / D", subject:"Physique-Chimie",
         title:"Mouvement rectiligne uniformément varié",
         objective:"Relier accélération constante, vitesse et déplacement dans un mouvement rectiligne.",
