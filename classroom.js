@@ -169,7 +169,7 @@
         form.appendChild(field);
       });
       const submit = document.createElement("button"); submit.type="submit"; submit.className="btn btn-primary"; submit.textContent="Valider l’évaluation"; form.appendChild(submit);
-      form.addEventListener("submit", event => {
+      form.addEventListener("submit", async event => {
         event.preventDefault(); let correct=0; const data=new FormData(form);
         pathLessons.forEach((lesson,i)=>{if(Number(data.get("q"+i))===lesson.answer)correct++;});
         const score=Math.round(correct/pathLessons.length*100); const passed=score>=70;
