@@ -116,7 +116,7 @@
     const filterSubject = section.querySelector("#classe-matiere");
     const search = section.querySelector("#classe-recherche");
     const detail = section.querySelector("#classe-detail");
-    const progressKey = "educap-classe-complete-v1";
+    const progressKey = "educap-classe-complete-v2";
     const supabaseClient = window.supabase?.createClient
       ? window.supabase.createClient("https://byzsqblgsssymvsztaqb.supabase.co", "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR")
       : null;
