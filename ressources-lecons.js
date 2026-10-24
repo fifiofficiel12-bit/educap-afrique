@@ -423,6 +423,21 @@
       #educap-fiches-lecons .efl-feedback{margin-top:12px;padding:12px;border-radius:9px;display:none}
       #educap-fiches-lecons .efl-feedback.visible{display:block}
       #educap-fiches-lecons .efl-action{margin-top:12px;border:0;border-radius:9px;padding:11px 16px;background:#1456a0;color:#fff;font-weight:700;cursor:pointer}
+      #educap-fiches-lecons .efl-learning-path{padding:18px;border-radius:14px;background:#173a32;color:#fff;margin:18px 0}
+      #educap-fiches-lecons .efl-path-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;font-weight:800}
+      #educap-fiches-lecons .efl-progress-track{height:7px;margin:12px 0;background:#47645c;border-radius:9px;overflow:hidden}
+      #educap-fiches-lecons .efl-progress-track span{display:block;height:100%;background:#9ce4b9;border-radius:9px;transition:width .2s}
+      #educap-fiches-lecons .efl-path-steps{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#c9d9d2}
+      #educap-fiches-lecons .efl-path-steps .active{color:#a7efc1;font-weight:800}
+      #educap-fiches-lecons .efl-lesson-header{border-color:#c5e5d0;background:#f2faf5}
+      #educap-fiches-lecons .efl-lesson-tag{display:inline-block;margin-bottom:8px;color:#176b50;font-size:12px;font-weight:800}
+      #educap-fiches-lecons .efl-lesson-navigation{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px}
+      #educap-fiches-lecons .efl-lesson-navigation button{border:1px solid #d5e1dc;border-radius:9px;padding:10px 12px;background:#fff;color:#173a32;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+      #educap-fiches-lecons .efl-lesson-navigation button:disabled{opacity:.4;cursor:not-allowed}
+      #educap-fiches-lecons .efl-next{background:#16734f}
+      #educap-fiches-lecons .efl-footnote{font-size:12px;color:#617089;margin-top:14px}
+      @media(max-width:520px){#educap-fiches-lecons .efl-path-top{font-size:11px}#educap-fiches-lecons .efl-lesson-navigation button{flex:1}}
+
     `;
     document.head.appendChild(style);
     const catalog=document.querySelector("#catalogue-programmes-officiels");
@@ -435,22 +450,37 @@
     const selector=section.querySelector("#efl-unit");
     const panel=section.querySelector("#efl-content");
     const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const completedLessons = new Set();
     function render(){
       const u=units.find(x=>x.id===selector.value);
+      const currentIndex=units.findIndex(x=>x.id===u.id);
+      const progress=Math.round((completedLessons.size/units.length)*100);
       panel.innerHTML=`
-        <div class="efl-block"><h3>${esc(u.title)}</h3><p><strong>Niveau :</strong> ${esc(u.level)} · ${esc(u.subject)}</p><p><strong>Objectif :</strong> ${esc(u.objective)}</p></div>
-        <div class="efl-block"><h3>1. À retenir</h3><ul>${u.course.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
-        <div class="efl-block"><h3>2. Exemple corrigé</h3><p class="efl-example">${esc(u.example)}</p></div>
-        <div class="efl-block"><h3>3. Résumé</h3><p>${esc(u.summary)}</p></div>
-        <div class="efl-block"><h3>4. Mini-quiz</h3><p>${esc(u.question)}</p><div class="efl-choices">${u.choices.map((c,i)=>`<label class="efl-choice"><input type="radio" name="efl-answer" value="${i}"><span>${esc(c)}</span></label>`).join("")}</div><button class="efl-action" type="button" id="efl-check">Vérifier ma réponse</button><div id="efl-feedback" class="efl-feedback" role="status"></div></div>
-        <p style="font-size:12px;color:#617089;margin-top:14px">EduCap Afrique — apprendre, pratiquer et vérifier ses acquis.</p>`;
+        <div class="efl-learning-path">
+          <div class="efl-path-top"><span>TON PARCOURS D’APPRENTISSAGE</span><strong>${progress}% terminé</strong></div>
+          <div class="efl-progress-track"><span style="width:${progress}%"></span></div>
+          <div class="efl-path-steps"><span class="active">1. J’apprends</span><span>2. Je m’exerce</span><span>3. Je vérifie</span></div>
+        </div>
+        <div class="efl-block efl-lesson-header"><span class="efl-lesson-tag">${esc(u.level)} · ${esc(u.subject)}</span><h3>${esc(u.title)}</h3><p><strong>Objectif :</strong> ${esc(u.objective)}</p></div>
+        <div class="efl-block"><h3>📘 1. J’apprends la leçon</h3><ul>${u.course.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+        <div class="efl-block"><h3>✍️ 2. J’observe l’exemple corrigé</h3><p class="efl-example">${esc(u.example)}</p></div>
+        <div class="efl-block"><h3>🧠 3. Je retiens l’essentiel</h3><p>${esc(u.summary)}</p></div>
+        <div class="efl-block efl-quiz"><h3>🎯 4. Je m’exerce</h3><p>${esc(u.question)}</p><div class="efl-choices">${u.choices.map((ch,i)=>`<label class="efl-choice"><input type="radio" name="efl-answer" value="${i}"><span>${esc(ch)}</span></label>`).join("")}</div><button class="efl-action" type="button" id="efl-check">Corriger mon exercice</button><div id="efl-feedback" class="efl-feedback" role="status"></div><button class="efl-action efl-next" type="button" id="efl-next" hidden>Passer à la leçon suivante →</button></div>
+        <div class="efl-lesson-navigation"><button type="button" id="efl-prev" ${currentIndex===0?"disabled":""}>← Leçon précédente</button><span>Leçon ${currentIndex+1} sur ${units.length}</span><button type="button" id="efl-next-nav" ${currentIndex===units.length-1?"disabled":""}>Leçon suivante →</button></div>
+        <p class="efl-footnote">EduCap Afrique — apprendre, pratiquer et vérifier ses acquis.</p>`;
       panel.querySelector("#efl-check").addEventListener("click",()=>{
         const selected=panel.querySelector('input[name="efl-answer"]:checked');
         const feedback=panel.querySelector("#efl-feedback");
         feedback.classList.add("visible");
         if(!selected){feedback.textContent="Choisis une réponse avant de vérifier.";return;}
-        feedback.textContent=(Number(selected.value)===u.answer?"Bonne réponse ! ":"Pas encore. ") + u.explanation;
+        const correct=Number(selected.value)===u.answer;
+        feedback.textContent=(correct?"Bonne réponse ! Tu as validé cette étape. ":"Pas encore. Relis la leçon puis réessaie. ")+u.explanation;
+        if(correct){completedLessons.add(u.id);panel.querySelector("#efl-next").hidden=false;panel.querySelector(".efl-path-steps span:nth-child(2)").classList.add("active");panel.querySelector(".efl-path-steps span:nth-child(3)").classList.add("active");}
       });
+      const goTo=index=>{if(index>=0&&index<units.length){selector.value=units[index].id;render();selector.scrollIntoView({behavior:"smooth",block:"start"});}};
+      panel.querySelector("#efl-prev").addEventListener("click",()=>goTo(currentIndex-1));
+      panel.querySelector("#efl-next-nav").addEventListener("click",()=>goTo(currentIndex+1));
+      panel.querySelector("#efl-next").addEventListener("click",()=>goTo(currentIndex+1));
     }
     selector.addEventListener("change",render);
     render();
