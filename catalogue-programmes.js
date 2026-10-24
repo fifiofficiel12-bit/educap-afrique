@@ -4,7 +4,7 @@
 (() => {
   "use strict";
   document.addEventListener("DOMContentLoaded", () => {
-    if (document.querySelector("#catalogue-programmes-officiels")) return;
+    if (document.querySelector("#catalogue-programmes")) return;
 
     const levels = [
       {id:"CP1",name:"CP1",cycle:"Primaire",series:[]},
@@ -41,7 +41,7 @@
       {name:"EDHC",url:"https://dpfc-ci.net/?page_id=63",note:"Disponibilité selon le niveau."},
       {name:"Éducation musicale",url:"https://dpfc-ci.net/?page_id=63",note:"Disponibilité selon le niveau."},
       {name:"Arts plastiques",url:"https://dpfc-ci.net/?page_id=63",note:"Disponibilité selon le niveau."},
-      {name:"EPS",url:"https://dpfc-ci.net/?page_id=63",note:"Progressions officielles selon le cycle."},
+      {name:"EPS",url:"https://dpfc-ci.net/?page_id=63",note:"Selon le niveau et le cycle."},
       {name:"Lecture et langage",url:"https://dpfc-ci.net/?page_id=289",note:"Primaire : consulter le programme du niveau concerné."},
       {name:"Sciences et technologie",url:"https://dpfc-ci.net/?page_id=289",note:"Primaire : vérifier le programme et les activités du niveau."},
       {name:"Éducation aux Droits de l’Homme et à la Citoyenneté (EDHC)",url:"https://dpfc-ci.net/?page_id=289",note:"Programme primaire selon le niveau."},
@@ -76,7 +76,7 @@
     };
 
     const section = document.createElement("section");
-    section.id = "catalogue-programmes-officiels";
+    section.id = "catalogue-programmes";
     section.className = "section";
     section.innerHTML = `
       <div class="container">
@@ -89,29 +89,24 @@
           <label for="ep-catalogue-niveau">Classe / niveau</label>
           <select id="ep-catalogue-niveau"><option value="">Choisir un niveau</option>${levels.map(l=>`<option value="${l.id}">${l.name}</option>`).join("")}</select>
           <div id="ep-catalogue-serie-wrap" hidden><label for="ep-catalogue-serie">Série</label><select id="ep-catalogue-serie"></select></div>
-          <div class="ep-catalogue-notice" role="status">Les liens ci-dessous conduisent aux références de la Direction de la Pédagogie et de la Formation Continue (DPFC). Les chapitres ne seront déclarés complets qu’après comparaison avec le document officiel correspondant.</div>
+          
           <div id="ep-catalogue-result" aria-live="polite"><p>Sélectionne une classe pour afficher les matières à organiser.</p></div>
-          <div class="ep-official-links">
-            <a href="https://dpfc-ci.net/?page_id=5267" target="_blank" rel="noopener noreferrer">Progressions annuelles 2026–2027 ↗</a>
-            <a href="https://dpfc-ci.net/?page_id=63" target="_blank" rel="noopener noreferrer">Programmes éducatifs et guides d’exécution ↗</a>
-            <a href="https://dpfc-ci.net/?page_id=283" target="_blank" rel="noopener noreferrer">Programmes du secondaire ↗</a>
-            <a href="https://dpfc-ci.net/?page_id=289" target="_blank" rel="noopener noreferrer">Programmes du primaire ↗</a>
-          </div>
+
         </div>
       </div>`;
     const style = document.createElement("style");
     style.textContent = `
-      #catalogue-programmes-officiels .catalogue-panel{max-width:900px;margin:0 auto;padding:clamp(18px,3vw,28px);background:#fff;border:1px solid #dce7f8;border-radius:18px;box-shadow:0 8px 28px #173c740a}
-      #catalogue-programmes-officiels label{display:block;font-weight:700;margin:12px 0 6px}
-      #catalogue-programmes-officiels select{width:100%;min-height:46px;padding:10px 12px;border:1px solid #d7e1f1;border-radius:10px;background:#fff;font:inherit;color:#172642}
-      #catalogue-programmes-officiels .ep-catalogue-notice{margin:16px 0;padding:13px;border-radius:10px;background:#fff7e6;color:#76521b;font-size:13px}
-      #catalogue-programmes-officiels .ep-subject-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
-      #catalogue-programmes-officiels .ep-subject{padding:15px;border:1px solid #e1e8f2;border-radius:12px;background:#fbfdff}
-      #catalogue-programmes-officiels .ep-subject h4{margin:0 0 7px}
-      #catalogue-programmes-officiels .ep-subject p{font-size:13px;color:#617089;margin:0 0 10px}
-      #catalogue-programmes-officiels .ep-subject a,#catalogue-programmes-officiels .ep-official-links a{color:#1754a5;font-weight:700;text-decoration:underline}
-      #catalogue-programmes-officiels .ep-official-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;font-size:13px}\n      #catalogue-programmes-officiels .ep-verified-programme{margin:18px 0;padding:16px;border:1px solid #b9d8c5;background:#f5fbf7;border-radius:12px}\n      #catalogue-programmes-officiels .ep-theme{margin:12px 0;padding:10px 12px;background:#fff;border-radius:8px}\n      #catalogue-programmes-officiels .ep-theme ol{margin:8px 0 0;padding-left:22px}\n      #catalogue-programmes-officiels .ep-theme li{margin:5px 0}
-      @media(max-width:600px){#catalogue-programmes-officiels .ep-subject-grid{grid-template-columns:1fr}}
+      #catalogue-programmes .catalogue-panel{max-width:900px;margin:0 auto;padding:clamp(18px,3vw,28px);background:#fff;border:1px solid #dce7f8;border-radius:18px;box-shadow:0 8px 28px #173c740a}
+      #catalogue-programmes label{display:block;font-weight:700;margin:12px 0 6px}
+      #catalogue-programmes select{width:100%;min-height:46px;padding:10px 12px;border:1px solid #d7e1f1;border-radius:10px;background:#fff;font:inherit;color:#172642}
+      #catalogue-programmes .ep-catalogue-notice{margin:16px 0;padding:13px;border-radius:10px;background:#fff7e6;color:#76521b;font-size:13px}
+      #catalogue-programmes .ep-subject-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+      #catalogue-programmes .ep-subject{padding:15px;border:1px solid #e1e8f2;border-radius:12px;background:#fbfdff}
+      #catalogue-programmes .ep-subject h4{margin:0 0 7px}
+      #catalogue-programmes .ep-subject p{font-size:13px;color:#617089;margin:0 0 10px}
+      #catalogue-programmes .ep-subject a,#catalogue-programmes .ep-official-links a{color:#1754a5;font-weight:700;text-decoration:underline}
+      #catalogue-programmes .ep-official-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;font-size:13px}\n      #catalogue-programmes .ep-verified-programme{margin:18px 0;padding:16px;border:1px solid #b9d8c5;background:#f5fbf7;border-radius:12px}\n      #catalogue-programmes .ep-theme{margin:12px 0;padding:10px 12px;background:#fff;border-radius:8px}\n      #catalogue-programmes .ep-theme ol{margin:8px 0 0;padding-left:22px}\n      #catalogue-programmes .ep-theme li{margin:5px 0}
+      @media(max-width:600px){#catalogue-programmes .ep-subject-grid{grid-template-columns:1fr}}
     `;
     document.head.appendChild(style);
     const main = document.querySelector("main");
@@ -140,10 +135,10 @@
         return true;
       });
       const detail = verifiedLessons[level.id + "|Mathématiques"];
-      const lessonHtml = detail ? `<section class="ep-verified-programme"><h4>Mathématiques — séquences et leçons référencées</h4><p>Contenu relevé dans le document DPFC lié ci-dessous. La progression de l’année doit être recoupée avec le calendrier officiel 2026–2027.</p>${detail.themes.map(t=>`<div class="ep-theme"><strong>${escape(t.theme)}</strong><ol>${t.lessons.map(l=>`<li>${escape(l)}</li>`).join("")}</ol></div>`).join("")}<a href="${detail.source}" target="_blank" rel="noopener noreferrer">${escape(detail.sourceLabel)} ↗</a></section>` : "";
+      const lessonHtml = detail ? `<section class="ep-verified-programme"><h4>Mathématiques — leçons à étudier</h4>${detail.themes.map(t=>`<div class="ep-theme"><strong>${escape(t.theme)}</strong><ol>${t.lessons.map(l=>`<li>${escape(l)}</li>`).join("")}</ol></div>`).join("")}</section>` : "";
       result.innerHTML=`<h3 style="margin:20px 0 4px">${escape(level.name)} — matières à organiser</h3>${lessonHtml}
-        <p style="color:#617089;font-size:13px">Statut : référentiel à vérifier et à compléter. Aucun chapitre n’est déclaré officiellement couvert par ce simple catalogue.</p>
-        <div class="ep-subject-grid">${list.map(s=>`<article class="ep-subject"><h4>${escape(s.name)}</h4><p>${escape(s.note)}</p><a href="${s.url}" target="_blank" rel="noopener noreferrer">Consulter les références DPFC ↗</a></article>`).join("")}</div>`;
+        
+        <div class="ep-subject-grid">${list.map(s=>`<article class="ep-subject"><h4>${escape(s.name)}</h4><p>${escape(s.note)}</p></article>`).join("")}</div>`;
     };
     levelSelect.addEventListener("change",render);
     seriesSelect.addEventListener("change",render);
