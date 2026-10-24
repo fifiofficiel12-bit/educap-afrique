@@ -938,8 +938,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const accesCatalogue = abonnementActif || ["admin", "formateur"].includes(role);
     const sectionCatalogue = document.querySelector("#parcours-decouverte");
     const lienCatalogue = document.querySelector('#navigation-edcap a[href="#parcours-decouverte"]');
-    if (sectionCatalogue) sectionCatalogue.hidden = !accesCatalogue;
-    if (lienCatalogue) lienCatalogue.hidden = !accesCatalogue;
+    if (sectionCatalogue) {
+      sectionCatalogue.hidden = !accesCatalogue;
+      sectionCatalogue.style.display = accesCatalogue ? "" : "none";
+    }
+    if (lienCatalogue) {
+      lienCatalogue.hidden = !accesCatalogue;
+      lienCatalogue.style.display = accesCatalogue ? "" : "none";
+    }
+
+    // Garde la navigation cohérente avec le contenu réellement accessible.
+    document.querySelectorAll('#navigation-edcap a[href="#parcours-decouverte"]').forEach((lien) => {
+      lien.hidden = !accesCatalogue;
+      lien.style.display = accesCatalogue ? "" : "none";
+    });
     const panneauAbonnement = document.querySelector("#abonnement-edc");
     if (panneauAbonnement) {
       panneauAbonnement.hidden = abonnementActif;
