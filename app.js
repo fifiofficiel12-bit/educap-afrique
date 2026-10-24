@@ -383,7 +383,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const formules = {
       mensuel: { amount: 750, days: 30, label: "1 mois" },
       decouverte_45j: { amount: 1000, days: 45, label: "45 jours" },
-      annuel: { amount: 1500, days: 365, label: "l’année scolaire ou académique" }
+      annuel: { amount: 750, days: 365, label: "l’année scolaire ou académique" }
     };
     const choix = formules[plan] || formules.mensuel;
     if (boutonPaiement) boutonPaiement.textContent = "Payer " + choix.amount.toLocaleString("fr-FR") + " FCFA";
