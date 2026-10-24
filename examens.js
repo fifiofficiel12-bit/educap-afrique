@@ -5,16 +5,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     if (!window.supabase?.createClient) return;
     const sb = window.supabase.createClient(URL_SUPABASE, CLE_PUBLIQUE);
-    const nav = document.querySelector("#navigation-edcap");
-    if (nav && !document.querySelector("[data-nav-examens]")) {
-      const lien = document.createElement("a");
-      lien.className = "nav-link";
-      lien.href = "#examens-edcap";
-      lien.dataset.navExamens = "true";
-      lien.textContent = "▣ Examens et résultats";
-      const compte = [...nav.querySelectorAll(".nav-group-label")].find(el => /MON COMPTE/i.test(el.textContent));
-      (compte || nav).before(lien);
-    }
     const footer = document.querySelector(".site-footer");
     if (!footer) return;
     let section = document.querySelector("#examens-edcap");
@@ -26,22 +16,21 @@
       section.innerHTML = `
       <div class="container">
         <div style="max-width:820px;margin:0 auto 26px;text-align:center">
-          <span style="font-weight:800;letter-spacing:.08em;color:#245cc8;font-size:.75rem">SE PRÉPARER ET MESURER SES PROGRÈS</span>
-          <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);margin:8px 0;color:#173a32">Examens et résultats</h2>
-          <p style="color:#60716c">Passe tes épreuves, obtiens ta note et retrouve tes résultats dans ton espace personnel.</p>
+          <span style="font-weight:800;letter-spacing:.08em;color:#245cc8;font-size:.75rem">SUIVI PÉDAGOGIQUE</span>
+          <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);margin:8px 0;color:#173a32">Mon bilan d’apprentissage</h2>
+          <p style="color:#60716c">Les évaluations de fin de parcours interviennent après les leçons, les exercices et les révisions. Tes notes et corrections validées seront conservées ici.</p>
         </div>
-        <div id="examens-edcap-zone" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px">
-          <article style="padding:22px;border:1px solid #dce5f2;border-radius:18px;background:#fff"><h3 style="margin-top:0">📚 Épreuves disponibles</h3><div id="examens-edcap-liste">Chargement…</div></article>
-          <article style="padding:22px;border:1px solid #dce5f2;border-radius:18px;background:#fff"><h3 style="margin-top:0">🏆 Mes résultats</h3><div id="examens-edcap-resultats">Vérification de la connexion…</div></article>
-        </div>
+        <article style="max-width:820px;margin:0 auto;padding:22px;border:1px solid #dce5f2;border-radius:18px;background:#fff">
+          <h3 style="margin-top:0">🏆 Mes résultats et corrections</h3>
+          <div id="examens-edcap-resultats">Vérification de la connexion…</div>
+          <p style="margin-top:16px;color:#718078;font-size:.82rem">Les examens de validation ne sont pas proposés comme une activité isolée : ils doivent clôturer un parcours d’apprentissage achevé. Les sujets officiels ne seront signalés comme tels qu’après vérification.</p>
+        </article>
         <div id="examens-edcap-session" style="margin-top:20px"></div>
-        <p style="max-width:820px;margin:18px auto 0;color:#718078;font-size:.82rem">Les sujets d’entraînement sont non officiels. Les réponses rédigées peuvent nécessiter une correction par un enseignant. Les épreuves sont affichées après publication par l’équipe EduCap Afrique.</p>
       </div>`;
       footer.before(section);
     }
     const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
     const labelType = t => ({ancien_sujet:"Ancien sujet",sujet_entrainement:"Sujet d’entraînement",examen_blanc:"Examen blanc",evaluation_finale:"Examen final",concours:"Concours"}[t] || "Épreuve");
-    const liste = section.querySelector("#examens-edcap-liste");
     const resultats = section.querySelector("#examens-edcap-resultats");
     const session = section.querySelector("#examens-edcap-session");
     let timer = null;
@@ -52,7 +41,7 @@
     function nettoyerTimer() { if (timer) clearInterval(timer); timer = null; }
     async function chargerResultats(user) {
       if (!user) {
-        resultats.innerHTML = '<p>Connecte-toi pour passer un examen et retrouver tes notes.</p><a href="#espace-personnel">Accéder à mon espace</a>';
+        resultats.innerHTML = '<p>Connecte-toi pour retrouver tes notes, les corrections et les compétences à retravailler.</p><a href="#espace-personnel">Accéder à mon espace</a>';
         return;
       }
       const {data: attempts, error} = await sb.from("exam_attempts")
@@ -69,17 +58,6 @@
     async function charger() {
       const {data: authData} = await sb.auth.getUser();
       const user = authData?.user;
-      const {data: exams,error} = await sb.from("exam_sets")
-        .select("id,title,description,parcours,examen_type,classe,serie,niveau,filiere,matiere,annee,duree_minutes,bareme,statut_source")
-        .eq("published",true).order("created_at",{ascending:false}).limit(50);
-      if (error) liste.innerHTML = msg("Impossible de charger les épreuves. Vérifie la connexion et réessaie.",true);
-      else if (!exams?.length) liste.innerHTML = msg("Aucune épreuve n’est encore publiée. Les examens apparaîtront ici après validation.");
-      else liste.innerHTML = exams.map(e => `<div style="padding:14px 0;border-top:1px solid #edf0f5"><strong>${esc(e.title)}</strong>
-        <p style="margin:6px 0;color:#60716c;font-size:.88rem">${esc([labelType(e.examen_type),e.matiere,e.classe,e.serie ? "Série "+e.serie : "",e.niveau,e.filiere,e.annee].filter(Boolean).join(" · "))}</p>
-        <p style="margin:5px 0;font-size:.86rem">${esc(e.duree_minutes)} minutes · Barème : ${esc(e.bareme)} points</p>
-        ${e.description ? `<p style="font-size:.9rem">${esc(e.description)}</p>` : ""}
-        <p style="font-size:.78rem;color:#718078">${e.statut_source === "officiel_verifie" ? "Sujet officiel vérifié" : e.statut_source === "archive_a_verifier" ? "Archive à vérifier" : "Entraînement non officiel"}</p>
-        <button type="button" data-start-exam="${esc(e.id)}" style="padding:10px 14px;border:0;border-radius:9px;background:#176b50;color:white;font-weight:700;cursor:pointer">Commencer l’épreuve</button></div>`).join("");
       await chargerResultats(user);
     }
     function renderQuestion(q,i) {
@@ -153,14 +131,10 @@
       target.innerHTML="<h4>Correction détaillée</h4>"+(data||[]).map(q=>`<div style="padding:12px 0;border-top:1px solid #e6ebf2"><strong>Question ${esc(q.ordre)} — ${esc(q.points_obtenus ?? 0)} / ${esc(q.points)}</strong><p style="white-space:pre-wrap">${esc(q.enonce)}</p><p><strong>Ta réponse :</strong> ${esc(typeof q.reponse_donnee === "string" ? q.reponse_donnee : JSON.stringify(q.reponse_donnee ?? "Aucune réponse"))}</p><p><strong>Réponse attendue :</strong> ${esc(typeof q.reponse_attendue === "string" ? q.reponse_attendue : JSON.stringify(q.reponse_attendue ?? "À revoir avec le corrigé"))}</p>${q.explication ? `<p>${esc(q.explication)}</p>` : ""}</div>`).join("");
     }
     section.addEventListener("click", async ev => {
-      const start = ev.target.closest("[data-start-exam]");
       const correction = ev.target.closest("[data-correction]");
-      const back = ev.target.closest("[data-back-results]");
-      if(start) { await commencer(start.dataset.startExam); return; }
       if(correction) { const id=correction.dataset.correction; const wrap=document.createElement("div"); wrap.style.cssText="padding:12px 0"; correction.parentElement.after(wrap); correction.disabled=true; await afficherCorrection(id,wrap); }
-      if(back) { session.scrollIntoView({behavior:"smooth",block:"start"}); resultats.scrollIntoView({behavior:"smooth",block:"center"}); }
     });
     sb.auth.onAuthStateChange(() => { charger().catch(()=>{}); });
-    charger().catch(()=>{liste.textContent="Erreur de chargement.";resultats.textContent="Erreur de chargement.";});
+    charger().catch(()=>{resultats.textContent="Erreur de chargement.";});
   });
 })();
