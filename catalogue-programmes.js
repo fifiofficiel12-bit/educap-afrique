@@ -63,6 +63,18 @@
       }
     };
 
+    verifiedLessons["tleC|Mathématiques"] = {
+      source: "https://dpfc-ci.net/dpfc/programmes/maths/13.%20Prog%20Educt%20maths%20TC%20CND%200923.pdf",
+      sourceLabel: "Programme éducatif DPFC — Mathématiques Terminale C",
+      themes: [
+        {theme:"Calculs algébriques",lessons:["Nombres complexes"]},
+        {theme:"Analyse",lessons:["Limites et continuité","Dérivabilité et étude de fonctions","Suites numériques","Calcul intégral","Équations différentielles"]},
+        {theme:"Arithmétique",lessons:["Divisibilité dans ℤ","PPCM et PGCD de deux entiers relatifs"]},
+        {theme:"Géométrie",lessons:["Barycentre et lignes de niveaux","Géométrie analytique de l’espace","Isométries du plan","Similitudes directes du plan","Nombres complexes et géométrie du plan"]},
+        {theme:"Probabilités et statistiques",lessons:["Probabilité conditionnelle et variable aléatoire","Statistique à deux variables"]}
+      ]
+    };
+
     const section = document.createElement("section");
     section.id = "catalogue-programmes-officiels";
     section.className = "section";
