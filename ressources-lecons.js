@@ -392,6 +392,87 @@
         choices:["x = 1","x = 4","x = 16"],
         answer:1, explanation:"Ajouter 6 donne 4x = 16, puis diviser par 4 donne x = 4."
       }
+
+      {
+        id:"primaire-maths-addition", level:"Primaire · CE2", subject:"Mathématiques",
+        title:"Additionner des nombres entiers",
+        objective:"Poser une addition et vérifier le résultat.",
+        course:["Aligne les chiffres selon leur rang : unités sous unités, dizaines sous dizaines, centaines sous centaines.","Additionne en commençant par les unités. Si le résultat dépasse 9, reporte la dizaine à la colonne suivante.","Relis l’opération et vérifie le résultat avec une estimation."],
+        example:"Une classe compte 128 cahiers puis reçoit 47 cahiers. 128 + 47 = 175 cahiers. On additionne 8 + 7 = 15, on écrit 5 et on retient 1 dizaine ; puis 2 + 4 + 1 = 7 dizaines et on garde 1 centaine.",
+        summary:"Bien aligner les rangs, additionner colonne par colonne et penser aux retenues.",
+        question:"Une école possède 236 livres et en reçoit 52. Combien de livres possède-t-elle maintenant ?",
+        choices:["278 livres","288 livres","298 livres"],answer:1,explanation:"236 + 52 = 288 livres."
+      },
+      {
+        id:"college-maths-equation", level:"Collège · 4e", subject:"Mathématiques",
+        title:"Résoudre une équation du premier degré",
+        objective:"Isoler l’inconnue en conservant l’égalité.",
+        course:["Une équation est une égalité contenant une inconnue.","Pour isoler l’inconnue, effectue la même opération sur les deux membres de l’égalité.","Remplace la valeur trouvée dans l’équation de départ pour vérifier."],
+        example:"Résoudre 3x + 5 = 20. On soustrait 5 : 3x = 15. On divise par 3 : x = 5. Vérification : 3 × 5 + 5 = 20.",
+        summary:"Effectuer la même opération des deux côtés, isoler x puis vérifier.",
+        question:"Résous 2x + 7 = 19.",
+        choices:["x = 5","x = 6","x = 13"],answer:1,explanation:"Soustraire 7 donne 2x = 12, puis diviser par 2 donne x = 6."
+      },
+      {
+        id:"lycee-francais-argumentation", level:"Terminale · Toutes séries", subject:"Français",
+        title:"Construire un paragraphe argumentatif",
+        objective:"Défendre une idée avec une justification et un exemple.",
+        course:["Une thèse est l’idée que l’on défend.","Un argument explique pourquoi cette idée peut être acceptée.","Un exemple concret illustre l’argument ; une phrase de liaison aide à organiser le raisonnement."],
+        example:"Thèse : la lecture aide à apprendre. Argument : elle enrichit le vocabulaire et développe la compréhension. Exemple : lire régulièrement des textes variés permet de rencontrer des mots nouveaux dans leur contexte.",
+        summary:"Pour chaque idée, présente la thèse, explique l’argument et illustre-le par un exemple précis.",
+        question:"Quel élément sert principalement à illustrer un argument ?",
+        choices:["Un exemple concret","Le titre du devoir uniquement","Une répétition de la thèse"],answer:0,explanation:"Un exemple concret montre comment l’argument s’applique à une situation."
+      },
+      {
+        id:"campus-droit-introduction", level:"Université · Licence 1", subject:"Droit",
+        title:"Distinguer droit objectif et droits subjectifs",
+        objective:"Comprendre deux notions fondamentales pour commencer l’étude du droit.",
+        course:["Le droit objectif désigne l’ensemble des règles juridiques qui organisent la vie en société.","Les droits subjectifs sont les prérogatives reconnues à une personne par le droit, par exemple un droit de propriété.","Pour analyser une situation, il faut identifier la règle applicable et les droits dont les personnes peuvent se prévaloir."],
+        example:"Une règle générale encadre la conclusion d’un contrat : elle relève du droit objectif. Le droit d’une personne de demander l’exécution d’un contrat valide peut constituer un droit subjectif.",
+        summary:"Droit objectif : les règles. Droits subjectifs : les prérogatives reconnues aux personnes.",
+        question:"Que désigne le droit objectif ?",
+        choices:["Les préférences personnelles","L’ensemble des règles juridiques applicables dans la société","Uniquement le droit de propriété"],answer:1,explanation:"Le droit objectif regroupe les règles juridiques qui organisent la société."
+      },
+      {
+        id:"campus-methodologie", level:"Université · Tous niveaux", subject:"Méthodologie universitaire",
+        title:"Prendre des notes et préparer une fiche",
+        objective:"Transformer un cours en notes utiles pour réviser.",
+        course:["Repère les notions, définitions, raisonnements et exemples importants plutôt que recopier chaque phrase.","Après le cours, complète les notes et vérifie les notions que tu n’as pas comprises.","Fais une fiche structurée avec un titre, les idées principales, des exemples et quelques questions de révision."],
+        example:"Pour une leçon de dix pages, prépare une fiche d’une page : cinq notions clés, trois questions et un résumé rédigé avec tes propres mots.",
+        summary:"Écouter, sélectionner, clarifier puis synthétiser permet de réviser plus efficacement.",
+        question:"Quel est l’objectif principal d’une fiche de révision ?",
+        choices:["Recopier tout le cours sans tri","Organiser les idées essentielles pour les retrouver facilement","Remplacer tous les exercices"],answer:1,explanation:"Une fiche synthétise les notions essentielles pour faciliter la révision."
+      },
+      {
+        id:"competences-bureautique-tableur", level:"Compétences pratiques", subject:"Bureautique",
+        title:"Faire une somme dans un tableur",
+        objective:"Comprendre comment totaliser une série de valeurs dans un tableur.",
+        course:["Place les nombres dans une colonne ou une ligne et vérifie que chaque cellule contient une valeur numérique.","La fonction SOMME additionne les valeurs d’une plage de cellules.","Contrôle que la plage sélectionnée inclut toutes les cellules voulues et aucune donnée inutile."],
+        example:"Si les montants se trouvent de B2 à B5, la formule =SOMME(B2:B5) calcule leur total dans un tableur configuré en français.",
+        summary:"Sélectionne la plage exacte et utilise la fonction SOMME pour calculer un total.",
+        question:"Dans un tableur en français, quelle formule additionne les cellules B2 à B5 ?",
+        choices:["=MOYENNE(B2:B5)","=SOMME(B2:B5)","=NB(B2:B5)"],answer:1,explanation:"SOMME additionne les valeurs de la plage B2:B5 ; MOYENNE calcule une moyenne et NB compte les valeurs numériques."
+      },
+      {
+        id:"competences-gestion-budget", level:"Compétences pratiques", subject:"Gestion et budget",
+        title:"Calculer un solde simple",
+        objective:"Distinguer recettes, dépenses et solde disponible.",
+        course:["Les recettes sont les sommes reçues pendant une période.","Les dépenses sont les sommes utilisées pendant cette période.","Le solde simple se calcule en soustrayant les dépenses des recettes."],
+        example:"Tu reçois 25 000 FCFA et dépenses 18 500 FCFA. Le solde restant est 25 000 − 18 500 = 6 500 FCFA.",
+        summary:"Solde = recettes − dépenses, en comparant des montants de la même période.",
+        question:"Une activité reçoit 40 000 FCFA et dépense 27 500 FCFA. Quel est son solde ?",
+        choices:["12 500 FCFA","13 500 FCFA","67 500 FCFA"],answer:0,explanation:"40 000 − 27 500 = 12 500 FCFA."
+      },
+      {
+        id:"competences-numerique-securite", level:"Compétences pratiques", subject:"Culture numérique",
+        title:"Protéger ses comptes en ligne",
+        objective:"Adopter des habitudes simples pour sécuriser ses accès numériques.",
+        course:["Utilise un mot de passe long et différent pour chaque service important.","Active la vérification en deux étapes lorsqu’elle est proposée.","Ne partage jamais un code de validation et vérifie l’adresse du site avant de saisir tes identifiants."],
+        example:"Un message te demande ton code reçu par SMS pour « débloquer ton compte ». Ne transmets pas ce code : ouvre toi-même l’application ou le site officiel pour vérifier la situation.",
+        summary:"Mot de passe unique, double vérification et prudence face aux messages urgents.",
+        question:"Que faire si une personne inconnue te demande le code de validation de ton compte ?",
+        choices:["Lui envoyer le code rapidement","Ne pas partager le code et vérifier depuis le service officiel","Publier le code dans un groupe"],answer:1,explanation:"Un code de validation est confidentiel ; le partager peut permettre à quelqu’un de prendre le contrôle du compte."
+      }
     ];
     const section=document.createElement("section");
     section.id="educap-fiches-lecons";
@@ -440,8 +521,8 @@
 
     `;
     document.head.appendChild(style);
-    const catalog=document.querySelector("#catalogue-programmes-officiels");
-    if(catalog) catalog.insertAdjacentElement("afterend",section);
+    const hero=document.querySelector("#accueil");
+    if(hero) hero.insertAdjacentElement("afterend",section);
     else {
       const registration=document.querySelector("#inscription");
       if(registration) registration.insertAdjacentElement("beforebegin",section);
