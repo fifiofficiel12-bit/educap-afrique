@@ -240,6 +240,24 @@
     [filterPath,filterSubject].forEach(el => el.addEventListener("change", renderLessons));
     search.addEventListener("input", renderLessons);
     renderLessons(); updateProgress();
+    (async () => {
+      if (!supabaseClient) return;
+      try {
+        const auth = await supabaseClient.auth.getUser();
+        signedUser = auth.data?.user || null;
+        if (!signedUser) return;
+        const {data:rows, error} = await supabaseClient.from("learning_progress")
+          .select("lesson_id,quiz_passed").eq("user_id", signedUser.id);
+        if (error) throw error;
+        (rows || []).forEach(row => {
+          if (row.quiz_passed && lessons.some(lesson => lesson.id === row.lesson_id) && !completed.includes(row.lesson_id)) completed.push(row.lesson_id);
+        });
+        try { localStorage.setItem(progressKey, JSON.stringify(completed)); } catch (_) {}
+        renderLessons(); updateProgress();
+      } catch (error) {
+        console.warn("Chargement de la progression en ligne indisponible :", error.message || error);
+      }
+    })();
 
     const nav = document.querySelector("#navigation-edcap");
     if (nav && !nav.querySelector('a[href="#ma-classe"]')) {
