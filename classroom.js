@@ -149,13 +149,26 @@
     const openLesson = id => {
       const item = lessons.find(x => x.id === id); if (!item) return;
       detail.hidden = false;
-      detail.innerHTML = `<div class="lesson-top"><span class="lesson-tag">${item.subject}</span><span class="lesson-meta">${item.time}</span></div><h4>${item.icon} ${item.title}</h4><p><strong>Objectif :</strong> ${item.desc}</p><h4>1. Leçon expliquée</h4><ol>${item.content.map(x => "<li>"+escapeHTML(x)+"</li>").join("")}</ol><div style="border-top:1px solid #dce7f8;padding-top:16px;margin-top:18px"><h4>2. Mini-quiz de compréhension</h4><p>${item.question}</p><div class="quiz-options">${item.options.map((x,i)=>'<label><input type="radio" name="classe-quiz" value="'+i+'"> <span>'+escapeHTML(x)+'</span></label>').join("")}</div><button type="button" class="btn btn-primary" id="classe-verifier">Vérifier ma réponse</button><div class="quiz-feedback" id="classe-feedback" hidden></div><button type="button" class="btn btn-secondary" id="classe-marquer" style="margin-left:8px">${completed.includes(item.id) ? "Séance déjà terminée" : "Marquer comme terminée ✓"}</button></div>`;
-      detail.querySelector("#classe-verifier").addEventListener("click", () => {
-        const selected = detail.querySelector('input[name="classe-quiz"]:checked');
-        const feedback = detail.querySelector("#classe-feedback");
-        feedback.hidden = false;
-        if (!selected) { feedback.textContent = "Choisis une réponse avant de vérifier."; return; }
-        feedback.textContent = Number(selected.value) === item.answer ? "Bonne réponse ! " + item.explain : "Pas encore. Relis la leçon et essaie à nouveau. " + item.explain;
+      detail.innerHTML = `<div class="lesson-top"><span class="lesson-tag">${item.subject}</span><span class="lesson-meta">${item.time}</span></div><h4>${item.icon} ${item.title}</h4><p><strong>Objectif :</strong> ${item.desc}</p><h4>1. Leçon expliquée</h4><ol>${item.content.map(x => "<li>"+escapeHTML(x)+"</li>").join("")}</ol><div style="border-top:1px solid #dce7f8;padding-top:16px;margin-top:18px"><h4>2. Quiz de compréhension</h4><p>Le quiz s’ouvre sur une page séparée. Une fois commencé, revenir en arrière ou recharger la page réinitialise le quiz.</p><button type="button" class="btn btn-primary" id="classe-ouvrir-quiz">Ouvrir le quiz →</button><button type="button" class="btn btn-secondary" id="classe-marquer" style="margin-left:8px">${completed.includes(item.id) ? "Séance déjà terminée" : "Marquer comme terminée ✓"}</button></div>`;
+      detail.querySelector("#classe-ouvrir-quiz").addEventListener("click", () => {
+        const quizWindow = window.open("", "_blank");
+        if (!quizWindow) {
+          alert("Le navigateur a bloqué la nouvelle page. Autorise les fenêtres contextuelles pour EduCap Afrique, puis réessaie.");
+          return;
+        }
+        const safe = value => String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+        const quizPayload = {title:item.title,subject:item.subject,question:item.question,options:item.options,answer:item.answer,explain:item.explain};
+        quizWindow.document.open();
+        quizWindow.document.write(`<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Quiz — EduCap Afrique</title><style>
+          *{box-sizing:border-box}body{margin:0;background:#f3f6fc;color:#172642;font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55}.wrap{max-width:760px;margin:0 auto;padding:28px 16px}.brand{font-weight:800;color:#1754a5;letter-spacing:.04em}.panel{margin-top:22px;background:#fff;border:1px solid #dfe7f5;border-radius:22px;padding:clamp(20px,5vw,36px);box-shadow:0 12px 35px #173c7410}h1{font-size:clamp(25px,5vw,36px);line-height:1.2}p{color:#52627a}.option{display:flex;gap:12px;align-items:flex-start;padding:14px;margin:10px 0;border:1px solid #dbe4f2;border-radius:12px;cursor:pointer}.option:has(input:checked){background:#eef5ff;border-color:#4784d7}.option input{margin-top:6px}button{border:0;border-radius:11px;padding:13px 18px;background:#1859bc;color:#fff;font-weight:700;font-size:15px;cursor:pointer}button:disabled{opacity:.6;cursor:default}.notice{font-size:13px;background:#fff7e6;color:#77531b;border:1px solid #f0dda9;border-radius:12px;padding:12px}.feedback{padding:14px;border-radius:12px;margin-top:16px;background:#e8f7ee;color:#17633b}.hidden{display:none}.foot{font-size:12px;color:#7b8799;margin-top:22px}
+        </style></head><body><main class="wrap"><div class="brand">EDUCAP AFRIQUE · ESPACE QUIZ</div><section class="panel"><p>${safe(item.subject)}</p><h1>${safe(item.title)}</h1><p>Lis la question, choisis une seule réponse puis valide.</p><div class="notice">Attention : quitter cette page, y revenir avec le bouton précédent ou actualiser recommence le quiz. Tes réponses ne sont pas conservées.</div><form id="quiz-form"><h2>${safe(item.question)}</h2>${item.options.map((option,index)=>'<label class="option"><input required type="radio" name="answer" value="'+index+'"><span>'+safe(option)+'</span></label>').join("")}<button type="submit" id="submit">Valider ma réponse</button></form><div id="feedback" class="feedback hidden" role="status"></div><p class="foot">Quiz de démonstration · EduCap Afrique</p></section></main><script>
+          const form=document.getElementById("quiz-form"), feedback=document.getElementById("feedback"), submit=document.getElementById("submit");
+          form.addEventListener("submit",function(event){event.preventDefault();const selected=form.querySelector('input[name="answer"]:checked');if(!selected)return;const correct=Number(selected.value)===${Number(item.answer)};feedback.textContent=(correct?"Bonne réponse ! ":"Réponse incorrecte. ")+${JSON.stringify(item.explain)};feedback.classList.remove("hidden");feedback.style.background=correct?"#e8f7ee":"#fff0ed";feedback.style.color=correct?"#17633b":"#9a3412";form.querySelectorAll("input").forEach(input=>input.disabled=true);submit.disabled=true;submit.textContent="Réponse validée";});
+          window.addEventListener("pageshow",function(event){if(event.persisted){window.location.reload();}});
+          window.addEventListener("pagehide",function(){try{form.reset();}catch(e){}});
+        </script></body></html>`);
+        quizWindow.document.close();
+        quizWindow.focus();
       });
       detail.querySelector("#classe-marquer").addEventListener("click", () => {
         if (!completed.includes(item.id)) completed.push(item.id);
