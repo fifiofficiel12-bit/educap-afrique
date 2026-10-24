@@ -298,6 +298,25 @@
           parcoursMessage.textContent = "Connecte-toi puis enregistre ton parcours pour afficher uniquement les cours qui te concernent.";
           return;
         }
+        // Verrou d’accès : aucun cours de démonstration n’est affiché sans abonnement confirmé.
+        const {data:activePayments,error:paymentError} = await supabaseClient.from("payments")
+          .select("subscription_ends_at")
+          .eq("user_id",signedUser.id)
+          .eq("status","paid")
+          .gt("subscription_ends_at",new Date().toISOString())
+          .limit(1);
+        const {data:roleProfile} = await supabaseClient.from("profiles")
+          .select("role")
+          .eq("id",signedUser.id).maybeSingle();
+        const privileged = ["admin","formateur"].includes(roleProfile?.role);
+        const subscriptionActive = !paymentError && Boolean(activePayments?.length);
+        if (!subscriptionActive && !privileged) {
+          parcoursMessage.innerHTML = '🔒 <strong>Accès aux cours réservé aux abonnés.</strong><p>Crée ton compte, connecte-toi puis règle l’abonnement EduCap Afrique. Aucun cours ni quiz ne sera accessible avant confirmation du paiement.</p><a class="btn btn-primary" href="#abonnement-edc">Voir l’abonnement</a>';
+          if (parcoursSection) parcoursSection.hidden = true;
+          const classroomLink = document.querySelector('#navigation-edcap a[href="#ma-classe"]');
+          if (classroomLink) classroomLink.hidden = true;
+          return;
+        }
         let {data:profile} = await supabaseClient.from("profiles")
           .select("parcours,classe,serie,niveau_campus,domaine_campus,formation")
           .eq("id",signedUser.id).maybeSingle();
