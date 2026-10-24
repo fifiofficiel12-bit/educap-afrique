@@ -7,6 +7,12 @@
     if (document.querySelector("#catalogue-programmes-officiels")) return;
 
     const levels = [
+      {id:"CP1",name:"CP1",cycle:"Primaire",series:[]},
+      {id:"CP2",name:"CP2",cycle:"Primaire",series:[]},
+      {id:"CE1",name:"CE1",cycle:"Primaire",series:[]},
+      {id:"CE2",name:"CE2",cycle:"Primaire",series:[]},
+      {id:"CM1",name:"CM1",cycle:"Primaire",series:[]},
+      {id:"CM2",name:"CM2 · Préparation CEPE",cycle:"Primaire",series:[]},
       {id:"6e",name:"6e",cycle:"Collège",series:[]},
       {id:"5e",name:"5e",cycle:"Collège",series:[]},
       {id:"4e",name:"4e",cycle:"Collège",series:[]},
@@ -35,7 +41,11 @@
       {name:"EDHC",url:"https://dpfc-ci.net/?page_id=63",note:"Disponibilité selon le niveau."},
       {name:"Éducation musicale",url:"https://dpfc-ci.net/?page_id=63",note:"Disponibilité selon le niveau."},
       {name:"Arts plastiques",url:"https://dpfc-ci.net/?page_id=63",note:"Disponibilité selon le niveau."},
-      {name:"EPS",url:"https://dpfc-ci.net/?page_id=63",note:"Progressions officielles selon le cycle."}
+      {name:"EPS",url:"https://dpfc-ci.net/?page_id=63",note:"Progressions officielles selon le cycle."},
+      {name:"Lecture et langage",url:"https://dpfc-ci.net/?page_id=289",note:"Primaire : consulter le programme du niveau concerné."},
+      {name:"Sciences et technologie",url:"https://dpfc-ci.net/?page_id=289",note:"Primaire : vérifier le programme et les activités du niveau."},
+      {name:"Éducation aux Droits de l’Homme et à la Citoyenneté (EDHC)",url:"https://dpfc-ci.net/?page_id=289",note:"Programme primaire selon le niveau."},
+      {name:"Activités d’Éveil et de Création (AEC)",url:"https://dpfc-ci.net/?page_id=289",note:"Programme primaire selon le niveau."}
     ];
 
     // Premier contenu détaillé vérifié dans un document DPFC indexé : Mathématiques Terminale A1.
@@ -73,6 +83,7 @@
             <a href="https://dpfc-ci.net/?page_id=5267" target="_blank" rel="noopener noreferrer">Progressions annuelles 2026–2027 ↗</a>
             <a href="https://dpfc-ci.net/?page_id=63" target="_blank" rel="noopener noreferrer">Programmes éducatifs et guides d’exécution ↗</a>
             <a href="https://dpfc-ci.net/?page_id=283" target="_blank" rel="noopener noreferrer">Programmes du secondaire ↗</a>
+            <a href="https://dpfc-ci.net/?page_id=289" target="_blank" rel="noopener noreferrer">Programmes du primaire ↗</a>
           </div>
         </div>
       </div>`;
@@ -111,8 +122,9 @@
         seriesSelect.innerHTML=level.series.map(s=>`<option value="${escape(s)}">${escape(s)}</option>`).join("");
       }
       const list=subjects.filter(s=>{
-        if(level.cycle==="Collège") return !["Philosophie"].includes(s.name);
-        if(level.cycle==="Lycée") return !["EDHC","Éducation musicale","Arts plastiques"].includes(s.name);
+        if(level.cycle==="Primaire") return ["Français","Mathématiques","Histoire-Géographie","Sciences de la Vie et de la Terre (SVT)","Éducation aux Droits de l’Homme et à la Citoyenneté (EDHC)","Activités d’Éveil et de Création (AEC)","EPS","Lecture et langage","Sciences et technologie"].includes(s.name);
+        if(level.cycle==="Collège") return !["Philosophie","Lecture et langage","Sciences et technologie","Éducation aux Droits de l’Homme et à la Citoyenneté (EDHC)","Activités d’Éveil et de Création (AEC)"].includes(s.name);
+        if(level.cycle==="Lycée") return !["EDHC","Éducation musicale","Arts plastiques","Lecture et langage","Sciences et technologie","Éducation aux Droits de l’Homme et à la Citoyenneté (EDHC)","Activités d’Éveil et de Création (AEC)"].includes(s.name);
         return true;
       });
       const detail = verifiedLessons[level.id + "|Mathématiques"];
