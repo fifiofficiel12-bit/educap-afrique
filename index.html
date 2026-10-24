@@ -755,11 +755,18 @@
           <div id="compte-connecte" hidden>
             <p id="compte-bienvenue"></p>
             <section class="form-card" id="abonnement-edc" style="margin:20px 0">
-              <h3>Abonnement annuel EduCap Afrique</h3>
-              <p>Accès annuel : <strong>750 FCFA</strong></p>
-<p><strong>Un seul paiement pour un an :</strong> accède à tous les cours publiés de tous les parcours, sans payer chaque matière séparément.</p>
-              <p class="muted">Après confirmation du paiement, le formulaire de paiement disparaît pour éviter un second paiement par erreur. Tu peux explorer les cours publiés des parcours scolaire, universitaire et professionnel.</p>
+              <h3>Choisis ta formule EduCap Afrique</h3>
+              <p>Les abonnements donnent accès aux cours publiés sur les parcours scolaire, universitaire et professionnel pendant la durée choisie.</p>
               <form id="paiement-form">
+                <div class="form-group">
+                  <label for="paiement-formule">Formule d’abonnement</label>
+                  <select id="paiement-formule" name="planCode" required>
+                    <option value="mensuel" data-amount="750">1 mois — 750 FCFA</option>
+                    <option value="decouverte_45j" data-amount="1000">Découverte complète — 45 jours — 1 000 FCFA</option>
+                    <option value="annuel" data-amount="1500">Année scolaire ou académique — 1 500 FCFA</option>
+                  </select>
+                </div>
+                <p id="paiement-formule-description" class="muted">Accès pendant 30 jours après confirmation du paiement.</p>
                 <div class="form-group">
                   <label for="paiement-nomclient">Nom complet</label>
                   <input id="paiement-nomclient" name="nomclient" type="text" autocomplete="name" minlength="2" required>
@@ -769,7 +776,7 @@
                   <input id="paiement-numero" name="numeroSend" type="tel" inputmode="tel" placeholder="Ex. 07XXXXXXXX" minlength="8" required>
                 </div>
                 <p id="paiement-message" class="muted" aria-live="polite" hidden></p>
-                <button class="btn btn-primary" type="submit">Payer 750 FCFA pour un an</button>
+                <button class="btn btn-primary" id="paiement-submit" type="submit">Payer 750 FCFA</button>
               </form>
             </section>
             <div class="account-actions">
