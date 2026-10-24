@@ -126,6 +126,13 @@
     .edc-tools-grid a>span{font-size:1.35rem}.edc-tools-grid strong{font-size:.95rem}.edc-tools-grid small{color:#d0e2d9;line-height:1.45}.edc-tools-grid b{margin-top:auto;color:#b9edcf;font-size:.82rem}
     @media(max-width:900px){.edc-level-grid,.edc-tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:520px){.edc-level-grid,.edc-tools-grid{grid-template-columns:1fr}.edc-level-card{min-height:190px;padding:19px}.edc-tools-panel{padding:18px}.edc-tools-grid a{min-height:125px}}
+    .edc-capprimaire-card{margin:24px 0;padding:clamp(20px,3vw,30px);border:1px solid #cde6d4;border-radius:22px;background:linear-gradient(120deg,#f0faf2,#fff 72%);box-shadow:0 12px 30px rgba(17,92,53,.06)}
+    .edc-capprimaire-brand{display:flex;align-items:center;gap:13px}.edc-capprimaire-brand>span{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:#dff4e5;font-size:27px}
+    .edc-capprimaire-kicker{font-size:.68rem;letter-spacing:.08em;font-weight:850;color:#16734f}.edc-capprimaire-brand h3{margin:3px 0 0;font-size:1.5rem;color:#123d2d}
+    .edc-capprimaire-card>p{max-width:800px;color:#506b5c;margin:16px 0}.edc-capprimaire-bottom{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+    .edc-capprimaire-bottom>span{display:grid;gap:3px}.edc-capprimaire-bottom>span strong{font-size:1.15rem;color:#0b7045}.edc-capprimaire-bottom>span small,.edc-capprimaire-note{font-size:.82rem;color:#64756b}
+    .edc-capprimaire-button{display:inline-flex;align-items:center;gap:18px;padding:12px 17px;border-radius:12px;background:#087443;color:white;text-decoration:none;font-weight:800}.edc-capprimaire-button:hover{background:#063c2b}.edc-capprimaire-note{display:block;margin-top:16px}
+    @media(max-width:520px){.edc-capprimaire-bottom{align-items:stretch}.edc-capprimaire-button{justify-content:space-between;width:100%}}
     .edc-telegram-community{padding:48px 0;background:#f3f8f5}
     .edc-telegram-card{display:flex;align-items:flex-start;gap:22px;max-width:900px;margin:0 auto;padding:30px;border:1px solid #dcebe2;border-radius:22px;background:#fff;box-shadow:0 12px 35px rgba(22,64,48,.07)}
     .edc-telegram-icon{display:grid;place-items:center;flex:0 0 58px;height:58px;border-radius:18px;background:#e5f5eb;color:#16734f;font-size:27px}
@@ -243,6 +250,12 @@
           <a class="edc-level-card edc-purple" href="#inscription" data-parcours="campus"><span class="edc-level-icon">🎓</span><span class="edc-level-kicker">03 · ÉTUDES SUPÉRIEURES</span><strong>Université</strong><small>Organiser son travail par filière et niveau</small><span class="edc-card-action">Explorer Campus <b>↗</b></span></a>
           <a class="edc-level-card edc-orange" href="#inscription" data-parcours="competences"><span class="edc-level-icon">💼</span><span class="edc-level-kicker">04 · SAVOIR-FAIRE</span><strong>Compétences</strong><small>Numérique, bureautique et pratiques professionnelles</small><span class="edc-card-action">Développer mes compétences <b>↗</b></span></a>
         </div>
+        <section class="edc-capprimaire-card" aria-labelledby="capprimaire-title">
+          <div class="edc-capprimaire-brand"><span aria-hidden="true">🌱</span><div><span class="edc-capprimaire-kicker">ESPACE SPÉCIALISÉ · PRIMAIRE</span><h3 id="capprimaire-title">Cap Primaire</h3></div></div>
+          <p>Un espace professionnel distinct pour les maîtres de maison et leurs collègues : ressources CP1 à CM2, partage pédagogique, communauté et programme d’affiliation.</p>
+          <div class="edc-capprimaire-bottom"><span><strong>750 FCFA / mois</strong><small>Tarif prévu pour les membres de Cap Primaire</small></span><a href="cap-primaire.html" class="edc-capprimaire-button">Entrer dans Cap Primaire <b aria-hidden="true">↗</b></a></div>
+          <small class="edc-capprimaire-note">Interface séparée, intégrée à EduCap Afrique. Les paiements et les commissions restent à activer après les tests.</small>
+        </section>
         <div class="edc-tools-panel"><div class="edc-tools-intro"><span class="edc-tools-symbol">✦</span><div><h3>Un parcours, plusieurs façons de progresser</h3><p>Accède directement aux outils et aux ressources disponibles sur la plateforme.</p></div></div>
           <div class="edc-tools-grid">
             <a href="#parcours-decouverte"><span>📚</span><strong>Bibliothèque de cours</strong><small>Découvrir les leçons et aperçus</small><b>Explorer →</b></a>
