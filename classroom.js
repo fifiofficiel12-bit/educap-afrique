@@ -56,9 +56,9 @@
     document.head.appendChild(style);
 
     const lessons = [
-      {id:"math-equation",path:"scolaire",subject:"Mathématiques",level:"Collège · 4e–3e",icon:"📐",title:"Résoudre une équation du premier degré",desc:"Comprendre l’inconnue, isoler x et vérifier le résultat.",time:"20 min",kind:"Exemple guidé",content:["Une équation conserve son égalité si l’on effectue la même opération des deux côtés.","Exemple : 3x + 5 = 20.","Soustrais 5 : 3x = 15. Divise par 3 : x = 5.","Vérification : 3 × 5 + 5 = 20. La solution est correcte."],question:"Quelle est la solution de 2x + 4 = 14 ?",options:["x = 5","x = 9","x = 7"],answer:0,explain:"2x = 14 − 4 = 10, donc x = 5."},
-      {id:"philo-dissertation",path:"scolaire",subject:"Philosophie",level:"Lycée · Terminale",icon:"💭",title:"Construire une dissertation philosophique",desc:"Analyser les mots clés, formuler un problème et organiser un plan.",time:"25 min",kind:"Méthode",content:["Définis précisément les termes du sujet.","Repère une tension ou une difficulté qui pose problème.","Formule une problématique sous forme de question claire.","Construis un plan progressif et justifie chaque idée par un argument et un exemple."],question:"Que doit-on faire avant de construire le plan ?",options:["Rédiger directement la conclusion","Analyser les termes du sujet","Apprendre une citation au hasard"],answer:1,explain:"L’analyse des termes permet de comprendre le sujet et de formuler la problématique."},
-      {id:"francais-lecture",path:"scolaire",subject:"Français",level:"Collège · 6e–3e",icon:"📖",title:"Lire et comprendre une consigne",desc:"Repérer le verbe d’action, les informations utiles et le résultat attendu.",time:"15 min",kind:"Technique",content:["Lis la consigne une première fois sans répondre.","Souligne le verbe d’action : expliquer, comparer, calculer, justifier…","Repère les données et les contraintes.","Reformule ce que tu dois produire avant de commencer."],question:"Quel élément aide à identifier le travail demandé ?",options:["Le verbe d’action de la consigne","La longueur de la feuille","La couleur du cahier"],answer:0,explain:"Le verbe d’action indique l’opération attendue."},
+      {id:"math-equation",path:"scolaire",classes:["4e","3e"],subject:"Mathématiques",level:"Collège · 4e–3e",icon:"📐",title:"Résoudre une équation du premier degré",desc:"Comprendre l’inconnue, isoler x et vérifier le résultat.",time:"20 min",kind:"Exemple guidé",content:["Une équation conserve son égalité si l’on effectue la même opération des deux côtés.","Exemple : 3x + 5 = 20.","Soustrais 5 : 3x = 15. Divise par 3 : x = 5.","Vérification : 3 × 5 + 5 = 20. La solution est correcte."],question:"Quelle est la solution de 2x + 4 = 14 ?",options:["x = 5","x = 9","x = 7"],answer:0,explain:"2x = 14 − 4 = 10, donc x = 5."},
+      {id:"philo-dissertation",path:"scolaire",classes:["Terminale"],series:["A1","A2","C","D"],subject:"Philosophie",level:"Lycée · Terminale",icon:"💭",title:"Construire une dissertation philosophique",desc:"Analyser les mots clés, formuler un problème et organiser un plan.",time:"25 min",kind:"Méthode",content:["Définis précisément les termes du sujet.","Repère une tension ou une difficulté qui pose problème.","Formule une problématique sous forme de question claire.","Construis un plan progressif et justifie chaque idée par un argument et un exemple."],question:"Que doit-on faire avant de construire le plan ?",options:["Rédiger directement la conclusion","Analyser les termes du sujet","Apprendre une citation au hasard"],answer:1,explain:"L’analyse des termes permet de comprendre le sujet et de formuler la problématique."},
+      {id:"francais-lecture",path:"scolaire",classes:["6e","5e","4e","3e"],subject:"Français",level:"Collège · 6e–3e",icon:"📖",title:"Lire et comprendre une consigne",desc:"Repérer le verbe d’action, les informations utiles et le résultat attendu.",time:"15 min",kind:"Technique",content:["Lis la consigne une première fois sans répondre.","Souligne le verbe d’action : expliquer, comparer, calculer, justifier…","Repère les données et les contraintes.","Reformule ce que tu dois produire avant de commencer."],question:"Quel élément aide à identifier le travail demandé ?",options:["Le verbe d’action de la consigne","La longueur de la feuille","La couleur du cahier"],answer:0,explain:"Le verbe d’action indique l’opération attendue."},
       {id:"campus-recherche",path:"campus",subject:"Méthodologie universitaire",level:"Licence · Méthode",icon:"🎓",title:"Réussir une recherche documentaire",desc:"Définir une question, évaluer les sources et organiser ses références.",time:"30 min",kind:"Méthode",content:["Transforme ton thème en question de recherche précise.","Privilégie les ouvrages, articles scientifiques et sources institutionnelles.","Compare les sources et note leurs limites.","Conserve les références et rédige la synthèse avec tes propres mots."],question:"Pourquoi conserver les références des sources ?",options:["Pour pouvoir vérifier et citer l’information","Pour allonger artificiellement le travail","Ce n’est pas utile"],answer:0,explain:"Les références rendent le travail vérifiable et permettent de citer correctement les auteurs."},
       {id:"competence-excel",path:"competences",subject:"Bureautique",level:"Débutant · Pratique",icon:"💻",title:"Créer un tableau simple dans un tableur",desc:"Organiser les données, nommer les colonnes et calculer un total.",time:"20 min",kind:"Atelier pratique",content:["Crée des colonnes claires : Article, Quantité, Prix unitaire, Total.","Dans la cellule Total, multiplie la quantité par le prix unitaire.","Recopie la formule sur les lignes suivantes.","Vérifie le résultat avec un calcul manuel sur une ligne."],question:"Que permet une formule dans un tableur ?",options:["Automatiser un calcul","Changer la couleur de l’écran uniquement","Envoyer automatiquement un e-mail"],answer:0,explain:"Une formule calcule un résultat à partir des données des cellules."},
       {id:"competence-projet",path:"competences",subject:"Organisation professionnelle",level:"Tous niveaux",icon:"🎯",title:"Découper un objectif en actions",desc:"Définir un résultat concret, des étapes et un critère de réussite.",time:"15 min",kind:"Mise en pratique",content:["Écris le résultat précis que tu veux obtenir.","Découpe-le en trois à cinq actions réalisables.","Attribue une durée réaliste à chaque action.","Définis comment tu vérifieras que le travail est terminé."],question:"À quoi sert un critère de réussite ?",options:["À vérifier si le résultat attendu est atteint","À rendre la tâche plus compliquée","À remplacer toutes les étapes"],answer:0,explain:"Un critère de réussite permet de vérifier concrètement le résultat."}
@@ -116,6 +116,15 @@
     const filterSubject = section.querySelector("#classe-matiere");
     const search = section.querySelector("#classe-recherche");
     const detail = section.querySelector("#classe-detail");
+    const parcoursSection = section.querySelector(".classroom-shell");
+    if (parcoursSection) parcoursSection.hidden = true;
+    const parcoursMessage = document.createElement("p");
+    parcoursMessage.id = "classe-parcours-message";
+    parcoursMessage.style.cssText = "padding:16px;border:1px solid #dce5f2;border-radius:12px;background:#fff;color:#334155";
+    parcoursMessage.textContent = "Chargement de ton parcours personnel…";
+    section.querySelector(".container").appendChild(parcoursMessage);
+    let profilApprenant = null;
+    let parcoursCharge = false;
     const progressKey = "educap-classe-complete-v2";
     const supabaseClient = window.supabase?.createClient
       ? window.supabase.createClient("https://byzsqblgsssymvsztaqb.supabase.co", "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR")
@@ -182,9 +191,21 @@
       detail.appendChild(panel);
       panel.scrollIntoView({behavior:"smooth",block:"center"});
     };
+    const normaliserClasse = value => String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");
+    const correspondAuParcours = lesson => {
+      if (!parcoursCharge || !profilApprenant || lesson.path !== profilApprenant.domaine) return false;
+      if (lesson.path !== "scolaire") return true;
+      const classe = normaliserClasse(profilApprenant.classe);
+      const series = String(profilApprenant.serie || "").trim().toUpperCase();
+      if (!lesson.classes?.length) return false;
+      const classeOK = lesson.classes.some(c => normaliserClasse(c) === classe || (normaliserClasse(c)==="terminale" && classe.includes("terminale")));
+      if (!classeOK) return false;
+      if (lesson.series?.length && !lesson.series.includes(series)) return false;
+      return true;
+    };
     const renderLessons = () => {
       const q = search.value.trim().toLocaleLowerCase("fr");
-      const filtered = lessons.filter(x => (filterPath.value === "tous" || x.path === filterPath.value) && (filterSubject.value === "toutes" || x.subject === filterSubject.value) && (x.title + " " + x.subject + " " + x.desc + " " + x.level).toLocaleLowerCase("fr").includes(q));
+      const filtered = lessons.filter(x => correspondAuParcours(x) && (filterSubject.value === "toutes" || x.subject === filterSubject.value) && (x.title + " " + x.subject + " " + x.desc + " " + x.level).toLocaleLowerCase("fr").includes(q));
       list.replaceChildren();
       if (!filtered.length) { list.innerHTML = '<p>Aucune séance ne correspond à ces filtres. Essaie une autre recherche.</p>'; return; }
       filtered.forEach(item => {
@@ -241,21 +262,41 @@
     search.addEventListener("input", renderLessons);
     renderLessons(); updateProgress();
     (async () => {
-      if (!supabaseClient) return;
       try {
+        if (!supabaseClient) throw new Error("Connexion au compte indisponible");
         const auth = await supabaseClient.auth.getUser();
         signedUser = auth.data?.user || null;
-        if (!signedUser) return;
-        const {data:rows, error} = await supabaseClient.from("learning_progress")
-          .select("lesson_id,quiz_passed").eq("user_id", signedUser.id);
+        if (!signedUser) {
+          parcoursMessage.textContent = "Connecte-toi puis enregistre ton parcours pour afficher uniquement les cours qui te concernent.";
+          return;
+        }
+        let {data:profile} = await supabaseClient.from("profiles")
+          .select("parcours,classe,serie,niveau_campus,domaine_campus,formation")
+          .eq("id",signedUser.id).maybeSingle();
+        if (!profile?.parcours) {
+          const latest = await supabaseClient.from("parcours_apprenants")
+            .select("domaine,classe,serie,niveau_campus,domaine_campus,formation")
+            .order("created_at",{ascending:false}).limit(1).maybeSingle();
+          if (latest.data) profile = {...latest.data,parcours:latest.data.domaine};
+        }
+        if (!profile?.parcours) {
+          parcoursMessage.textContent = "Aucun parcours enregistré. Va dans « Choisir mon parcours », enregistre ta classe et ta série ou ta formation, puis reviens ici.";
+          return;
+        }
+        profilApprenant = {domaine:profile.parcours,classe:profile.classe,serie:profile.serie,niveau_campus:profile.niveau_campus,domaine_campus:profile.domaine_campus,formation:profile.formation};
+        parcoursCharge = true;
+        if (filterPath) { filterPath.value = profilApprenant.domaine; filterPath.disabled = true; }
+        parcoursMessage.textContent = "Parcours actif : " + ({scolaire:"Scolaire — "+(profilApprenant.classe||"classe non précisée")+(profilApprenant.serie?" · série "+profilApprenant.serie:""),campus:"Universitaire — "+(profilApprenant.niveau_campus||"niveau à préciser")+" · "+(profilApprenant.domaine_campus||"domaine à préciser"),competences:"Professionnel — "+(profilApprenant.formation||"formation à préciser")}[profilApprenant.domaine]||"parcours enregistré") + ". Seules les séances correspondantes sont affichées.";
+        if (parcoursSection) parcoursSection.hidden = false;
+        const {data:rows,error} = await supabaseClient.from("learning_progress").select("lesson_id,quiz_passed").eq("user_id",signedUser.id);
         if (error) throw error;
-        (rows || []).forEach(row => {
-          if (row.quiz_passed && lessons.some(lesson => lesson.id === row.lesson_id) && !completed.includes(row.lesson_id)) completed.push(row.lesson_id);
-        });
-        try { localStorage.setItem(progressKey, JSON.stringify(completed)); } catch (_) {}
+        (rows||[]).forEach(row=>{if(row.quiz_passed && lessons.some(lesson=>lesson.id===row.lesson_id)&&!completed.includes(row.lesson_id))completed.push(row.lesson_id);});
+        try { localStorage.setItem(progressKey,JSON.stringify(completed)); } catch (_) {}
         renderLessons(); updateProgress();
+        if (!lessons.some(correspondAuParcours)) list.innerHTML = '<p>Les cours adaptés à ton parcours ne sont pas encore disponibles. Aucun cours d’un autre niveau ou domaine ne sera affiché.</p>';
       } catch (error) {
-        console.warn("Chargement de la progression en ligne indisponible :", error.message || error);
+        parcoursMessage.textContent = "Impossible de charger ton parcours. Réessaie après connexion.";
+        console.warn("Chargement du parcours impossible :", error.message || error);
       }
     })();
 
