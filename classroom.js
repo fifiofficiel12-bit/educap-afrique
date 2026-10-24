@@ -117,6 +117,22 @@
     const search = section.querySelector("#classe-recherche");
     const detail = section.querySelector("#classe-detail");
     const progressKey = "educap-classe-complete-v1";
+    const supabaseClient = window.supabase?.createClient
+      ? window.supabase.createClient("https://byzsqblgsssymvsztaqb.supabase.co", "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR")
+      : null;
+    let signedUser = null;
+    if (supabaseClient) {
+      supabaseClient.auth.getUser().then(({data}) => { signedUser = data?.user || null; }).catch(() => {});
+    }
+    const syncPassedLesson = async (lesson) => {
+      if (!supabaseClient || !signedUser) return;
+      const {error} = await supabaseClient.from("learning_progress").upsert({
+        user_id: signedUser.id, lesson_id: lesson.id, parcours: lesson.path,
+        matiere: lesson.subject, quiz_score: 100, quiz_passed: true,
+        completed_at: new Date().toISOString(), updated_at: new Date().toISOString()
+      }, {onConflict:"user_id,lesson_id"});
+      if (error) console.warn("Progression conservée sur cet appareil, synchronisation indisponible :", error.message);
+    };
     let completed = [];
     try { completed = JSON.parse(localStorage.getItem(progressKey) || "[]"); if (!Array.isArray(completed)) completed = []; } catch (_) { completed = []; }
 
@@ -207,6 +223,7 @@
           window.removeEventListener("message", onQuizPassed);
           if (!completed.includes(item.id)) completed.push(item.id);
           try { localStorage.setItem(progressKey, JSON.stringify(completed)); } catch (_) {}
+          syncPassedLesson(item);
           updateProgress(); renderLessons();
           detail.querySelector("#classe-quiz-status")?.replaceChildren(document.createTextNode("Séance réussie : progression enregistrée."));
           const samePath = lessons.filter(x => x.path === item.path);
