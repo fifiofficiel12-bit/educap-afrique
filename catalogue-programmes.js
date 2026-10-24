@@ -123,22 +123,38 @@
     const render=()=>{
       const level=levels.find(l=>l.id===levelSelect.value);
       if(!level){seriesWrap.hidden=true;result.innerHTML="<p>Sélectionne une classe pour afficher les matières à organiser.</p>";return;}
+      const previousSeries=seriesSelect.value;
       seriesWrap.hidden=!level.series.length;
       seriesSelect.replaceChildren();
       if(level.series.length){
-        seriesSelect.innerHTML=level.series.map(s=>`<option value="${escape(s)}">${escape(s)}</option>`).join("");
+        seriesSelect.innerHTML=level.series.map(s=>\`<option value="\${escape(s)}">\${escape(s)}</option>\`).join("");
+        if(level.series.includes(previousSeries)) seriesSelect.value=previousSeries;
       }
+      const serieChoisie=seriesSelect.value;
       const list=subjects.filter(s=>{
         if(level.cycle==="Primaire") return ["Français","Mathématiques","Histoire-Géographie","Sciences de la Vie et de la Terre (SVT)","Éducation aux Droits de l’Homme et à la Citoyenneté (EDHC)","Activités d’Éveil et de Création (AEC)","EPS","Lecture et langage","Sciences et technologie"].includes(s.name);
         if(level.cycle==="Collège") return !["Philosophie","Lecture et langage","Sciences et technologie","Éducation aux Droits de l’Homme et à la Citoyenneté (EDHC)","Activités d’Éveil et de Création (AEC)"].includes(s.name);
         if(level.cycle==="Lycée") return !["EDHC","Éducation musicale","Arts plastiques","Lecture et langage","Sciences et technologie","Éducation aux Droits de l’Homme et à la Citoyenneté (EDHC)","Activités d’Éveil et de Création (AEC)"].includes(s.name);
         return true;
       });
-      const detail = verifiedLessons[level.id + "|Mathématiques"];
-      const lessonHtml = detail ? `<section class="ep-verified-programme"><h4>Mathématiques — leçons à étudier</h4>${detail.themes.map(t=>`<div class="ep-theme"><strong>${escape(t.theme)}</strong><ol>${t.lessons.map(l=>`<li>${escape(l)}</li>`).join("")}</ol></div>`).join("")}</section>` : "";
-      result.innerHTML=`<h3 style="margin:20px 0 4px">${escape(level.name)} — matières à organiser</h3>${lessonHtml}
-        
-        <div class="ep-subject-grid">${list.map(s=>`<article class="ep-subject"><h4>${escape(s.name)}</h4><p>${escape(s.note)}</p></article>`).join("")}</div>`;
+      const detail=verifiedLessons[level.id+"|Mathématiques"];
+      const serieLabel=serieChoisie ? " · Série "+escape(serieChoisie) : "";
+      const lessonHtml=detail ? \`<section class="ep-verified-programme"><h4>Programme de mathématiques — \${escape(level.name)}</h4><p>Repères de leçons pour organiser les révisions.</p>\${detail.themes.map(t=>\`<div class="ep-theme"><strong>\${escape(t.theme)}</strong><ol>\${t.lessons.map(l=>\`<li>\${escape(l)}</li>\`).join("")}</ol></div>\`).join("")}</section>\` : "";
+      result.innerHTML=\`<h3 style="margin:20px 0 4px">\${escape(level.name)}\${serieLabel} — matières à organiser</h3>
+        <p>Choisis une matière ci-dessous, puis ouvre les fiches de cours et les exercices disponibles.</p>
+        \${lessonHtml}
+        <div class="ep-subject-grid">\${list.map(s=>\`<article class="ep-subject"><h4>\${escape(s.name)}</h4><p>\${escape(s.note)}</p><a href="#educap-fiches-lecons" class="ep-open-lessons" data-subject="\${escape(s.name)}">Voir les fiches disponibles →</a></article>\`).join("")}</div>
+        <p class="ep-catalogue-notice">Les ressources s’enrichissent progressivement. La liste des matières ne signifie pas que toutes les leçons sont déjà publiées.</p>\`;
+      result.querySelectorAll(".ep-open-lessons").forEach(link=>link.addEventListener("click",()=>{
+        const subject=link.getAttribute("data-subject");
+        const lessonSelect=document.querySelector("#efl-unit");
+        if(lessonSelect){
+          const options=Array.from(lessonSelect.options);
+          const match=options.find(o=>o.textContent.toLowerCase().includes(subject.toLowerCase()) && (o.textContent.toLowerCase().includes(level.name.toLowerCase()) || o.textContent.toLowerCase().includes(level.id.toLowerCase())));
+          const fallback=options.find(o=>o.textContent.toLowerCase().includes(subject.toLowerCase()));
+          if(match||fallback){lessonSelect.value=(match||fallback).value;lessonSelect.dispatchEvent(new Event("change",{bubbles:true}));}
+        }
+      }));
     };
     levelSelect.addEventListener("change",render);
     seriesSelect.addEventListener("change",render);
