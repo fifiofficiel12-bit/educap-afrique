@@ -933,6 +933,13 @@ document.addEventListener("DOMContentLoaded", () => {
       .gt("subscription_ends_at", new Date().toISOString())
       .limit(1);
     const abonnementActif = !erreurAbonnement && Boolean(paiementsActifs?.length);
+    // Le catalogue détaillé n’encombre plus l’accueil des visiteurs non abonnés.
+    // Il reste disponible aux abonnés actifs, aux formateurs et aux administrateurs.
+    const accesCatalogue = abonnementActif || ["admin", "formateur"].includes(role);
+    const sectionCatalogue = document.querySelector("#parcours-decouverte");
+    const lienCatalogue = document.querySelector('#navigation-edcap a[href="#parcours-decouverte"]');
+    if (sectionCatalogue) sectionCatalogue.hidden = !accesCatalogue;
+    if (lienCatalogue) lienCatalogue.hidden = !accesCatalogue;
     const panneauAbonnement = document.querySelector("#abonnement-edc");
     if (panneauAbonnement) {
       panneauAbonnement.hidden = abonnementActif;
