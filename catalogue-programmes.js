@@ -53,7 +53,7 @@
     const verifiedLessons = {
       "tleA1|Mathématiques": {
         source: "https://dpfc-ci.net/dpfc/programmes/maths/11.%20Prog%20%C3%89duct%20MATHS%20TA1%20CND%200923.pdf",
-        sourceLabel: "Programme éducatif DPFC — Mathématiques Terminale A1",
+        sourceLabel: "Mathématiques — Terminale A1",
         themes: [
           {theme:"Calculs algébriques", lessons:["Systèmes linéaires dans ℝ × ℝ"]},
           {theme:"Fonctions numériques", lessons:["Étude de fonctions polynômes et de fonctions rationnelles","Fonction logarithme népérien","Fonction exponentielle népérienne","Primitives et calcul intégral","Suites numériques"]},
@@ -65,7 +65,7 @@
 
     verifiedLessons["tleC|Mathématiques"] = {
       source: "https://dpfc-ci.net/dpfc/programmes/maths/13.%20Prog%20Educt%20maths%20TC%20CND%200923.pdf",
-      sourceLabel: "Programme éducatif DPFC — Mathématiques Terminale C",
+      sourceLabel: "Mathématiques — Terminale C",
       themes: [
         {theme:"Calculs algébriques",lessons:["Nombres complexes"]},
         {theme:"Analyse",lessons:["Limites et continuité","Dérivabilité et étude de fonctions","Suites numériques","Calcul intégral","Équations différentielles"]},
@@ -81,9 +81,9 @@
     section.innerHTML = `
       <div class="container">
         <div class="section-heading">
-          <span class="eyebrow">EDUCAP SCOLAIRE · CÔTE D’IVOIRE</span>
-          <h2>Catalogue des programmes scolaires</h2>
-          <p>Choisis une classe pour organiser les matières, les séquences, les leçons et les évaluations à partir des références officielles.</p>
+          <span class="eyebrow">EDUCAP SCOLAIRE</span>
+          <h2>Apprendre par classe et par matière</h2>
+          <p>Choisis ton niveau pour retrouver les matières de ton parcours scolaire.</p>
         </div>
         <div class="catalogue-panel">
           <label for="ep-catalogue-niveau">Classe / niveau</label>
