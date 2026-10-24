@@ -373,8 +373,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Paiement annuel : le serveur Supabase valide la session et initie la transaction.
+  // Formules d’abonnement : prix et durée sont validés côté serveur Supabase.
   const paiementForm = document.querySelector("#paiement-form");
+  const formulePaiement = document.querySelector("#paiement-formule");
+  const boutonPaiement = document.querySelector("#paiement-submit");
+  const descriptionFormule = document.querySelector("#paiement-formule-description");
+  const actualiserFormulePaiement = () => {
+    const plan = formulePaiement?.value || "mensuel";
+    const formules = {
+      mensuel: { amount: 750, days: 30, label: "1 mois" },
+      decouverte_45j: { amount: 1000, days: 45, label: "45 jours" },
+      annuel: { amount: 1500, days: 365, label: "l’année scolaire ou académique" }
+    };
+    const choix = formules[plan] || formules.mensuel;
+    if (boutonPaiement) boutonPaiement.textContent = "Payer " + choix.amount.toLocaleString("fr-FR") + " FCFA";
+    if (descriptionFormule) descriptionFormule.textContent = "Accès pendant " + choix.days + " jours après confirmation du paiement.";
+  };
+  formulePaiement?.addEventListener("change", actualiserFormulePaiement);
+  actualiserFormulePaiement();
   paiementForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const bouton = paiementForm.querySelector('button[type="submit"]');
@@ -400,6 +416,17 @@ document.addEventListener("DOMContentLoaded", () => {
         afficherPaiement("Vérifie ton nom complet et ton numéro Mobile Money.");
         return;
       }
+      const planCode = String(f.get("planCode") || "");
+      if (!["mensuel", "decouverte_45j", "annuel"].includes(planCode)) {
+        afficherPaiement("Choisis une formule d’abonnement valide.");
+        return;
+      }
+      // Enregistre le parrainage avant le premier paiement, si un code a été partagé.
+      const codeParrain = String(localStorage.getItem("educap_referral_code") || "").trim().toUpperCase();
+      if (codeParrain) {
+        const { error: erreurParrainage } = await clientSupabase.rpc("capture_affiliate_referral", { p_code: codeParrain });
+        if (erreurParrainage) console.warn("Le code de parrainage n’a pas pu être enregistré.", erreurParrainage.message);
+      }
       afficherPaiement("Vérification de la demande de paiement…", true);
       const response = await fetch(SUPABASE_URL + "/functions/v1/create-money-fusion-payment", {
         method: "POST",
@@ -408,7 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "apikey": SUPABASE_PUBLIC_KEY,
           "Authorization": "Bearer " + session.access_token
         },
-        body: JSON.stringify({ nomclient, numeroSend })
+        body: JSON.stringify({ nomclient, numeroSend, planCode })
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok || !payload.url) {
@@ -714,7 +741,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const { data: paiement, error } = await clientSupabase
       .from("payments")
-      .select("status, amount, subscription_ends_at")
+      .select("status, amount, plan_code, plan_label, subscription_ends_at")
       .eq("id", commande)
       .eq("user_id", session.user.id)
       .maybeSingle();
@@ -722,9 +749,9 @@ document.addEventListener("DOMContentLoaded", () => {
       messageAuth("Impossible de vérifier cette transaction pour le moment. Ne paie pas une deuxième fois : actualise la page dans quelques instants.");
       return;
     }
-    if (paiement.status === "paid" && Number(paiement.amount) === 750 &&
+    if (paiement.status === "paid" && [750, 1000, 1500].includes(Number(paiement.amount)) &&
         paiement.subscription_ends_at && new Date(paiement.subscription_ends_at) > new Date()) {
-      messageAuth("Paiement confirmé : ton abonnement annuel EduCap Afrique est actif.", true);
+      messageAuth("Paiement confirmé : ton abonnement " + (paiement.plan_label || "EduCap Afrique") + " est actif.", true);
     } else if (paiement.status === "pending") {
       messageAuth("Paiement encore en attente de confirmation du prestataire. Actualise cette page dans quelques instants et ne relance pas un deuxième paiement.");
     } else {
