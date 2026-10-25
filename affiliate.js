@@ -133,8 +133,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const {data,error}=await db.rpc("request_affiliate_withdrawal",{p_operator:operator,p_number:phone,p_service:service||null});
             if(error)throw error;
             if(data?.success!==true)throw new Error(data?.message||"La demande n’a pas pu être envoyée.");
-            feedback.textContent="Demande envoyée : "+money(data.amount)+". Elle sera vérifiée par EduCap Afrique avant le versement.";
+            feedback.textContent="Demande enregistrée : "+money(data.amount)+". Lancement du versement automatique…";
             feedback.hidden=false;feedback.style.color="#075b46";withdrawalForm.reset();
+            const {data:payout,error:payoutError}=await db.functions.invoke("affiliate-auto-payout",{body:{withdrawal_id:data.withdrawal_id}});
+            if(payoutError||payout?.error){
+              feedback.textContent="Demande enregistrée, mais le versement automatique n’a pas pu démarrer : "+(payout?.error||payoutError.message||"configuration du prestataire à vérifier.")+" Ton solde reste réservé pour éviter un double retrait.";
+              feedback.style.color="#b42318";
+            }else{
+              feedback.textContent="Demande de "+money(data.amount)+" transmise au service de versement. Le statut sera actualisé après confirmation de Money Fusion.";
+            }
             await load(session);
           }catch(error){feedback.textContent=error.message||"Demande impossible. Réessaie.";feedback.hidden=false;feedback.style.color="#b42318";}
           finally{button.disabled=false;}
@@ -143,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const withdrawalList=$("affiliate-withdrawal-list");
       if(withdrawalList){
         withdrawalList.replaceChildren();
-        const statuses={pending:"En attente de vérification",approved:"Validée, en attente de versement",paid:"Versée",rejected:"Refusée"};
+        const statuses={pending:"En attente d’envoi automatique",processing:"Versement en cours",approved:"Validée, en attente de versement",paid:"Versée",rejected:"Versement échoué — solde libéré"};
         const operators={orange_money:"Orange Money",mtn_momo:"MTN MoMo",moov_money:"Moov Money",wave:"Wave",other:"Autre service"};
         if(!withdrawalsResult.data?.length)withdrawalList.textContent="Aucune demande pour le moment.";
         (withdrawalsResult.data||[]).forEach(w=>{
