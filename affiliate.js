@@ -128,7 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
           try{
             const operator=$("affiliate-withdrawal-operator").value;
             const phone=$("affiliate-withdrawal-number").value.trim();
-            const {data,error}=await db.rpc("request_affiliate_withdrawal",{p_operator:operator,p_number:phone});
+            const service=$("affiliate-withdrawal-other-service")?.value.trim()||"";
+            if(operator==="other"&&!service)throw new Error("Précise le nom du service de paiement.");
+            const {data,error}=await db.rpc("request_affiliate_withdrawal",{p_operator:operator,p_number:phone,p_service:service||null});
             if(error)throw error;
             if(data?.success!==true)throw new Error(data?.message||"La demande n’a pas pu être envoyée.");
             feedback.textContent="Demande envoyée : "+money(data.amount)+". Elle sera vérifiée par EduCap Afrique avant le versement.";
@@ -142,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if(withdrawalList){
         withdrawalList.replaceChildren();
         const statuses={pending:"En attente de vérification",approved:"Validée, en attente de versement",paid:"Versée",rejected:"Refusée"};
-        const operators={orange_money:"Orange Money",mtn_momo:"MTN MoMo",moov_money:"Moov Money",wave:"Wave"};
+        const operators={orange_money:"Orange Money",mtn_momo:"MTN MoMo",moov_money:"Moov Money",wave:"Wave",other:"Autre service"};
         if(!withdrawalsResult.data?.length)withdrawalList.textContent="Aucune demande pour le moment.";
         (withdrawalsResult.data||[]).forEach(w=>{
           const li=document.createElement("li");
@@ -174,6 +176,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if(profile?.role==="admin")await loadAdmin();else if(adminPanel)adminPanel.hidden=true;
   }
+  const withdrawalOperator=$("affiliate-withdrawal-operator");
+  const otherService=$("affiliate-withdrawal-other-service");
+  const otherServiceLabel=$("affiliate-withdrawal-other-label");
+  withdrawalOperator?.addEventListener("change",()=>{const show=withdrawalOperator.value==="other";if(otherService)otherService.hidden=!show;if(otherServiceLabel)otherServiceLabel.hidden=!show;if(otherService)otherService.required=show;});
   apply?.addEventListener("click",()=>{if(!session){say("Crée un compte ou connecte-toi avant de demander à devenir affilié.");document.querySelector("#espace-personnel")?.scrollIntoView({behavior:"smooth"});}});
   async function refreshAffiliateAfterPayment(){
     if(session) await load(session);
