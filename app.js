@@ -980,7 +980,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const abonnementActif = !erreurAbonnement && Boolean(paiementsActifs?.length);
     // Le catalogue détaillé n’encombre plus l’accueil des visiteurs non abonnés.
     // Il reste disponible aux abonnés actifs, aux formateurs et aux administrateurs.
-    const accesCatalogue = abonnementActif || ["admin", "formateur"].includes(role);
+    const accesCatalogue = true; // La bibliothèque est visible par tous ; l'abonnement contrôle le contenu complet.
     const sectionCatalogue = document.querySelector("#parcours-decouverte");
     const lienCatalogue = document.querySelector('#navigation-edcap a[href="#parcours-decouverte"]');
     if (sectionCatalogue) {
