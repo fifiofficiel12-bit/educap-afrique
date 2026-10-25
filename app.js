@@ -999,10 +999,14 @@ document.addEventListener("DOMContentLoaded", () => {
       ...element,
       content: contenuParId.get(element.id) || null
     })).filter((element) => {
-      // Les anciens cours « formation » appartiennent au parcours Compétences.
-      const categorieCompatible = abonnementActif || element.category === parcours ||
-        (parcours === "competences" && element.category === "formation");
-      if (!categorieCompatible) return false;
+      const gestionnaire = ["admin", "formateur"].includes(role);
+      // Un abonnement ouvre l'accès aux cours, mais ne change pas le parcours choisi.
+      const categorieCours = normaliser(element.category);
+      const categorieParcours = normaliser(parcours);
+      const categorieCompatible = categorieCours === categorieParcours ||
+        (parcours === "competences" && categorieCours === "formation");
+      if (!gestionnaire && !categorieCompatible) return false;
+
       if (element.pays && profil?.pays) {
         const paysCours = normaliser(element.pays).replace(/[’']/g, "");
         const paysProfil = normaliser(profil.pays).replace(/[’']/g, "");
@@ -1010,11 +1014,14 @@ document.addEventListener("DOMContentLoaded", () => {
           (paysProfil === "ci" && paysCours === "cote divoire");
         if (!memePays) return false;
       }
-      if (!abonnementActif && parcours === "scolaire") {
-        if (element.classe && classeProfil && element.classe !== classeProfil) return false;
-        if (element.serie && serieProfil && element.serie !== serieProfil) return false;
-        if (element.classe && !classeProfil) return false;
-        if (element.serie && !serieProfil) return false;
+
+      // Dans l'espace personnel scolaire, afficher uniquement la classe et la série choisies.
+      // Les cours sans métadonnées fiables restent dans le catalogue général, pas dans cet espace.
+      if (parcours === "scolaire" && !gestionnaire) {
+        if (!classeProfil || !serieProfil) return false;
+        if (!element.classe || !element.serie) return false;
+        if (normaliser(element.classe) !== normaliser(classeProfil)) return false;
+        if (normaliser(element.serie) !== normaliser(serieProfil)) return false;
       }
       return true;
     });
