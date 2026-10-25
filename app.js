@@ -6,6 +6,51 @@ const SUPABASE_PUBLIC_KEY =
   "sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR";
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Navigation par vues : une seule rubrique principale est visible à la fois.
+  // L'accueil reste simple ; les ressources s'ouvrent seulement depuis leur rubrique.
+  const initialiserNavigationParVues = () => {
+    const main = document.querySelector("main");
+    const navigation = document.querySelector("#navigation-edcap");
+    if (!main) return;
+
+    const racines = Array.from(main.children).filter((element) =>
+      element.matches("section, [role='note']")
+    );
+
+    const afficherVue = () => {
+      const hash = window.location.hash || "#accueil";
+      const cible = document.getElementById(decodeURIComponent(hash.slice(1)));
+      let racineActive = cible;
+      while (racineActive && racineActive.parentElement !== main) {
+        racineActive = racineActive.parentElement;
+      }
+
+      // Au chargement ou au clic sur Accueil, afficher uniquement l'accueil.
+      if (!cible || hash === "#accueil") {
+        racineActive = document.querySelector("#accueil");
+        if (racineActive) {
+          racines.forEach((racine) => {
+            const estAccueil = racine === racineActive ||
+              (racine.matches("[role='note']"));
+            racine.hidden = !estAccueil;
+          });
+        }
+      } else if (racineActive) {
+        racines.forEach((racine) => {
+          racine.hidden = racine !== racineActive;
+        });
+      }
+
+      navigation?.querySelectorAll("a[href^='#']").forEach((lien) => {
+        lien.classList.toggle("active", lien.getAttribute("href") === hash);
+      });
+      window.scrollTo({ top: 0, behavior: "auto" });
+    };
+
+    window.addEventListener("hashchange", afficherVue);
+    afficherVue();
+  };
+  initialiserNavigationParVues();
   const pays = document.querySelector("#pays");
   const domaine = document.querySelector("#domaine");
   const classe = document.querySelector("#classe");
