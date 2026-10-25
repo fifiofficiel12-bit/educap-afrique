@@ -65,6 +65,20 @@
         <p style="font-size:.82rem;color:var(--muted)">Les fiches Cap Primaire sont des supports de formation et des exemples de démarche. Elles ne remplacent pas le programme officiel, les instructions de la hiérarchie ni les manuels agréés.</p>
       </div>`;
     anchor.insertAdjacentElement("afterend",section);
+    const requestedTitle = new URLSearchParams(window.location.search).get("fiche");
+    if(requestedTitle){
+      const resource = resources.find(r => r.title === requestedTitle);
+      if(resource){
+        section.innerHTML = `
+          <div class="section-head"><div><span class="tag">${esc(resource.level)} · ${esc(resource.subject)} · ${esc(resource.type)}</span><h2 style="margin-top:10px">${esc(resource.title)}</h2><p>${esc(resource.goal)}</p></div></div>
+          <article class="resource"><div class="resource-body">
+            <h3>Le cours</h3><p style="white-space:pre-line;line-height:1.85">${esc(resource.body)}</p>
+            <h3 style="margin-top:22px">À mettre en pratique</h3><p style="white-space:pre-line;line-height:1.85">${esc(resource.practice)}</p>
+            <a class="btn btn-light" href="${window.location.pathname}#ressources">← Retour à la bibliothèque</a>
+          </div></article>`;
+        return;
+      }
+    }
     const subjects=[...new Set(resources.map(r=>r.subject))].sort((a,b)=>a.localeCompare(b,"fr"));
     const types=[...new Set(resources.map(r=>r.type))].sort((a,b)=>a.localeCompare(b,"fr"));
     subjects.forEach(s=>section.querySelector("#cp-subject").insertAdjacentHTML("beforeend",`<option>${esc(s)}</option>`));
@@ -75,7 +89,7 @@
       const level=section.querySelector("#cp-level").value, subject=section.querySelector("#cp-subject").value, type=section.querySelector("#cp-type").value;
       const found=resources.filter(r=>(level==="Tous niveaux"||r.level===level||r.level==="Tous niveaux")&&(subject==="Toutes disciplines"||r.subject===subject)&&(type==="Tous types"||r.type===type)&&(!q||[r.level,r.subject,r.type,r.title,r.goal,r.body,r.practice].join(" ").toLocaleLowerCase("fr").includes(q)));
       section.querySelector("#cp-count").textContent=found.length+" ressource(s) affichée(s) sur "+resources.length+".";
-      cards.innerHTML=found.map((r,i)=>`<article class="resource"><div class="resource-body"><span class="tag">${esc(r.level)} · ${esc(r.subject)} · ${esc(r.type)}</span><h3>${esc(r.title)}</h3><p><strong>Objectif :</strong> ${esc(r.goal)}</p><details style="margin-top:12px"><summary style="cursor:pointer;color:var(--green);font-weight:850;padding:7px 0">Ouvrir la fiche complète</summary><div style="padding-top:8px"><p style="white-space:pre-line">${esc(r.body)}</p><p style="margin-top:12px"><strong>À mettre en pratique :</strong> ${esc(r.practice)}</p></div></details></div></article>`).join("")||'<div class="panel">Aucune ressource ne correspond. Modifiez les filtres.</div>';
+      cards.innerHTML=found.map(r=>`<article class="resource"><div class="resource-body"><span class="tag">${esc(r.level)} · ${esc(r.subject)} · ${esc(r.type)}</span><h3>${esc(r.title)}</h3><p><strong>Objectif :</strong> ${esc(r.goal)}</p><a class="btn btn-light" href="${window.location.pathname}?fiche=${encodeURIComponent(r.title)}#ressources">Ouvrir le cours</a></div></article>`).join("")||'<div class="panel">Aucune ressource ne correspond. Modifiez les filtres.</div>';
     }
     ["#cp-search","#cp-level","#cp-subject","#cp-type"].forEach(sel=>section.querySelector(sel).addEventListener("input",render));
     render();
