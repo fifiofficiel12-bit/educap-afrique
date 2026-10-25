@@ -130,7 +130,7 @@
 <div class="notice">Les paiements Mobile Money et les commissions automatiques ne sont pas encore activés. Ne considérez pas une adhésion comme payée sur la seule base d’une validation manuelle.</div>
 </div></div></section><section class="section"><div class="notice"><strong>Information :</strong> chaque responsable peut créer un compte, accéder à son tableau de bord et gérer les ressources et demandes d’adhésion de son propre espace. Les paiements Mobile Money et les commissions automatiques restent à connecter côté serveur.</div></section>
 </main>
-<footer class="footer"><div class="wrap footer-inner"><div><strong>Cap Primaire</strong><br><small>Ensemble pour un meilleur apprentissage.</small></div><div><strong>Propulsé par EduCap Afrique</strong><br><small>Apprendre. Progresser. Réussir.</small></div></div></footer>
+<section class="section" id="adhesion"><div class="section-head"><div><h2>Rejoindre une communauté Cap Primaire</h2><p>Connectez-vous ou créez votre compte, puis payez votre adhésion mensuelle de 750 FCFA via Mobile Money.</p></div></div><div class="panel" style="max-width:760px;margin:0 auto"><div class="notice">L’accès membre sera activé uniquement après confirmation du paiement par Money Fusion. Si le responsable vous a envoyé un lien, les informations de sa communauté seront préremplies.</div><form id="memberJoinForm" style="display:grid;gap:10px;margin-top:14px"><label for="joinSpaceId"><strong>Identifiant de la communauté</strong></label><input id="joinSpaceId" required placeholder="Identifiant fourni dans le lien du responsable" style="padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit"><label for="joinName"><strong>Nom complet</strong></label><input id="joinName" required maxlength="100" autocomplete="name" placeholder="Votre nom et prénom" style="padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit"><label for="joinEmail"><strong>Adresse e-mail</strong></label><input id="joinEmail" type="email" required autocomplete="email" placeholder="vous@exemple.com" style="padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit"><label for="joinPassword"><strong>Mot de passe</strong></label><input id="joinPassword" type="password" required minlength="6" autocomplete="current-password" placeholder="6 caractères minimum" style="padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit"><label for="joinPhone"><strong>Numéro Mobile Money</strong></label><input id="joinPhone" type="tel" required autocomplete="tel" placeholder="Ex. 0700000000" style="padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit"><label for="joinRef"><strong>Code du parrain (facultatif)</strong></label><input id="joinRef" maxlength="32" placeholder="Code fourni par le membre qui vous invite" style="padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit"><div class="actions"><button class="btn btn-dark" id="joinSignup" type="button">Créer mon compte et payer</button><button class="btn btn-light" id="joinLogin" type="button">J’ai déjà un compte</button></div></form><p id="joinMessage" class="notice" role="status" style="margin-top:14px">Complétez les champs pour démarrer votre adhésion.</p></div></section>\n<footer class="footer"><div class="wrap footer-inner"><div><strong>Cap Primaire</strong><br><small>Ensemble pour un meilleur apprentissage.</small></div><div><strong>Propulsé par EduCap Afrique</strong><br><small>Apprendre. Progresser. Réussir.</small></div></div></footer>
 <script src="cap-primaire-catalogue.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -210,7 +210,42 @@
  signup.addEventListener('click',function(){mode='signup';nameInput.required=true;});
  logout.addEventListener('click',async function(){await client.auth.signOut();currentUser=null;currentSpace=null;message('Vous êtes déconnecté.');await loadAccount();});
  client.auth.onAuthStateChange(function(){setTimeout(()=>loadAccount().catch(err=>message('Impossible de vérifier la session : '+err.message)),0);});
- loadAccount().catch(err=>message('Impossible de vérifier la session : '+err.message));
+
+ const joinSpaceId=document.getElementById('joinSpaceId'),joinName=document.getElementById('joinName'),joinEmail=document.getElementById('joinEmail'),joinPassword=document.getElementById('joinPassword'),joinPhone=document.getElementById('joinPhone'),joinRef=document.getElementById('joinRef'),joinMessage=document.getElementById('joinMessage');
+ const query=new URLSearchParams(location.search);
+ joinSpaceId.value=query.get('space')||'';
+ joinRef.value=query.get('member_ref')||'';
+ async function startMembership(createAccount){
+  const buttons=[document.getElementById('joinSignup'),document.getElementById('joinLogin')];buttons.forEach(b=>b.disabled=true);
+  joinMessage.textContent=createAccount?'Création du compte en cours…':'Connexion en cours…';
+  try{
+   if(!joinSpaceId.value.trim()) throw new Error('Ouvrez le lien de votre responsable ou saisissez l’identifiant de sa communauté.');
+   const email=joinEmail.value.trim(),password=joinPassword.value,name=joinName.value.trim();
+   if(createAccount){
+    const {data,error}=await client.auth.signUp({email,password,options:{data:{full_name:name}}});
+    if(error)throw error;
+    if(!data.session) throw new Error('Compte créé. Confirmez votre adresse e-mail, puis revenez ici et choisissez « J’ai déjà un compte ».');
+   }else{
+    const {error}=await client.auth.signInWithPassword({email,password});if(error)throw error;
+   }
+   const {data:{session}}=await client.auth.getSession();
+   if(!session)throw new Error('Aucune session active. Connectez-vous après confirmation de votre e-mail.');
+   joinMessage.textContent='Préparation sécurisée du paiement…';
+   const response=await fetch(SUPABASE_URL+'/functions/v1/create-capprimaire-payment',{
+    method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+session.access_token},
+    body:JSON.stringify({spaceId:joinSpaceId.value.trim(),referralCode:joinRef.value.trim(),nomclient:name||session.user.user_metadata?.full_name||email,numeroSend:joinPhone.value.trim()})
+   });
+   const result=await response.json();
+   if(!response.ok)throw new Error(result.error||'Impossible de démarrer le paiement.');
+   if(!result.url)throw new Error('Lien de paiement absent. Contactez le support avant de réessayer.');
+   joinMessage.textContent='Redirection vers Money Fusion. Votre accès sera activé après confirmation du paiement.';
+   location.href=result.url;
+  }catch(err){joinMessage.textContent='Information : '+(err.message||'opération impossible');}
+  finally{buttons.forEach(b=>b.disabled=false);}
+ }
+ document.getElementById('joinSignup').addEventListener('click',()=>startMembership(true));
+ document.getElementById('joinLogin').addEventListener('click',()=>startMembership(false));
+\n loadAccount().catch(err=>message('Impossible de vérifier la session : '+err.message));
 })();
 </script>
 </body></html>
