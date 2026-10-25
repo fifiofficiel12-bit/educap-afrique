@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
         db.from("affiliate_referrals").select("id",{count:"exact",head:true}).eq("affiliate_id",session.user.id),
         db.from("affiliate_commissions").select("id,amount,status,category_at_payment,created_at,withdrawal_id").eq("affiliate_id",session.user.id).order("created_at",{ascending:false}).limit(1000)
       ]);
-      const withdrawalsResult=await db.from("affiliate_withdrawals").select("id,amount,mobile_money_operator,mobile_money_number,status,created_at,paid_at").eq("affiliate_id",session.user.id).order("created_at",{ascending:false}).limit(100);
+      const withdrawalsResult=await db.from("affiliate_withdrawals").select("id,amount,mobile_money_operator,mobile_money_number,mobile_money_service,status,created_at,paid_at").eq("affiliate_id",session.user.id).order("created_at",{ascending:false}).limit(100);
       if(clicks.error||refs.error||comm.error||withdrawalsResult.error){say("Certaines statistiques ne sont pas disponibles.");return;}
       const rows=comm.data||[];
       const available=rows.filter(x=>x.status==="approved"&&!x.withdrawal_id).reduce((s,x)=>s+x.amount,0);
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(!withdrawalsResult.data?.length)withdrawalList.textContent="Aucune demande pour le moment.";
         (withdrawalsResult.data||[]).forEach(w=>{
           const li=document.createElement("li");
-          li.textContent=new Date(w.created_at).toLocaleDateString("fr-FR")+" — "+money(w.amount)+" — "+operators[w.mobile_money_operator]+" — "+statuses[w.status];
+          li.textContent=new Date(w.created_at).toLocaleDateString("fr-FR")+" — "+money(w.amount)+" — "+(w.mobile_money_operator==="other"?(w.mobile_money_service||"Autre service"):operators[w.mobile_money_operator])+" — "+w.mobile_money_number+" — "+statuses[w.status];
           withdrawalList.append(li);
         });
       }
