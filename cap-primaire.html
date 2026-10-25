@@ -49,6 +49,48 @@
   }
 }
 
+
+/* Refonte professionnelle du tableau de bord responsable */
+#compte-admin{padding-top:24px}
+#compte-admin>.section-head{margin-bottom:22px}
+#compte-admin>.section-head h2{font-size:clamp(1.7rem,3vw,2.35rem);color:var(--deep);letter-spacing:-.04em}
+#compte-admin>.section-head p{max-width:680px;line-height:1.7}
+#compte-admin>.panel{max-width:1040px!important;margin:0 auto!important;padding:clamp(18px,3vw,32px)!important;border:1px solid #dfece4;border-radius:24px;box-shadow:0 18px 50px rgba(6,59,43,.07);background:#fff}
+#compte-admin .notice{border-radius:14px;line-height:1.6}
+#authForm label,#adminDashboard label{font-size:.9rem;color:#274b3c}
+#authForm input,#adminDashboard input:not([type=checkbox]),#adminDashboard select,#adminDashboard textarea{width:100%;min-height:48px;padding:13px 14px!important;border:1px solid #d5e4da!important;border-radius:12px!important;background:#fbfdfb;color:#17352c;font:inherit;transition:border-color .18s,box-shadow .18s,background .18s}
+#authForm input:focus,#adminDashboard input:focus,#adminDashboard select:focus,#adminDashboard textarea:focus{outline:none;border-color:#078447!important;background:#fff;box-shadow:0 0 0 4px rgba(7,132,71,.11)}
+#adminDashboard{margin-top:26px!important;padding-top:24px;border-top:1px solid #e6eee8}
+#adminDashboard>h3{font-size:clamp(1.45rem,3vw,2rem);letter-spacing:-.035em;margin:0 0 7px;color:#103e2c}
+#signedInEmail{display:inline-flex;align-items:center;gap:8px;margin:8px 0 14px;padding:9px 13px;background:#f0f8f2;border:1px solid #dceee1;border-radius:999px;color:#315846;font-size:.88rem;overflow-wrap:anywhere}
+#spaceStatus{margin:0 0 20px;background:#f0f8f2;border-color:#d9ebdf}
+#adminDashboard>.panel{padding:clamp(16px,2.5vw,24px)!important;margin:16px 0 0!important;border:1px solid #e0ebe4;border-radius:18px;box-shadow:0 8px 24px rgba(6,59,43,.045);background:#fff}
+#adminDashboard>.panel h3{font-size:1.12rem;color:#153f2e;margin:0 0 16px}
+#adminDashboard .btn{min-height:44px;border-radius:12px;padding:11px 17px;transition:transform .15s,box-shadow .15s}
+#adminDashboard .btn-dark{box-shadow:0 5px 12px rgba(7,132,71,.15)}
+#adminDashboard .btn-dark:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(7,132,71,.2)}
+#resourceForm{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px!important}
+#resourceTitle,#resourceContent,#resourceForm label,#resourceForm button{grid-column:1/-1}
+#resourceContent{min-height:150px;resize:vertical;line-height:1.65}
+#resourceForm select{appearance:auto;cursor:pointer}
+#resourceForm label{display:flex;align-items:center;gap:10px;width:fit-content;padding:10px 13px;background:#f2f8f4;border:1px solid #e0eee4;border-radius:12px;font-weight:700}
+#resourceForm input[type=checkbox]{width:19px;height:19px;min-height:19px;accent-color:#078447}
+#resourceForm button{min-height:50px;font-size:.98rem}
+#resourceList>div,#memberList>div{padding:15px 0!important;border-top:1px solid #e8efe9!important}
+#resourceList strong,#memberList strong{color:#193d2d}
+#resourceList button,#memberList button{margin-top:9px}
+#authForm .actions{gap:10px}
+#authForm .btn{min-height:46px}
+#adminDashboard>.notice:last-child{margin-top:18px;padding:16px;background:#fff9e9;border-color:#f3e3b4;color:#6a5522}
+@media(max-width:620px){
+ #compte-admin>.panel{padding:16px!important;border-radius:18px}
+ #resourceForm{grid-template-columns:1fr}
+ #resourceTitle,#resourceContent,#resourceForm label,#resourceForm button{grid-column:1}
+ #authForm .actions{display:grid;grid-template-columns:1fr}
+ #authForm .actions .btn{width:100%}
+ #signedInEmail{border-radius:12px;max-width:100%}
+}
+
 </style>
 </head>
 <body>
@@ -81,10 +123,10 @@
 <div class="panel" id="gestion"><h3>Une plateforme sous votre direction</h3><p style="color:var(--muted);margin-bottom:12px">L’administrateur de Cap Primaire doit disposer de ses propres identifiants et ne gérer que sa communauté.</p><a class="btn btn-light" href="https://educap-afrique.fifiofficiel12.workers.dev/" style="width:100%">Retour à EduCap Afrique ↗</a></div>
 </aside></div></section>
 <section class="section" id="compte-admin"><div class="section-head"><div><h2>Créer votre compte responsable</h2><p>Inscrivez-vous ou connectez-vous pour créer et gérer votre propre espace Cap Primaire.</p></div></div><div class="panel" style="max-width:760px;margin:0 auto"><div class="notice" style="margin-bottom:15px">Ce formulaire crée un compte responsable de communauté, pas un administrateur général de toute la plateforme. Utilisez une adresse e-mail que vous contrôlez.</div><form id="authForm" style="display:grid;gap:12px"><label for="adminName"><strong>Nom de votre espace / école</strong></label><input id="adminName" required maxlength="100" placeholder="Ex. Groupe scolaire Les Flamboyants" style="padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit"><label for="adminEmail"><strong>Adresse e-mail</strong></label><input id="adminEmail" type="email" required autocomplete="email" placeholder="vous@exemple.com" style="padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit"><label for="adminPassword"><strong>Mot de passe (6 caractères minimum)</strong></label><input id="adminPassword" type="password" required minlength="6" autocomplete="current-password" placeholder="Choisissez un mot de passe" style="padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit"><div class="actions"><button class="btn btn-dark" type="submit" id="signupBtn">Créer mon compte responsable</button><button class="btn btn-light" type="button" id="loginBtn">J’ai déjà un compte</button><button class="btn btn-light" type="button" id="logoutBtn" hidden>Me déconnecter</button></div></form><div id="authMessage" class="notice" role="status" style="margin-top:14px">Remplissez les champs puis choisissez « Créer mon compte responsable ».</div><div id="adminDashboard" hidden style="margin-top:18px">
-<h3>Mon tableau de bord Cap Primaire</h3><p id="signedInEmail"></p><p id="spaceStatus" class="notice"></p>
-<div class="panel" style="margin-top:14px"><h3>Paramètres de mon espace</h3><label for="spaceName"><strong>Nom de l’espace</strong></label><input id="spaceName" maxlength="100" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;margin:6px 0 10px"><button id="saveSpace" type="button" class="btn btn-dark">Enregistrer le nom</button></div>
-<div class="panel"><h3>Publier une ressource pédagogique</h3><form id="resourceForm" style="display:grid;gap:9px"><input id="resourceTitle" required maxlength="180" placeholder="Titre de la ressource" style="padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit"><select id="resourceClass" required style="padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit"><option value="">Choisir le niveau</option><option>CP1</option><option>CP2</option><option>CE1</option><option>CE2</option><option>CM1</option><option>CM2</option></select><select id="resourceSubject" required style="padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit"><option value="">Choisir la matière</option><option>Français</option><option>Mathématiques</option><option>Éducation aux droits humains et à la citoyenneté</option><option>Sciences</option><option>Autre</option></select><select id="resourceType" style="padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit"><option value="fiche">Fiche pédagogique</option><option value="cours">Cours</option><option value="exercice">Exercice corrigé</option><option value="document">Document</option></select><textarea id="resourceContent" rows="4" placeholder="Contenu de la ressource (facultatif)" style="padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit"></textarea><label><input id="resourcePublished" type="checkbox"> Publier immédiatement</label><button class="btn btn-dark" type="submit">Enregistrer la ressource</button></form><p id="resourceMessage" class="notice" hidden></p><div id="resourceList" style="margin-top:12px"></div></div>
-<div class="panel"><h3>Gérer les membres</h3><p style="color:var(--muted)">Acceptez ou refusez les demandes d’adhésion à votre espace.</p><div id="memberList">Chargement des membres…</div><p id="memberMessage" class="notice" hidden></p></div>
+<div class="dashboard-welcome"><span class="eyebrow" style="background:#eaf7ee;color:#087443;border-color:#d3eadb">VOTRE ESPACE DE GESTION</span><h3>Bienvenue dans votre espace Cap Primaire</h3><p style="color:var(--muted);margin:0 0 10px">Votre communauté, vos ressources et vos membres : gérez votre espace en toute autonomie.</p><p id="signedInEmail"></p><p id="spaceStatus" class="notice"></p></div>
+<div class="panel dashboard-card" style="margin-top:14px"><h3>⚙️ Paramètres de mon espace</h3><p style="color:var(--muted);margin-top:-8px">Personnalisez le nom qui représente votre école ou votre communauté.</p><label for="spaceName"><strong>Nom de l’espace</strong></label><input id="spaceName" maxlength="100" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit;margin:6px 0 10px"><button id="saveSpace" type="button" class="btn btn-dark">Enregistrer le nom</button></div>
+<div class="panel dashboard-card"><h3>📚 Publier une ressource pédagogique</h3><p style="color:var(--muted);margin-top:-8px">Ajoutez vos fiches, cours et exercices pour enrichir votre bibliothèque.</p><form id="resourceForm" style="display:grid;gap:9px"><input id="resourceTitle" required maxlength="180" placeholder="Titre de la ressource" style="padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit"><select id="resourceClass" required style="padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit"><option value="">Choisir le niveau</option><option>CP1</option><option>CP2</option><option>CE1</option><option>CE2</option><option>CM1</option><option>CM2</option></select><select id="resourceSubject" required style="padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit"><option value="">Choisir la matière</option><option>Français</option><option>Mathématiques</option><option>Éducation aux droits humains et à la citoyenneté</option><option>Sciences</option><option>Autre</option></select><select id="resourceType" style="padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit"><option value="fiche">Fiche pédagogique</option><option value="cours">Cours</option><option value="exercice">Exercice corrigé</option><option value="document">Document</option></select><textarea id="resourceContent" rows="4" placeholder="Contenu de la ressource (facultatif)" style="padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit"></textarea><label><input id="resourcePublished" type="checkbox"> Publier immédiatement</label><button class="btn btn-dark" type="submit">Enregistrer la ressource</button></form><p id="resourceMessage" class="notice" hidden></p><div id="resourceList" style="margin-top:12px"></div></div>
+<div class="panel dashboard-card"><h3>👥 Gérer les membres</h3><p style="color:var(--muted)">Acceptez ou refusez les demandes d’adhésion à votre espace.</p><div id="memberList">Chargement des membres…</div><p id="memberMessage" class="notice" hidden></p></div>
 <div class="notice">Les paiements Mobile Money et les commissions automatiques ne sont pas encore activés. Ne considérez pas une adhésion comme payée sur la seule base d’une validation manuelle.</div>
 </div></div></section><section class="section"><div class="notice"><strong>Information :</strong> chaque responsable peut créer un compte, accéder à son tableau de bord et gérer les ressources et demandes d’adhésion de son propre espace. Les paiements Mobile Money et les commissions automatiques restent à connecter côté serveur.</div></section>
 </main>
