@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         (data.withdrawals||[]).forEach(w=>{
           const card=document.createElement("article");card.className="card affiliate-admin-card";
           const h=document.createElement("h4");h.textContent=money(w.amount)+" · "+({pending:"En attente",approved:"À verser",paid:"Versé",rejected:"Refusé"})[w.status];
-          const p=document.createElement("p");p.textContent="Affilié "+w.affiliate_id+" · "+({orange_money:"Orange Money",mtn_momo:"MTN MoMo",moov_money:"Moov Money",wave:"Wave"})[w.mobile_money_operator]+" · "+w.mobile_money_number;
+          const p=document.createElement("p");p.textContent="Affilié "+w.affiliate_id+" · "+({orange_money:"Orange Money",mtn_momo:"MTN MoMo",moov_money:"Moov Money",wave:"Wave",other:(w.mobile_money_service||"Autre service")})[w.mobile_money_operator]+" · "+w.mobile_money_number;
           card.append(h,p);
           if(w.status==="pending"||w.status==="approved"){
             const b=document.createElement("button");b.type="button";b.className="btn btn-primary";
