@@ -133,7 +133,7 @@
   else{
    const name=nameInput.value.trim()||'Mon espace Cap Primaire';
    const code='CAP-'+user.id.replace(/-/g,'').slice(0,8).toUpperCase();
-   const {data:created,error:createError}=await client.from('capprimaire_spaces').insert({owner_id:user.id,name,description:'Espace pédagogique Cap Primaire',affiliate_enabled:false,referral_code:code,monthly_price:750}).select('id,name,monthly_price,referral_code').single();
+   const {data:created,error:createError}=await client.from('capprimaire_spaces').insert({owner_id:user.id,name,description:'Espace pédagogique Cap Primaire',affiliate_enabled:false,is_primary:false,referral_code:code,monthly_price:750}).select('id,name,monthly_price,referral_code').single();
    if(createError){spaceStatus.textContent='Compte connecté, mais espace non créé : '+createError.message;return;}
    currentSpace=created;
   }
