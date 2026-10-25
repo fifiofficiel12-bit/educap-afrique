@@ -1020,8 +1020,17 @@ document.addEventListener("DOMContentLoaded", () => {
       if (parcours === "scolaire" && !gestionnaire) {
         if (!classeProfil || !serieProfil) return false;
         if (!element.classe || !element.serie) return false;
-        if (normaliser(element.classe) !== normaliser(classeProfil)) return false;
-        if (normaliser(element.serie) !== normaliser(serieProfil)) return false;
+        const classeCours = normaliser(element.classe);
+        const classeChoisie = normaliser(classeProfil);
+        const classeCompatible = classeCours === classeChoisie ||
+          classeCours.startsWith(classeChoisie + " ");
+        if (!classeCompatible) return false;
+
+        const serieCours = normaliser(element.serie);
+        const serieChoisie = normaliser(serieProfil);
+        const serieCompatible = serieCours === serieChoisie ||
+          serieCours.endsWith(" " + serieChoisie);
+        if (!serieCompatible) return false;
       }
       return true;
     });
