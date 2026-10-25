@@ -139,9 +139,10 @@
  const SUPABASE_KEY='sb_publishable_iGibajCXvXeDMWK5g28Rqw_FjEagmwR';
  const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
  const sw=document.getElementById('affiliateSwitch'),details=document.getElementById('affiliateDetails'),affiliateStatus=document.getElementById('affiliateStatus'),link=document.getElementById('refLink'),copy=document.getElementById('copyRef');
- link.value=location.origin+location.pathname+'?ref=CAP-EXEMPLE';
- sw.addEventListener('click',function(){const on=sw.getAttribute('aria-checked')!=='true';sw.setAttribute('aria-checked',String(on));details.hidden=!on;affiliateStatus.textContent=on?'Option de démonstration uniquement. Les liens et commissions ne sont pas encore activés côté serveur.':'L’affiliation est désactivée dans cette maquette. Le responsable peut tester l’option ci-dessus.';});
- copy.addEventListener('click',async function(){try{await navigator.clipboard.writeText(link.value);copy.textContent='Copié ✓';setTimeout(()=>copy.textContent='Copier',1600);}catch(e){link.select();document.execCommand('copy');copy.textContent='Copié ✓';}});
+ function setAffiliateUI(on){sw.setAttribute('aria-checked',String(on));details.hidden=!on;}
+ function refreshReferralLink(){if(currentSpace){link.value=location.origin+location.pathname+'?space='+encodeURIComponent(currentSpace.id)+'&ref='+encodeURIComponent(currentSpace.referral_code);setAffiliateUI(!!currentSpace.affiliate_enabled);affiliateStatus.textContent=currentSpace.affiliate_enabled?'Affiliation activée pour cet espace. Le lien de présentation est prêt; le suivi automatique des inscriptions et les commissions nécessitent encore le raccordement du parcours d’adhésion et du paiement.':'Affiliation désactivée pour cet espace.';}}
+ sw.addEventListener('click',async function(){if(!currentUser||!currentSpace){affiliateStatus.textContent='Connectez-vous avec le compte responsable de cet espace pour modifier ce réglage.';return;}const on=sw.getAttribute('aria-checked')!=='true';sw.disabled=true;affiliateStatus.textContent='Enregistrement du réglage…';const {data,error}=await client.from('capprimaire_spaces').update({affiliate_enabled:on}).eq('id',currentSpace.id).select('id,name,monthly_price,affiliate_enabled,referral_code').single();sw.disabled=false;if(error){affiliateStatus.textContent='Impossible d’enregistrer ce réglage : '+error.message;return;}currentSpace=data;refreshReferralLink();});
+ copy.addEventListener('click',async function(){if(!link.value){affiliateStatus.textContent='Connectez-vous pour obtenir le lien de votre espace.';return;}try{await navigator.clipboard.writeText(link.value);copy.textContent='Copié ✓';setTimeout(()=>copy.textContent='Copier',1600);}catch(e){link.select();document.execCommand('copy');copy.textContent='Copié ✓';}});
  const form=document.getElementById('authForm'),msg=document.getElementById('authMessage'),signup=document.getElementById('signupBtn'),login=document.getElementById('loginBtn'),logout=document.getElementById('logoutBtn'),dash=document.getElementById('adminDashboard'),emailText=document.getElementById('signedInEmail'),spaceStatus=document.getElementById('spaceStatus');
  const nameInput=document.getElementById('adminName'),spaceName=document.getElementById('spaceName'),saveSpace=document.getElementById('saveSpace'),resourceForm=document.getElementById('resourceForm'),resourceMessage=document.getElementById('resourceMessage'),resourceList=document.getElementById('resourceList'),memberList=document.getElementById('memberList'),memberMessage=document.getElementById('memberMessage');
  let mode='signup',currentUser=null,currentSpace=null;
@@ -180,6 +181,7 @@
    currentSpace=created;
   }
   spaceName.value=currentSpace.name;
+  refreshReferralLink();
   spaceStatus.textContent='Espace : '+currentSpace.name+' — tarif indicatif : '+currentSpace.monthly_price+' FCFA/mois — code : '+currentSpace.referral_code+'. Les paiements restent à connecter.';
   await Promise.all([loadResources(),loadMembers()]);
  }
