@@ -1113,3 +1113,70 @@ a { color: #078447; }
     background-position:58% center;
   }
 }
+
+/* ACCESSIBILITÉ : lecture facile pour tous les apprenants */
+html {
+  font-size: 18px;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #14213a;
+}
+p, li, dd, dt, label, input, select, textarea, button {
+  line-height: 1.7;
+}
+p, li {
+  max-width: 78ch;
+}
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.3;
+  letter-spacing: normal;
+  color: #10264a;
+}
+.main-nav a {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.nav-group-label {
+  font-size: .85rem;
+  line-height: 1.5;
+}
+.btn, button, input, select, textarea {
+  font-size: 1rem;
+}
+.btn, button {
+  min-height: 48px;
+}
+input, select, textarea {
+  min-height: 48px;
+}
+.muted, .course-meta, .notice, .form-group label {
+  font-size: .95rem;
+}
+.course-item h4 {
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+.course-item p {
+  line-height: 1.85;
+}
+:focus-visible {
+  outline: 4px solid #ffbf00;
+  outline-offset: 3px;
+}
+@media (max-width: 560px) {
+  html { font-size: 17px; }
+  .main-nav a { font-size: .95rem; min-height: 42px; }
+  .nav-group-label { font-size: .85rem; }
+  .hero h1 { line-height: 1.2; }
+  .section-heading h2 { line-height: 1.3; }
+}
+@media (prefers-contrast: more) {
+  body { color: #000; }
+  a { text-decoration: underline; }
+  .muted, .card p, .course-item p, .section-heading p { color: #263238; }
+}
+
