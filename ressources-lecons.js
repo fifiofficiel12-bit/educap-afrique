@@ -568,6 +568,45 @@
       panel.scrollIntoView({behavior:"smooth",block:"start"});
     });
     const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const globalSearch=document.querySelector("#edc-global-lesson-search");
+    const globalResults=document.querySelector("#edc-global-search-results");
+    if(globalSearch&&globalResults){
+      const closeGlobalResults=()=>{globalResults.hidden=true;globalSearch.setAttribute("aria-expanded","false");};
+      const renderGlobalResults=()=>{
+        const query=normalizeSearch(globalSearch.value);
+        if(!query){globalResults.innerHTML="";closeGlobalResults();return;}
+        const words=query.split(/\s+/).filter(Boolean);
+        const matches=units.filter(u=>{
+          const haystack=normalizeSearch([u.title,u.subject,u.level,u.objective,...u.course,u.example,u.summary].join(" "));
+          return words.every(word=>haystack.includes(word));
+        }).slice(0,8);
+        globalResults.innerHTML=matches.length?matches.map(u=>'<button type="button" role="option" data-global-lesson-id="'+esc(u.id)+'"><strong>'+esc(u.title)+'</strong><small>'+esc(u.level)+' · '+esc(u.subject)+'</small></button>').join(""):'<div class="edc-search-empty">Aucune leçon disponible pour cette recherche. Essaie un autre mot ou une autre matière.</div>';
+        globalResults.hidden=false;
+        globalSearch.setAttribute("aria-expanded","true");
+      };
+      globalSearch.addEventListener("input",renderGlobalResults);
+      globalSearch.addEventListener("keydown",event=>{
+        if(event.key==="Escape")closeGlobalResults();
+        if(event.key==="Enter"){
+          const first=globalResults.querySelector("[data-global-lesson-id]");
+          if(first){event.preventDefault();first.click();}
+        }
+      });
+      globalResults.addEventListener("click",event=>{
+        const button=event.target.closest("[data-global-lesson-id]");
+        if(!button)return;
+        const lesson=units.find(u=>u.id===button.dataset.globalLessonId);
+        if(!lesson)return;
+        selector.value=lesson.id;
+        render();
+        closeGlobalResults();
+        const sectionTop=section.getBoundingClientRect().top+window.scrollY-110;
+        window.scrollTo({top:Math.max(0,sectionTop),behavior:"smooth"});
+      });
+      document.addEventListener("click",event=>{
+        if(!event.target.closest(".edc-global-search"))closeGlobalResults();
+      });
+    }
     const completedLessons = new Set();
     function render(){
       const u=units.find(x=>x.id===selector.value);
