@@ -96,7 +96,7 @@
 <body>
 <header class="topbar">
 <a class="brand" href="#accueil"><span class="brand-mark">📗</span><span>Cap Primaire<small>Propulsé par EduCap Afrique</small></span></a>
-<nav class="toplinks" aria-label="Navigation"><a href="https://educap-afrique.fifiofficiel12.workers.dev/">← EduCap Afrique</a><a href="#ressources">Ressources</a><a href="#offre">Offre membre</a><a href="#affiliation">Affiliation</a><a class="admin" href="#administration">Espace administrateur ↗</a></nav>
+<nav class="toplinks" aria-label="Navigation"><a href="https://educap-afrique.fifiofficiel12.workers.dev/">← EduCap Afrique</a><a href="#ressources">Ressources</a><a href="#offre">Offre membre</a><a href="#affiliation">Affiliation</a><a class="admin" href="#compte-admin">Espace administrateur ↗</a></nav>
 </header>
 <main class="wrap">
 <section class="hero" id="accueil">
@@ -204,7 +204,7 @@
   try{
    if(!['alexiskouao553@gmail.com','fifiofficiel12@gmail.com'].includes(email.toLowerCase())) throw new Error('Accès réservé aux comptes responsables autorisés de Cap Primaire.');
    const {error}=await client.auth.signInWithPassword({email,password});if(error)throw error;
-   await loadAccount();message('Connexion réussie. Votre accès administrateur intégral et gratuit à Cap Primaire est activé. Aucun abonnement n’est requis pour votre compte.');
+   await loadAccount();if(!dash.hidden){message('Connexion réussie. Votre espace administrateur est ouvert ci-dessous.');dash.scrollIntoView({behavior:'smooth',block:'start'});}else{message('Connexion effectuée, mais le tableau de bord n’a pas pu être ouvert. Vérifiez le message d’accès affiché.');}
   }catch(err){message('Erreur : '+(err.message||'opération impossible'));}
   finally{signup.disabled=false;login.disabled=false;}
  });
