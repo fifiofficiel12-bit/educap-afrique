@@ -26,76 +26,57 @@
         id:"a1-proba", level:"Terminale A1", subject:"Mathématiques",
         title:"Probabilité d’un événement contraire",
         objective:"Utiliser la probabilité de l’événement contraire pour simplifier un calcul.",
-        course:[
-          "La probabilité d’un événement A est comprise entre 0 et 1.",
-          "L’événement contraire de A, noté A̅, signifie que A ne se réalise pas.",
-          "La relation essentielle est P(A̅) = 1 − P(A)."
-        ],
-        example:"Si la probabilité qu’un élève réussisse un test est de 0,72, alors la probabilité qu’il échoue est 1 − 0,72 = 0,28, soit 28 %.",
-        summary:"Quand il est plus simple de calculer « au moins un » ou « aucun », penser à l’événement contraire et à la formule 1 − P(A).",
-        question:"Si P(A) = 0,35, combien vaut P(A̅) ?",
-        choices:["0,35","0,65","1,35"],
-        answer:1, explanation:"P(A̅) = 1 − 0,35 = 0,65."
+        course:["Un événement est un résultat ou un ensemble de résultats d’une expérience aléatoire. Son contraire rassemble tous les résultats où l’événement initial ne se produit pas.","La probabilité de l’événement et celle de son contraire totalisent toujours 1, soit 100 %.","On peut calculer P(non A) par 1 − P(A), mais il faut d’abord s’assurer que P(A) est connue et comprise entre 0 et 1."],
+        example:"Dans un sac, la probabilité de tirer une boule rouge est 0,3. L’événement contraire est « ne pas tirer une boule rouge ». Sa probabilité vaut 1 − 0,3 = 0,7, soit 70 %. Contrôle : 0,3 + 0,7 = 1.",
+        summary:"Identifier précisément l’événement, calculer 1 − sa probabilité et vérifier que les deux probabilités totalisent 1.",
+        question:"Si la probabilité d’un événement est de 0,18, quelle est celle de son contraire ?",
+        choices:["0,18","0,82","1,18"],
+        answer:1, explanation:"1 − 0,18 = 0,82. Les deux probabilités totalisent 1."
       },
       {
         id:"tc-complexes", level:"Terminale C", subject:"Mathématiques",
         title:"Premiers calculs avec les nombres complexes",
         objective:"Calculer avec i et écrire un nombre complexe sous forme algébrique.",
-        course:[
-          "Un nombre complexe s’écrit z = a + bi, où a et b sont réels et i² = −1.",
-          "Pour additionner, on regroupe les parties réelles et les parties imaginaires.",
-          "Pour multiplier, on développe puis on remplace i² par −1."
-        ],
-        example:"Calculons (2 + 3i)(1 − i). En développant : 2 − 2i + 3i − 3i². Comme i² = −1, cela donne 2 + i + 3 = 5 + i.",
-        summary:"Développer comme avec des expressions algébriques, puis remplacer systématiquement i² par −1.",
-        question:"Combien vaut i² ?",
-        choices:["1","−1","i"],
-        answer:1, explanation:"Par définition de l’unité imaginaire, i² = −1."
+        course:["Un nombre complexe s’écrit z = a + bi, où a est sa partie réelle, b sa partie imaginaire et i² = −1.","Pour additionner deux nombres complexes, on additionne séparément les parties réelles et les coefficients de i.","Pour multiplier, on développe puis on remplace i² par −1. Attention : i² n’est pas égal à 1."],
+        example:"Calculons (3 + 2i) + (1 − 5i) = (3 + 1) + (2 − 5)i = 4 − 3i. Puis (2 + i)(3 − i) = 6 − 2i + 3i − i² = 7 + i, car i² = −1.",
+        summary:"Regrouper séparément les parties réelles et imaginaires; lors d’un produit, développer et remplacer i² par −1.",
+        question:"Combien vaut (1 + i)(1 − i) ?",
+        choices:["2","0","1 + i"],
+        answer:0, explanation:"(1+i)(1−i)=1−i²=1−(−1)=2."
       }
       ,{
         id:"a1-log", level:"Terminale A1", subject:"Mathématiques",
         title:"Équations avec le logarithme népérien",
         objective:"Utiliser les propriétés du logarithme pour résoudre une équation simple.",
-        course:[
-          "Le logarithme népérien ln(x) est défini seulement pour x strictement positif.",
-          "Pour a > 0 et b > 0, ln(a) + ln(b) = ln(ab).",
-          "La fonction ln est strictement croissante sur ]0;+∞[ : ln(a) = ln(b) équivaut à a = b, avec a et b positifs."
+        course:["Le logarithme népérien ln(x) existe uniquement si x > 0. Cette condition doit être écrite avant de résoudre une équation.","Pour x et y strictement positifs, ln(x) = ln(y) implique x = y, car la fonction logarithme est injective.","La propriété ln(ab) = ln(a) + ln(b) s’applique si a > 0 et b > 0. On ne peut pas prendre le logarithme d’un nombre négatif ou nul."]0;+∞[ : ln(a) = ln(b) équivaut à a = b, avec a et b positifs."
         ],
-        example:"Résoudre ln(x) = ln(5). Condition : x > 0. Comme ln est injective sur les réels positifs, x = 5. La solution est donc {5}.",
-        summary:"Écrire d’abord la condition x > 0. Simplifier les logarithmes, puis résoudre en vérifiant que les solutions respectent le domaine.",
-        question:"Quelle est la condition de définition de ln(x) ?",
-        choices:["x ≥ 0","x > 0","x ≠ 0"],
-        answer:1, explanation:"Le logarithme népérien est défini uniquement pour un argument strictement positif."
+        example:"Résoudre ln(2x − 1) = ln(5). Condition : 2x − 1 > 0, donc x > 1/2. Égalité des logarithmes : 2x − 1 = 5, donc 2x = 6 et x = 3. La valeur 3 respecte la condition : la solution est {3}.",
+        summary:"Déterminer le domaine de définition, utiliser les propriétés du logarithme, résoudre puis vérifier les conditions de positivité.",
+        question:"Quelle condition doit vérifier x pour que ln(3x + 6) soit défini ?",
+        choices:["x > −2","x ≥ −2","x < −2"],
+        answer:0, explanation:"Il faut 3x+6>0, donc 3x>−6 puis x>−2."
       },
       {
         id:"a1-suites", level:"Terminale A1", subject:"Mathématiques",
         title:"Reconnaître une suite arithmétique",
         objective:"Identifier une suite arithmétique et calculer un terme à partir de sa raison.",
-        course:[
-          "Une suite (uₙ) est arithmétique si la différence entre deux termes consécutifs est constante.",
-          "Cette constante r s’appelle la raison : uₙ₊₁ = uₙ + r.",
-          "Si le premier terme est u₀, alors uₙ = u₀ + nr."
-        ],
-        example:"Une suite arithmétique vérifie u₀ = 4 et r = 3. Alors u₅ = 4 + 5 × 3 = 19.",
-        summary:"Repérer la différence constante, identifier le premier terme et la raison, puis appliquer la formule adaptée à l’indice de départ.",
-        question:"Si u₀ = 2 et r = 4, quelle est la valeur de u₃ ?",
-        choices:["6","10","14"],
-        answer:2, explanation:"u₃ = u₀ + 3r = 2 + 3 × 4 = 14."
+        course:["Une suite est arithmétique si l’on ajoute toujours le même nombre pour passer d’un terme au suivant. Ce nombre constant est la raison r.","La relation de récurrence est u(n+1) = u(n) + r. Si le premier terme est u0, alors un = u0 + n r.","Attention à l’indice de départ : si la suite commence à u1, la formule s’écrit un = u1 + (n−1)r."],
+        example:"Une suite vérifie u0 = 7 et r = −2. Alors u1 = 5, u2 = 3 et u4 = 7 + 4×(−2) = −1. Le résultat est cohérent car on retire 2 à chaque étape.",
+        summary:"Identifier le premier terme et la raison, vérifier la différence constante puis appliquer la formule correspondant à l’indice de départ.",
+        question:"Une suite arithmétique a u0 = 5 et r = 3. Quelle est la valeur de u4 ?",
+        choices:["8","12","17"],
+        answer:2, explanation:"u4 = u0 + 4r = 5 + 4×3 = 17."
       },
       {
         id:"tc-derivee", level:"Terminale C", subject:"Mathématiques",
         title:"Dérivée et sens de variation",
         objective:"Calculer une dérivée simple et relier son signe aux variations d’une fonction.",
-        course:[
-          "La dérivée de xⁿ est nxⁿ⁻¹ pour les puissances usuelles où la formule s’applique.",
-          "Si f'(x) est positive sur un intervalle, f y est croissante; si f'(x) est négative, f y est décroissante.",
-          "Pour conclure sur un intervalle, vérifier le signe de la dérivée sur tout cet intervalle."
-        ],
-        example:"Pour f(x) = x² − 4x, f'(x) = 2x − 4. La dérivée est négative si x < 2, nulle en 2 et positive si x > 2. La fonction décroît jusqu’à 2 puis croît après 2.",
-        summary:"Calculer f'(x), résoudre f'(x) = 0, étudier le signe de f' puis en déduire les variations.",
-        question:"Pour f(x) = x² − 4x, combien vaut f'(3) ?",
-        choices:["−2","2","6"],
-        answer:1, explanation:"f'(x) = 2x − 4, donc f'(3) = 6 − 4 = 2."
+        course:["La dérivée f′ décrit la variation locale d’une fonction. Pour f(x)=x², f′(x)=2x; pour f(x)=ax+b, f′(x)=a.","Si f′ est positive sur un intervalle, f y est croissante; si f′ est négative, f y est décroissante. Si le signe change, il faut repérer où il change.","Une étude de variations demande de calculer la dérivée, résoudre f′(x)=0, étudier le signe puis conclure intervalle par intervalle."],
+        example:"Pour f(x)=x²−6x+5, f′(x)=2x−6. La dérivée s’annule en x=3. Elle est négative pour x<3 et positive pour x>3 : f décroît jusqu’à 3 puis croît après 3. f(3)=9−18+5=−4.",
+        summary:"Calculer la dérivée, repérer ses zéros, dresser son signe et en déduire les variations sur chaque intervalle.",
+        question:"Pour f(x)=x²−6x, quel est le signe de f′(x) lorsque x=2 ?",
+        choices:["Positif","Négatif","Nul"],
+        answer:1, explanation:"f′(x)=2x−6, donc f′(2)=4−6=−2, qui est négatif."
       },
       {
         id:"term-philo-liberte", level:"Terminale A1 / A2", subject:"Philosophie",
@@ -286,11 +267,11 @@
         id:"six-maths-fractions", level:"6e / 5e", subject:"Mathématiques",
         title:"Additionner des fractions simples",
         objective:"Additionner des fractions de même dénominateur et simplifier le résultat.",
-        course:["Une fraction représente une ou plusieurs parts d’un tout partagé en parts égales.","Pour additionner deux fractions de même dénominateur, on additionne les numérateurs et on conserve le dénominateur.","On simplifie une fraction en divisant le numérateur et le dénominateur par un même diviseur commun non nul."],
-        example:"3/8 + 2/8 = 5/8. Pour 4/10, on divise en haut et en bas par 2 : 4/10 = 2/5.",
-        summary:"Vérifier les dénominateurs, effectuer le calcul puis simplifier si possible.",
-        question:"Combien vaut 2/7 + 3/7 ?",
-        choices:["5/14","5/7","6/7"], answer:1, explanation:"Les dénominateurs sont identiques : (2 + 3)/7 = 5/7."
+        course:["Une fraction a un numérateur (en haut) et un dénominateur (en bas, non nul). Pour additionner des fractions, il faut les exprimer avec un dénominateur commun.","Si les dénominateurs sont identiques, on additionne les numérateurs et on conserve le dénominateur : 2/7 + 3/7 = 5/7.","Si les dénominateurs diffèrent, on recherche un dénominateur commun. Par exemple, 1/2 = 3/6 et 1/3 = 2/6, donc 1/2 + 1/3 = 5/6."],
+        example:"Calculons 3/4 + 1/8. Le dénominateur commun peut être 8 : 3/4 = 6/8. Donc 6/8 + 1/8 = 7/8. On ne calcule pas 3+1 sur 4+8.",
+        summary:"Trouver un dénominateur commun, transformer les fractions, additionner les numérateurs puis simplifier si possible.",
+        question:"Combien vaut 1/3 + 1/6 ?",
+        choices:["2/9","1/2","2/6"], answer:1, explanation:"1/3 = 2/6, donc 2/6 + 1/6 = 3/6 = 1/2."
       },
       {
         id:"quatrieme-maths-pythagore", level:"4e / 3e", subject:"Mathématiques",
