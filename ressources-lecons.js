@@ -485,7 +485,11 @@
           <p>Lis la leçon, étudie l’exemple, puis vérifie ta compréhension avec le mini-quiz.</p>
         </div>
         <div class="efl-panel">
-          <label for="efl-unit">Choisir une fiche</label>
+          <label for="efl-search">Rechercher une leçon</label>
+          <input id="efl-search" type="search" placeholder="Ex. : équation, dérivée, droit, bureautique…" autocomplete="off" aria-describedby="efl-search-help">
+          <p id="efl-search-help" class="efl-search-help">Recherche par titre, matière, niveau ou mot-clé. Clique sur un résultat pour ouvrir la leçon.</p>
+          <div id="efl-search-results" class="efl-search-results" aria-live="polite"></div>
+          <label for="efl-unit">Ou choisir une fiche</label>
           <select id="efl-unit">${units.map(u=>`<option value="${u.id}">${u.level} — ${u.title}</option>`).join("")}</select>
           <div id="efl-content" aria-live="polite"></div>
         </div>
@@ -493,8 +497,16 @@
     const style=document.createElement("style");
     style.textContent=`
       #educap-fiches-lecons .efl-panel{max-width:900px;margin:auto;padding:clamp(18px,3vw,28px);border:1px solid #dce7f8;border-radius:18px;background:#fff}
-      #educap-fiches-lecons label{display:block;font-weight:700;margin-bottom:7px}
-      #educap-fiches-lecons select{width:100%;min-height:46px;padding:10px;border:1px solid #d7e1f1;border-radius:10px;font:inherit}
+      #educap-fiches-lecons label{display:block;font-weight:700;margin:14px 0 7px}
+      #educap-fiches-lecons select,#educap-fiches-lecons #efl-search{width:100%;min-height:46px;padding:10px 12px;border:1px solid #cbd9ed;border-radius:10px;font:inherit;background:#fff;color:#172642}
+      #educap-fiches-lecons #efl-search:focus{outline:3px solid #d9e8ff;border-color:#1457d9}
+      #educap-fiches-lecons .efl-search-help{margin:7px 0 12px;color:#617089;font-size:13px}
+      #educap-fiches-lecons .efl-search-results{display:grid;gap:8px;margin:12px 0 18px}
+      #educap-fiches-lecons .efl-search-result{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:12px 14px;border:1px solid #dce6f5;border-radius:11px;background:#f8fbff;text-align:left;color:#172642;cursor:pointer}
+      #educap-fiches-lecons .efl-search-result:hover,#educap-fiches-lecons .efl-search-result:focus{border-color:#1457d9;background:#eef5ff}
+      #educap-fiches-lecons .efl-search-result strong{display:block}
+      #educap-fiches-lecons .efl-search-result small{display:block;margin-top:3px;color:#617089}
+      #educap-fiches-lecons .efl-search-empty{padding:13px;border-radius:10px;background:#fff7e6;color:#76521b;font-size:14px}
       #educap-fiches-lecons .efl-block{margin-top:16px;padding:16px;border-radius:12px;background:#f7faff;border:1px solid #e1eaf6}
       #educap-fiches-lecons .efl-block h3{margin:0 0 10px;font-size:18px}
       #educap-fiches-lecons li{margin:7px 0;line-height:1.55}
@@ -530,6 +542,31 @@
     }
     const selector=section.querySelector("#efl-unit");
     const panel=section.querySelector("#efl-content");
+    const searchInput=section.querySelector("#efl-search");
+    const searchResults=section.querySelector("#efl-search-results");
+    const normalizeSearch=value=>String(value||"").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLocaleLowerCase("fr").trim();
+    function updateSearch(){
+      const query=normalizeSearch(searchInput.value);
+      if(!query){searchResults.innerHTML="";return;}
+      const words=query.split(/\\s+/).filter(Boolean);
+      const matches=units.filter(u=>{
+        const haystack=normalizeSearch([u.title,u.subject,u.level,u.objective,...u.course,u.example,u.summary].join(" "));
+        return words.every(word=>haystack.includes(word));
+      }).slice(0,12);
+      if(!matches.length){
+        searchResults.innerHTML='<div class="efl-search-empty">Aucune leçon disponible ne correspond à cette recherche. Essaie un autre mot, une matière ou une classe.</div>';
+        return;
+      }
+      searchResults.innerHTML=matches.map(u=>'<button type="button" class="efl-search-result" data-lesson-id="'+esc(u.id)+'"><span><strong>'+esc(u.title)+'</strong><small>'+esc(u.level)+' · '+esc(u.subject)+'</small></span><span aria-hidden="true">Ouvrir →</span></button>').join("");
+    }
+    searchInput.addEventListener("input",updateSearch);
+    searchResults.addEventListener("click",event=>{
+      const button=event.target.closest("[data-lesson-id]");
+      if(!button)return;
+      selector.value=button.dataset.lessonId;
+      render();
+      panel.scrollIntoView({behavior:"smooth",block:"start"});
+    });
     const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
     const completedLessons = new Set();
     function render(){
