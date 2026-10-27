@@ -76,7 +76,7 @@
           <label>Type<select id="cp-type" style="display:block;width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;margin-top:5px"><option>Tous types</option></select></label>
         </div>
       </div>
-      <p id="cp-count" aria-live="polite" style="color:var(--muted);font-weight:700"></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><p id="cp-count" aria-live="polite" style="color:var(--muted);font-weight:700;flex:1"></p><button id="cp-reset" type="button" class="btn btn-light">Afficher toutes les ressources</button></div>
       <div id="cp-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px"></div>
       <div class="panel" style="margin-top:20px">
         <h3>Références officielles à consulter</h3>
@@ -92,8 +92,11 @@
         section.innerHTML = `
           <div class="section-head"><div><span class="tag">${esc(resource.level)} · ${esc(resource.subject)} · ${esc(resource.type)}</span><h2 style="margin-top:10px">${esc(resource.title)}</h2><p>${esc(resource.goal)}</p></div></div>
           <article class="resource"><div class="resource-body">
-            <h3>Le cours</h3><p style="white-space:pre-line;line-height:1.85">${esc(resource.body)}</p>
-            <h3 style="margin-top:22px">À mettre en pratique</h3><p style="white-space:pre-line;line-height:1.85">${esc(resource.practice)}</p>
+            <div class="panel" style="background:#f2faf5;margin-bottom:18px"><strong>Objectif d’apprentissage</strong><p style="margin:6px 0 0">${esc(resource.goal)}</p></div>
+            <h3>1. Je découvre la notion</h3><p style="white-space:pre-line;line-height:1.85">${esc(resource.body)}</p>
+            <h3 style="margin-top:22px">2. Je passe à la pratique</h3><p style="white-space:pre-line;line-height:1.85">${esc(resource.practice)}</p>
+            <div class="panel" style="margin-top:18px"><h3>3. Je vérifie mes acquis</h3><ul><li>Peux-tu expliquer l’idée principale avec tes propres mots ?</li><li>Peux-tu refaire l’activité sans regarder le cours ?</li><li>Peux-tu expliquer pourquoi ta réponse est correcte ?</li></ul><p>Si tu bloques, relis l’étape correspondante, demande une explication à l’enseignant et réessaie.</p></div>
+            <p style="font-size:.85rem;color:var(--muted);margin-top:16px">Support pédagogique complémentaire : vérifie la notion et sa place dans la progression officielle de ta classe avant de l’utiliser comme leçon de référence.</p>
             <a class="btn btn-light" href="${window.location.pathname}#ressources">← Retour à la bibliothèque</a>
           </div></article>`;
         return;
@@ -112,6 +115,13 @@
       cards.innerHTML=found.map(r=>`<article class="resource"><div class="resource-body"><span class="tag">${esc(r.level)} · ${esc(r.subject)} · ${esc(r.type)}</span><h3>${esc(r.title)}</h3><p><strong>Objectif :</strong> ${esc(r.goal)}</p><a class="btn btn-light" href="${window.location.pathname}?fiche=${encodeURIComponent(r.title)}#ressources">Ouvrir le cours</a></div></article>`).join("")||'<div class="panel">Aucune ressource ne correspond. Modifiez les filtres.</div>';
     }
     ["#cp-search","#cp-level","#cp-subject","#cp-type"].forEach(sel=>section.querySelector(sel).addEventListener("input",render));
+    section.querySelector("#cp-reset").addEventListener("click",()=>{
+      section.querySelector("#cp-search").value="";
+      section.querySelector("#cp-level").value="Tous niveaux";
+      section.querySelector("#cp-subject").value="Toutes disciplines";
+      section.querySelector("#cp-type").value="Tous types";
+      render();
+    });
     render();
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
