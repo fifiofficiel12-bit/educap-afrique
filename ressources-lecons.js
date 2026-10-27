@@ -544,11 +544,11 @@
     const panel=section.querySelector("#efl-content");
     const searchInput=section.querySelector("#efl-search");
     const searchResults=section.querySelector("#efl-search-results");
-    const normalizeSearch=value=>String(value||"").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLocaleLowerCase("fr").trim();
+    const normalizeSearch=value=>String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase("fr").trim();
     function updateSearch(){
       const query=normalizeSearch(searchInput.value);
       if(!query){searchResults.innerHTML="";return;}
-      const words=query.split(/\\s+/).filter(Boolean);
+      const words=query.split(/\s+/).filter(Boolean);
       const matches=units.filter(u=>{
         const haystack=normalizeSearch([u.title,u.subject,u.level,u.objective,...u.course,u.example,u.summary].join(" "));
         return words.every(word=>haystack.includes(word));
