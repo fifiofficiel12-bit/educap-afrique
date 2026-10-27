@@ -197,11 +197,11 @@
         id:"term-anglais-present", level:"Collège / Lycée", subject:"Anglais",
         title:"Parler des habitudes au présent simple",
         objective:"Former des phrases affirmatives et négatives au présent simple.",
-        course:["Le présent simple décrit notamment les habitudes, les faits généraux et les routines.","Avec he, she et it, le verbe prend généralement -s ou -es à la forme affirmative.","À la forme négative, on utilise do not/don’t ou does not/doesn’t, puis la base verbale."],
-        example:"I study every evening. She studies every evening. They do not play on Monday. He doesn’t play on Monday.",
-        summary:"Repérer le sujet, choisir la forme verbale adaptée et utiliser do/does pour les questions et les négations.",
-        question:"Choisis la phrase correcte.",
-        choices:["She study every day.","She studies every day.","She does studies every day."], answer:1, explanation:"À la troisième personne du singulier, on ajoute généralement -s au verbe à l’affirmatif."
+        course:["Le présent simple exprime les habitudes, les faits généraux et les situations stables.","À la troisième personne du singulier (he, she, it), on ajoute généralement -s au verbe : I work, she works. Après does/doesn’t, le verbe reprend sa forme de base.","Pour une question, on utilise Do/Does + sujet + base verbale ? Pour une négation, don’t/doesn’t + base verbale."],
+        example:"She plays football every Saturday. (Elle joue au football chaque samedi.) Question : Does she play football every Saturday? Négation : She doesn’t play football every Saturday. Après does/doesn’t, on écrit play, pas plays.",
+        summary:"Identifier le sujet, choisir do ou does, ajouter -s à l’affirmatif avec he/she/it et garder la base verbale après does.",
+        question:"Choose the correct sentence.",
+        choices:["He go to school every day.","He goes to school every day.","He does goes to school every day."], answer:1, explanation:"Avec he au présent simple affirmatif, on ajoute -s à go : goes."
       },
       {
         id:"term-histoire-colonisation", level:"3e / Terminale", subject:"Histoire-Géographie",
@@ -227,11 +227,11 @@
         id:"term-chimie-quantite", level:"Terminale C / D", subject:"Physique-Chimie",
         title:"Calculer une quantité de matière",
         objective:"Utiliser la relation entre masse, masse molaire et quantité de matière.",
-        course:["La quantité de matière n s’exprime en mole (mol).","Pour un échantillon pur de masse m et de masse molaire M, n = m/M, avec des unités compatibles.","Vérifier les unités et convertir les grammes en kilogrammes seulement si la masse molaire est exprimée dans l’unité correspondante."],
-        example:"Un échantillon contient 18 g d’eau. Avec M(H₂O) = 18 g·mol⁻¹, n = 18/18 = 1 mol.",
-        summary:"Identifier m et M, vérifier que les unités concordent, puis appliquer n = m/M.",
-        question:"Quelle quantité de matière correspond à 36 g d’une substance de masse molaire 18 g·mol⁻¹ ?",
-        choices:["0,5 mol","2 mol","18 mol"], answer:1, explanation:"n = m/M = 36/18 = 2 mol."
+        course:["La quantité de matière n se mesure en mole (mol). La masse m s’exprime en grammes si la masse molaire M est en g·mol⁻¹.","La relation n = m/M permet de calculer la quantité de matière à partir de la masse et de la masse molaire.","Vérifier les unités avant le calcul : masse et masse molaire doivent être dans des unités compatibles. La quantité de matière ne peut pas être négative."],
+        example:"On dispose de 18 g d’eau, de masse molaire M = 18 g·mol⁻¹. n = m/M = 18/18 = 1 mol. Si la masse était 9 g, n = 9/18 = 0,5 mol.",
+        summary:"Relever la masse, identifier la masse molaire, vérifier les unités puis calculer n = m/M avec l’unité mol.",
+        question:"Quelle quantité de matière représente 12 g de carbone si M = 12 g·mol⁻¹ ?",
+        choices:["0,5 mol","1 mol","12 mol"], answer:1, explanation:"n = m/M = 12/12 = 1 mol."
       },
       {
         id:"term-economie-marche", level:"Terminale / Campus", subject:"Économie",
@@ -277,11 +277,11 @@
         id:"quatrieme-maths-pythagore", level:"4e / 3e", subject:"Mathématiques",
         title:"Utiliser le théorème de Pythagore",
         objective:"Calculer un côté d’un triangle rectangle à partir des deux autres.",
-        course:["Dans un triangle rectangle, l’hypoténuse est le côté opposé à l’angle droit et c’est le plus long côté.","Le théorème de Pythagore affirme que le carré de l’hypoténuse est égal à la somme des carrés des deux autres côtés.","Avant d’appliquer la formule, identifier l’angle droit et l’hypoténuse."],
-        example:"Un triangle ABC est rectangle en A, avec AB = 3 cm et AC = 4 cm. BC² = 3² + 4² = 9 + 16 = 25, donc BC = 5 cm.",
-        summary:"Identifier l’hypoténuse, écrire l’égalité de Pythagore, remplacer les longueurs et prendre la racine carrée positive.",
-        question:"Un triangle rectangle a des côtés de l’angle droit de 6 cm et 8 cm. Quelle est l’hypoténuse ?",
-        choices:["10 cm","14 cm","100 cm"], answer:0, explanation:"c² = 6² + 8² = 36 + 64 = 100, donc c = 10 cm."
+        course:["Dans un triangle rectangle, le théorème de Pythagore relie les trois côtés : le carré de l’hypoténuse est égal à la somme des carrés des deux autres côtés.","L’hypoténuse est le côté opposé à l’angle droit; c’est le plus long côté. Il faut la repérer avant de remplacer dans la formule.","Pour calculer l’hypoténuse c, on utilise c²=a²+b² puis c=√(a²+b²). Pour calculer un autre côté, on soustrait les carrés : a²=c²−b²."],
+        example:"Un triangle rectangle a des côtés de l’angle droit de 6 cm et 8 cm. L’hypoténuse c vérifie c²=6²+8²=36+64=100, donc c=√100=10 cm. On vérifie : 10²=6²+8².",
+        summary:"Repérer l’angle droit et l’hypoténuse, écrire la formule avec les bons côtés, calculer puis donner l’unité.",
+        question:"Un triangle rectangle a des côtés de l’angle droit de 5 cm et 12 cm. Quelle est son hypoténuse ?",
+        choices:["13 cm","17 cm","7 cm"], answer:0, explanation:"c²=5²+12²=25+144=169, donc c=13 cm."
       },
       {
         id:"troisieme-francais-grammaire", level:"3e", subject:"Français",
@@ -327,21 +327,21 @@
         id:"term-physique-electricite", level:"3e / Terminale C-D", subject:"Physique-Chimie",
         title:"Loi d’Ohm dans un circuit simple",
         objective:"Relier tension, résistance et intensité dans un conducteur ohmique.",
-        course:["Pour un conducteur ohmique à température constante, la loi d’Ohm s’écrit U = R × I.","U se mesure en volts, R en ohms et I en ampères.","À partir de deux grandeurs connues, on peut calculer la troisième en transformant la relation."],
-        example:"Une résistance de 6 Ω est traversée par un courant de 2 A. La tension vaut U = R × I = 6 × 2 = 12 V.",
-        summary:"Identifier les grandeurs et leurs unités, choisir U = RI ou sa forme transformée, puis vérifier le résultat.",
+        course:["La loi d’Ohm relie la tension U (en volts), la résistance R (en ohms) et l’intensité I (en ampères) : U = R × I pour un conducteur ohmique dans les conditions appropriées.","On peut transformer la relation : I = U/R et R = U/I, à condition que les grandeurs et unités soient cohérentes.","Avant le calcul, noter les données, la grandeur recherchée et l’unité attendue. Le résultat doit être positif pour une tension, une intensité et une résistance positives dans un circuit simple."],
+        example:"Une résistance de 6 Ω est traversée par un courant de 2 A. La tension vaut U=R×I=6×2=12 V. Si U=12 V et R=6 Ω, alors I=U/R=12/6=2 A.",
+        summary:"Choisir la forme de la loi d’Ohm adaptée à la grandeur recherchée, remplacer les valeurs et indiquer l’unité.",
         question:"Une résistance de 4 Ω est soumise à une tension de 12 V. Quelle intensité la traverse ?",
-        choices:["3 A","8 A","48 A"], answer:0, explanation:"I = U/R = 12/4 = 3 A."
+        choices:["3 A","8 A","48 A"], answer:0, explanation:"I=U/R=12/4=3 A."
       },
       {
         id:"term-maths-pourcentage", level:"3e / Lycée", subject:"Mathématiques",
         title:"Calculer un pourcentage et une variation",
         objective:"Calculer une proportion et interpréter une augmentation ou une réduction.",
-        course:["Pour calculer p % d’une quantité N, multiplier N par p/100.","Une augmentation de p % correspond à multiplier la valeur initiale par 1 + p/100.","Une réduction de p % correspond à multiplier la valeur initiale par 1 − p/100."],
-        example:"Un article coûte 10 000 FCFA et bénéficie d’une réduction de 15 %. Réduction = 10 000 × 0,15 = 1 500 FCFA. Nouveau prix = 10 000 − 1 500 = 8 500 FCFA.",
-        summary:"Transformer le pourcentage en nombre décimal, calculer la variation puis l’ajouter ou la retrancher selon la situation.",
-        question:"Après une hausse de 10 %, un montant de 5 000 FCFA devient :",
-        choices:["4 500 FCFA","5 100 FCFA","5 500 FCFA"], answer:2, explanation:"5 000 × 1,10 = 5 500 FCFA."
+        course:["Un pourcentage p % signifie p pour 100, soit p/100. Pour calculer p % d’une quantité, on multiplie cette quantité par p/100.","Une hausse de p % se calcule en multipliant la valeur initiale par 1+p/100. Une baisse de p % se calcule avec le coefficient 1−p/100.","Pour calculer un taux d’évolution, comparer la variation à la valeur initiale : (valeur finale − valeur initiale)/valeur initiale × 100 %."],
+        example:"Un article coûte 8 000 F et bénéficie d’une réduction de 15 %. Réduction = 8 000×15/100=1 200 F. Prix réduit = 8 000−1 200=6 800 F. Une hausse de 15 % aurait donné 8 000×1,15=9 200 F.",
+        summary:"Distinguer la valeur initiale, le taux et le sens de variation; calculer le montant puis la valeur finale.",
+        question:"Un prix de 20 000 F augmente de 10 %. Quel est le nouveau prix ?",
+        choices:["20 100 F","22 000 F","18 000 F"], answer:1, explanation:"10 % de 20 000 F vaut 2 000 F; le nouveau prix est 22 000 F."
       },
       {
         id:"term-physique-mouvement", level:"Terminale C / D", subject:"Physique-Chimie",
@@ -362,16 +362,12 @@
         id:"troisieme-equation", level:"3e", subject:"Mathématiques",
         title:"Résoudre une équation du premier degré",
         objective:"Isoler l’inconnue en effectuant la même opération sur les deux membres.",
-        course:[
-          "Une équation est une égalité contenant une ou plusieurs inconnues.",
-          "Pour conserver l’égalité, on ajoute, soustrait, multiplie ou divise les deux membres par la même valeur autorisée.",
-          "Après résolution, remplacer l’inconnue par la valeur trouvée permet de vérifier la solution."
-        ],
-        example:"Résoudre 3x + 5 = 20. Soustraire 5 des deux côtés : 3x = 15. Diviser par 3 : x = 5. Vérification : 3 × 5 + 5 = 20.",
-        summary:"Regrouper les termes, isoler l’inconnue et vérifier la solution dans l’équation initiale.",
-        question:"Quelle est la solution de 4x − 6 = 10 ?",
-        choices:["x = 1","x = 4","x = 16"],
-        answer:1, explanation:"Ajouter 6 donne 4x = 16, puis diviser par 4 donne x = 4."
+        course:["Une équation est une égalité contenant une inconnue. Résoudre consiste à trouver toutes les valeurs qui rendent l’égalité vraie.","On peut ajouter ou soustraire le même nombre aux deux membres; on peut multiplier ou diviser les deux membres par un même nombre non nul.","Regrouper les termes en x d’un côté et les nombres de l’autre, réduire, isoler x puis vérifier la solution dans l’équation de départ."],
+        example:"Résoudre 3x+5=20. Soustraire 5 : 3x=15. Diviser par 3 : x=5. Vérification : 3×5+5=20, donc la solution est bien x=5.",
+        summary:"Effectuer la même opération sur les deux membres, isoler l’inconnue et vérifier en remplaçant x dans l’égalité initiale.",
+        question:"Résous 4x−7=9.",
+        choices:["x=2","x=4","x=16"],
+        answer:1, explanation:"4x−7=9 donne 4x=16 puis x=4. Vérification : 16−7=9."
       }
 
       {
