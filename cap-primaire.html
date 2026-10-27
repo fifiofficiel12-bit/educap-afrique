@@ -180,7 +180,7 @@
    message('Vous êtes connecté comme membre. L’administration est réservée aux comptes responsables autorisés.');
    return;
   }
-  dash.hidden=false;signup.hidden=true;login.hidden=true;
+  dash.hidden=false;signup.hidden=true;login.hidden=true;if(membershipSection)membershipSection.hidden=true;
   const {data:spaces,error}=await client.from('capprimaire_spaces').select('id,name,monthly_price,affiliate_enabled,referral_code').eq('owner_id',user.id).limit(1);
   if(error){spaceStatus.textContent='Compte connecté. Impossible de charger l’espace : '+error.message;return;}
   if(spaces&&spaces.length){currentSpace=spaces[0];}
