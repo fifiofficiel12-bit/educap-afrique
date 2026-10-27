@@ -120,6 +120,18 @@
     .edc-level-card strong{font-size:1.25rem;line-height:1.2}.edc-level-card small{font-size:.9rem;line-height:1.5;color:#64756f}
     .edc-card-action{display:flex;justify-content:space-between;gap:10px;width:100%;margin-top:auto;padding-top:12px;font-size:.82rem;font-weight:750;color:#176b50}.edc-card-action b{font-size:1rem}
     .edc-blue .edc-level-icon{background:#edf3ff}.edc-blue .edc-card-action{color:#245cc8}.edc-purple .edc-level-icon{background:#f2efff}.edc-purple .edc-card-action{color:#7252bd}.edc-orange .edc-level-icon{background:#fff3e6}.edc-orange .edc-card-action{color:#a65a19}
+    .edc-global-search{position:relative;z-index:15;background:#fff;border-bottom:1px solid #dce6f5;box-shadow:0 5px 18px rgba(20,87,217,.07)}
+    .edc-global-search-inner{display:grid;grid-template-columns:minmax(190px,.8fr) minmax(260px,1.5fr);gap:18px;align-items:center;padding-top:14px;padding-bottom:14px}
+    .edc-global-search-copy{display:grid;gap:3px}.edc-global-search-copy strong{color:#1457d9;font-size:1.02rem}.edc-global-search-copy span{color:#64748b;font-size:.84rem}
+    .edc-global-search-box{position:relative}.edc-global-search-box input{width:100%;min-height:48px;padding:12px 16px;border:2px solid #cbdcf7;border-radius:13px;background:#f8fbff;color:#172642;font:inherit}
+    .edc-global-search-box input:focus{outline:3px solid #dce9ff;border-color:#1457d9;background:#fff}
+    .edc-global-search-results{position:absolute;top:calc(100% + 7px);left:0;right:0;max-height:360px;overflow:auto;padding:7px;border:1px solid #dce6f5;border-radius:13px;background:#fff;box-shadow:0 14px 35px rgba(23,38,66,.16)}
+    .edc-global-search-results button{display:block;width:100%;padding:11px 12px;border:0;border-radius:9px;background:#fff;text-align:left;color:#172642;cursor:pointer}
+    .edc-global-search-results button:hover,.edc-global-search-results button:focus{background:#eef5ff;outline:0}
+    .edc-global-search-results strong,.edc-global-search-results small{display:block}.edc-global-search-results small{margin-top:3px;color:#64748b}
+    .edc-global-search-results .edc-search-empty{padding:12px;color:#76521b;font-size:.9rem}
+    .edc-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:620px){.edc-global-search-inner{grid-template-columns:1fr;gap:8px;padding-top:10px;padding-bottom:12px}.edc-global-search-copy span{font-size:.8rem}.edc-global-search-box input{min-height:46px}}
     .edc-tools-panel{margin-top:26px;padding:25px;border-radius:22px;background:#173a32;color:#fff}
     .edc-tools-intro{display:flex;align-items:center;gap:14px;margin-bottom:20px}.edc-tools-symbol{display:grid;place-items:center;flex:0 0 44px;height:44px;border-radius:14px;background:#28584b;font-size:1.35rem}
     .edc-tools-intro h3{margin:0 0 5px;font-size:1.2rem}.edc-tools-intro p{margin:0;color:#d0e2d9;font-size:.92rem}
@@ -174,6 +186,20 @@
       </nav>
     </div>
   </header>
+
+  <section class="edc-global-search" aria-label="Recherche rapide de leçons">
+    <div class="container edc-global-search-inner">
+      <div class="edc-global-search-copy">
+        <strong>📚 Trouve ta leçon</strong>
+        <span>Recherche une notion pour savoir directement où étudier.</span>
+      </div>
+      <div class="edc-global-search-box">
+        <label class="edc-sr-only" for="edc-global-lesson-search">Rechercher une leçon ou une notion</label>
+        <input id="edc-global-lesson-search" type="search" placeholder="Ex. : équation, dérivée, liberté, tableur…" autocomplete="off" aria-controls="edc-global-search-results" aria-expanded="false">
+        <div id="edc-global-search-results" class="edc-global-search-results" role="listbox" aria-label="Leçons correspondantes" hidden></div>
+      </div>
+    </div>
+  </section>
 
   <main>
     <div class="container" role="note" style="margin:14px auto;padding:18px 20px;border:1px solid #d7e4f5;border-radius:12px;background:#f3f7ff;color:#17365f">
