@@ -173,10 +173,10 @@
   currentUser=user||null;
   if(!user){currentSpace=null;dash.hidden=true;logout.hidden=true;signup.hidden=false;login.hidden=false;return;}
   logout.hidden=false;emailText.textContent='Connecté : '+(user.email||'compte utilisateur');
-  if(String(user.email||'').toLowerCase()!=='alexiskouao553@gmail.com'){
+  if(!['alexiskouao553@gmail.com','fifiofficiel12@gmail.com'].includes(String(user.email||'').toLowerCase())){
    currentSpace=null;dash.hidden=true;signup.hidden=true;login.hidden=true;
-   spaceStatus.textContent='Accès administrateur refusé : seul Alex (alexiskouao553@gmail.com) administre Cap Primaire. Votre compte peut servir à adhérer comme membre.';
-   message('Vous êtes connecté comme membre. L’administration est réservée à Alex.');
+   spaceStatus.textContent='Accès administrateur refusé : utilisez le compte responsable autorisé. Votre compte peut servir à adhérer comme membre.';
+   message('Vous êtes connecté comme membre. L’administration est réservée aux comptes responsables autorisés.');
    return;
   }
   dash.hidden=false;signup.hidden=true;login.hidden=true;
@@ -201,7 +201,7 @@
   e.preventDefault();signup.disabled=true;login.disabled=true;message('Connexion en cours…');
   const email=document.getElementById('adminEmail').value.trim(),password=document.getElementById('adminPassword').value,name=nameInput.value.trim();
   try{
-   if(email.toLowerCase()!=='alexiskouao553@gmail.com') throw new Error('Accès réservé à Alex, administrateur de cette plateforme. Aucun autre compte responsable n’est autorisé.');
+   if(!['alexiskouao553@gmail.com','fifiofficiel12@gmail.com'].includes(email.toLowerCase())) throw new Error('Accès réservé aux comptes responsables autorisés de Cap Primaire.');
    const {error}=await client.auth.signInWithPassword({email,password});if(error)throw error;
    await loadAccount();message('Connexion réussie. Votre accès administrateur intégral et gratuit à Cap Primaire est activé. Aucun abonnement n’est requis pour votre compte.');
   }catch(err){message('Erreur : '+(err.message||'opération impossible'));}
