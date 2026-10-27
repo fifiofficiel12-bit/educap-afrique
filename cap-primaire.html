@@ -173,7 +173,7 @@
   const {data:{user}}=await client.auth.getUser();
   currentUser=user||null;
   if(!user){currentSpace=null;dash.hidden=true;logout.hidden=true;signup.hidden=false;login.hidden=false;if(membershipSection)membershipSection.hidden=false;return;}
-  logout.hidden=false;emailText.textContent='Connecté : '+(user.email||'compte utilisateur');
+  logout.hidden=false;emailText.textContent='Compte administrateur connecté';
   if(!['alexiskouao553@gmail.com','fifiofficiel12@gmail.com'].includes(String(user.email||'').toLowerCase())){
    currentSpace=null;dash.hidden=true;signup.hidden=true;login.hidden=true;
    spaceStatus.textContent='Accès administrateur refusé : utilisez le compte responsable autorisé. Votre compte peut servir à adhérer comme membre.';
