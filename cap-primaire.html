@@ -143,7 +143,8 @@
  function refreshReferralLink(){if(currentSpace){link.value=location.origin+location.pathname+'?space='+encodeURIComponent(currentSpace.id)+'&ref='+encodeURIComponent(currentSpace.referral_code);setAffiliateUI(!!currentSpace.affiliate_enabled);affiliateStatus.textContent=currentSpace.affiliate_enabled?'Affiliation activée pour cet espace. Le lien de présentation est prêt; le suivi automatique des inscriptions et les commissions nécessitent encore le raccordement du parcours d’adhésion et du paiement.':'Affiliation désactivée pour cet espace.';}}
  sw.addEventListener('click',async function(){if(!currentUser||!currentSpace){affiliateStatus.textContent='Connectez-vous avec le compte responsable de cet espace pour modifier ce réglage.';return;}const on=sw.getAttribute('aria-checked')!=='true';sw.disabled=true;affiliateStatus.textContent='Enregistrement du réglage…';const {data,error}=await client.from('capprimaire_spaces').update({affiliate_enabled:on}).eq('id',currentSpace.id).select('id,name,monthly_price,affiliate_enabled,referral_code').single();sw.disabled=false;if(error){affiliateStatus.textContent='Impossible d’enregistrer ce réglage : '+error.message;return;}currentSpace=data;refreshReferralLink();});
  copy.addEventListener('click',async function(){if(!link.value){affiliateStatus.textContent='Connectez-vous pour obtenir le lien de votre espace.';return;}try{await navigator.clipboard.writeText(link.value);copy.textContent='Copié ✓';setTimeout(()=>copy.textContent='Copier',1600);}catch(e){link.select();document.execCommand('copy');copy.textContent='Copié ✓';}});
- const membershipSection=document.getElementById('adhesion');\n const form=document.getElementById('authForm'),msg=document.getElementById('authMessage'),signup=document.getElementById('signupBtn'),login=document.getElementById('loginBtn'),logout=document.getElementById('logoutBtn'),dash=document.getElementById('adminDashboard'),emailText=document.getElementById('signedInEmail'),spaceStatus=document.getElementById('spaceStatus');
+ const membershipSection=document.getElementById('adhesion');
+ const form=document.getElementById('authForm'),msg=document.getElementById('authMessage'),signup=document.getElementById('signupBtn'),login=document.getElementById('loginBtn'),logout=document.getElementById('logoutBtn'),dash=document.getElementById('adminDashboard'),emailText=document.getElementById('signedInEmail'),spaceStatus=document.getElementById('spaceStatus');
  const nameInput=document.getElementById('adminName'),spaceName=document.getElementById('spaceName'),saveSpace=document.getElementById('saveSpace'),resourceForm=document.getElementById('resourceForm'),resourceMessage=document.getElementById('resourceMessage'),resourceList=document.getElementById('resourceList'),memberList=document.getElementById('memberList'),memberMessage=document.getElementById('memberMessage');
  let mode='login',currentUser=null,currentSpace=null;
  function message(t){msg.textContent=t;}
@@ -246,7 +247,8 @@
  }
  document.getElementById('joinSignup').addEventListener('click',()=>startMembership(true));
  document.getElementById('joinLogin').addEventListener('click',()=>startMembership(false));
-\n loadAccount().catch(err=>message('Impossible de vérifier la session : '+err.message));
+
+ loadAccount().catch(err=>message('Impossible de vérifier la session : '+err.message));
 })();
 </script>
 </body></html>
