@@ -1686,9 +1686,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const root = document.createElement("div");
   root.id = "educap-aide-flottante";
   root.innerHTML = `
-    <section id="educap-aide-panneau" role="dialog" aria-label="Guide EduCap — aide au démarrage">
+    <section id="educap-aide-panneau" role="dialog" aria-label="Mentor EduCap — assistant d’apprentissage">
       <h3>Bienvenue sur EduCap Afrique !</h3>
-      <p>Je suis ton guide de démarrage. Choisis ton besoin pour obtenir des étapes simples et découvrir comment utiliser EduCap Afrique.</p>
+      <p>Je suis Mentor EduCap. Je reste avec toi dans l’application pour t’aider à comprendre une leçon, t’entraîner et organiser tes révisions.</p>
       <label for="educap-aide-parcours">Ton parcours</label>
       <select id="educap-aide-parcours">
         <option value="scolaire">Collège / lycée</option>
@@ -1711,7 +1711,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       <button type="button" class="action" id="educap-aide-fermer">Fermer</button>
     </section>
-    <button id="educap-aide-bouton" type="button" aria-expanded="false">🧭 Guide EduCap</button>
+    <button id="educap-aide-bouton" type="button" aria-expanded="false">💬 Mentor EduCap</button>
   `;
   document.body.appendChild(root);
 
