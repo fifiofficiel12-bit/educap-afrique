@@ -1668,15 +1668,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const style = document.createElement("style");
   style.textContent = `
     #educap-aide-flottante{position:fixed;right:18px;bottom:18px;z-index:9999;font-family:inherit}
-    #educap-aide-bouton{border:0;border-radius:999px;padding:14px 18px;background:#123d75;color:#fff;font-weight:800;box-shadow:0 8px 28px #0b214744;cursor:pointer}
-    #educap-aide-panneau{display:none;position:absolute;right:0;bottom:64px;width:min(350px,calc(100vw - 32px));max-height:72vh;overflow:auto;background:#fff;color:#172642;border:1px solid #d9e3f2;border-radius:18px;box-shadow:0 14px 44px #10233b33;padding:18px}
+    #educap-aide-bouton{border:0;border-radius:999px;padding:9px 12px;background:#123d75;color:#fff;font-weight:800;box-shadow:0 8px 28px #0b214744;cursor:pointer}
+    #educap-aide-panneau{display:none;position:absolute;right:0;bottom:50px;width:min(300px,calc(100vw - 32px));max-height:65vh;overflow:auto;background:#fff;color:#172642;border:1px solid #d9e3f2;border-radius:18px;box-shadow:0 14px 44px #10233b33;padding:18px}
     #educap-aide-panneau.ouvert{display:block}
     #educap-aide-panneau h3{margin:0 0 8px;font-size:19px}
-    #educap-aide-panneau p{font-size:14px;line-height:1.5}
-    #educap-aide-panneau label{display:block;font-weight:700;font-size:13px;margin:12px 0 6px}
-    #educap-aide-panneau select,#educap-aide-panneau textarea{box-sizing:border-box;width:100%;padding:10px;border:1px solid #ccd8e8;border-radius:9px;background:#fff;color:#172642}
+    #educap-aide-panneau p{font-size:12px;line-height:1.5}
+    #educap-aide-panneau label{display:block;font-weight:700;font-size:12px;margin:8px 0 5px}
+    #educap-aide-panneau select,#educap-aide-panneau textarea{box-sizing:border-box;width:100%;padding:8px;border:1px solid #ccd8e8;border-radius:9px;background:#fff;color:#172642}
     #educap-aide-panneau textarea{min-height:72px;resize:vertical}
-    #educap-aide-panneau button.action{width:100%;border:0;border-radius:9px;padding:11px;margin-top:9px;font-weight:700;cursor:pointer;background:#eaf1fb;color:#123d75}
+    #educap-aide-panneau button.action{width:100%;border:0;border-radius:9px;padding:8px;margin-top:7px;font-size:12px;font-weight:700;cursor:pointer;background:#eaf1fb;color:#123d75}
     #educap-aide-panneau button.principal{background:#123d75;color:#fff}
     #educap-aide-reponse{white-space:pre-line;background:#f3f7fd;padding:12px;border-radius:10px;margin-top:12px;font-size:14px;line-height:1.5}
     @media(max-width:480px){#educap-aide-flottante{right:12px;bottom:12px}#educap-aide-panneau{max-height:70vh}}
